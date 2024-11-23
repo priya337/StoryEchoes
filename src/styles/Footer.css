@@ -1,0 +1,12 @@
+.footer {
+  height: 5%;
+  width: 100vw;
+}
+
+/*Mobile Screen*/
+@media screen and (max-device-width: 425px) {
+}
+
+/*Tablet Screen*/
+@media screen and (max-device-width: 768px) and (min-width: 426px) {
+}

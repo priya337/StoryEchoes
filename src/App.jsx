@@ -1,15 +1,27 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0);
+import { Routes, Route } from "react-router-dom";
 
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import Footer from "./components/Footer";
+import AddStory from "./components/AddStory";
+import WonderShelf from "./components/WonderShelf";
+
+function App() {
   return (
-    <>
-      <h1>Story Echoes</h1>
-    </>
+    <div className="App">
+      <Navbar />
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/addStory" element={<AddStory />} />
+          <Route path="/wonderShelf" element={<WonderShelf />} />
+        </Routes>
+      </div>
+
+      <Footer />
+    </div>
   );
 }
 
