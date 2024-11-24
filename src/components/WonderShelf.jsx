@@ -5,9 +5,12 @@ import { Link } from "react-router-dom";
 const WonderShelf = () => {
   return (
     <div>
-      WonderShelf
       <Link to="/addStory">
-        <img src={Add} alt="Add Story Logo"></img>
+        <img src={Add} alt="Add Story Logo" className="add-icon"></img>
+      </Link>
+
+      <Link to="/readStory">
+        <h4>Read Story</h4>
       </Link>
     </div>
   );

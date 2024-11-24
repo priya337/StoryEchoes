@@ -2,20 +2,40 @@
   height: 10%;
   width: 100vw;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Bubblegum Sans';
+  font-size: 1.5em;
+  position: relative;
+  border-bottom: 1px solid slateblue;
+}
+
+.logo-area{
+  display: flex;
   align-items: center;
   padding-left: 20px;
-  font-family: "Montserrat", sans-serif;
-  font-size: 1.5em;
-  font-weight: bold;
-  font-style: normal;
-  position: relative;
+  width: 50%;
 }
 
 .app-logo {
   height: 50px;
   width: 80px;
+  margin-right: 10px;
 }
+
+.menu-area{
+  width: 40%;
+  display: flex;
+  justify-content: flex-end;
+
+  margin-right: 40px;
+}
+
+.menu-item{
+  margin-right: 30px;
+  font-size: 0.65em;
+}
+
 
 /*Mobile Screen*/
 @media screen and (max-device-width: 425px) {
