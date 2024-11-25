@@ -15,7 +15,7 @@ const ReadStory = () => {
     // Fetch story data
     const fetchStory = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/stories/${id}`);
+        const response = await axios.get(`http://localhost:400/stories/${id}`);
         setStory(response.data);
 
         // Dynamically import the front cover image

@@ -13,7 +13,7 @@ const WonderShelf = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/stories"); // Replace with your backend URL
+        const response = await axios.get("http://localhost:400/stories"); // Replace with your backend URL
         setStories(response.data); // Save fetched stories in the state
       } catch (error) {
         setError("Failed to fetch stories. Please try again later."); // Handle error
