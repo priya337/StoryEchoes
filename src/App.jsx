@@ -18,7 +18,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/wonderShelf" element={<WonderShelf />} />
           <Route path="/addStory" element={<AddStory />} />
-          <Route path="/readStory" element={<ReadStory />} />
+          {/* Updated route to handle dynamic story IDs */}
+          <Route path="/readStory/:id" element={<ReadStory />} />
+          {/* Placeholder route for individual story pages */}
+          <Route
+            path="/readStory/:id/page/:pageNumber"
+            element={<div>Page View Placeholder</div>}
+          />
         </Routes>
       </div>
 

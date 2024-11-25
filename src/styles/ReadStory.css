@@ -1,32 +1,215 @@
-.reading-area{
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    position: relative;
+/* Reading Area */
+.reading-area {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center the entire content vertically */
+  position: relative;
 }
 
-.lamp{
-    width: 80px;
-    height: 80px;
-    z-index: 10;
+/* Lamp and Glow */
+.lamp {
+  width: 80px;
+  height: 80px;
+  z-index: 10;
+  position: absolute;
+  top: 0; /* Align the lamp above the bulb */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for the lamp's width */
 }
 
-.glow{
-    -webkit-box-shadow:0px 0px 105px 45px rgba(241, 255, 45, 0.9);
-    -moz-box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
-    box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
+.glow {
+  -webkit-box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
+  -moz-box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
+  box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
+  position: absolute;
+  top: 70px; /* Bring the glow closer to the lamp */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.round{
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: rgb(214, 221, 11);
-    position: absolute;
-    top: 45px;
-    left: 49.1%;
+.round {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgb(214, 221, 11);
+  position: absolute;
+  top: 60px; /* Adjust the bulb's position closer to the lamp */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.glow1{
-    background-color: grey;
+/* Book Container */
+.book-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 200px; /* Add spacing from the lamp and glow */
+  transition: transform 0.5s ease, opacity 0.5s ease; /* Smooth transition for open/close */
+}
+
+.book-container.open {
+  transform: scale(1.1); /* Slight zoom when open */
+  opacity: 1; /* Ensure visibility */
+}
+
+.book-container.closed {
+  transform: scale(1); /* Default scale */
+  opacity: 1; /* Maintain visibility */
+}
+
+/* Book Styles */
+.book {
+  position: relative;
+  width: 350px;
+  height: 500px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.book img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the image scales properly */
+  border-radius: 15px;
+}
+
+/* Open Book Styles */
+.book-open {
+  display: flex;
+  width: 700px; /* Double the size for both pages */
+  height: 500px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.book-open .page-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Page Styles */
+.page-left,
+.page-right {
+  width: 50%; /* Split into two equal pages */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.page-left {
+  background-color: #f9f9f9;
+  font-size: 16px;
+  line-height: 1.6;
+  font-family: "Georgia", serif; /* Classic book font */
+  color: #333;
+  text-align: left;
+}
+
+.page-right {
+  background-color: #fff;
+  text-align: center;
+}
+
+.page-right img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+/* Open Book Button */
+.open-book-btn {
+  position: absolute;
+  right: -30px; /* Move outside the book's right edge */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for perfect vertical centering */
+  width: 60px; /* Button width */
+  height: 60px; /* Button height */
+  background-color: #6a0dad;
+  color: white;
+  font-size: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 10;
+}
+
+.open-book-btn:hover {
+  background-color: #8a2be2;
+  transform: translateY(-50%) scale(1.1); /* Enlarge slightly while keeping centered */
+}
+
+/* Arrow Icon */
+.arrow {
+  font-weight: bold;
+}
+
+/* Navigation Button (Flipping Pages) */
+.navigation-btn {
+  position: absolute;
+  right: -30px; /* Position on the right */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.navigation-btn:hover {
+  background-color: #8a2be2;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.navigation-btn.prev {
+  left: -30px; /* Move to the left for the previous button */
+  right: auto;
+}
+
+/* Media Controls */
+.media-controls {
+  position: absolute;
+  bottom: 20px;
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+}
+
+audio {
+  width: 100%;
+  max-width: 400px;
 }

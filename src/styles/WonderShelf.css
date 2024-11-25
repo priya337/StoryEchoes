@@ -1,4 +1,54 @@
-.add-icon{
-    width: 50px;
-    height: 50px;
-}
+/* Main container for WonderShelf */
+.wonder-shelf {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center; /* Center align all content */
+  }
+  
+  /* Container for the list of stories */
+  .story-list {
+    display: flex; /* Use flexbox to align stories horizontally */
+    flex-wrap: wrap; /* Allow wrapping if there are too many stories */
+    gap: 30px; /* Adds space between each book */
+    justify-content: center; /* Center align the books in the container */
+  }
+  
+  /* Styling for each story item */
+  .story-item {
+    max-width: 250px; /* Restrict the width of each book */
+    text-align: center; /* Centers the content */
+  }
+  
+  /* Styling for story cover images */
+  .story-cover {
+    width: 200px; /* Enlarged width for the images */
+    height: 300px; /* Enlarged height for the images */
+    object-fit: cover; /* Ensures the image scales proportionally */
+    border-radius: 10px; /* Adds rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+    transition: transform 0.2s; /* Smooth animation on hover */
+  }
+  
+  /* Hover effect for story covers */
+  .story-cover:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+  }
+  
+  /* Styling specifically for the Add (+) Icon */
+  .add-icon {
+    width: 80px; /* Reduced width */
+    height: 80px; /* Reduced height */
+    background-color: rgba(0, 0, 0, 0.05); /* Subtle background for distinction */
+    display: flex; /* Center align the + icon */
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #007bff; /* Dashed border to highlight as an interactive element */
+    border-radius: 10px; /* Match the rounded corners of book covers */
+    transition: transform 0.2s; /* Smooth animation on hover */
+  }
+  
+  /* Hover effect for the Add (+) Icon */
+  .add-icon:hover {
+    transform: scale(1.05); /* Slightly enlarge the + icon on hover */
+  }
+  
