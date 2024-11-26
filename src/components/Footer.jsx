@@ -10,7 +10,7 @@ const Footer = () => {
         <img 
           src={githubLogo} 
           // alt="GitHub" 
-          style={{ width: '60px', height: '50px' }} 
+          style={{ width: '60px', height: '30px' }} 
         />
       </a>
       <p>Check out my repository on GitHub!</p>

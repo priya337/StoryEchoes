@@ -19,7 +19,7 @@ const ReadStory = () => {
         setStory(response.data);
 
         // Dynamically import the front cover image
-        const image = await import(`../assets/Story${id}images/front_cover.jpg`);
+        const image = await import(`/Story${id}images/front_cover.jpg`);
         setFrontCoverImage(image.default); // Set the imported image
       } catch (error) {
         setError("Failed to fetch story or image.");
