@@ -73,7 +73,7 @@ const ReadStory = () => {
       <div className="bulb glow"></div>*/}
       {!loading && !error && story && (
         <div className="book-container">
-          <Link to="/editStory">
+          <Link to={`/editStory/${id}`}>
             <button>EDIT</button>
           </Link>
           <HTMLFlipBook
