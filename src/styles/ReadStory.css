@@ -5,7 +5,6 @@
   justify-content: center;
   align-items: center; /* Center the entire content vertically */
   position: relative;
-  margin-top: 50px;
 }
 
 /* Lamp and Glow */
@@ -42,22 +41,19 @@
 
 /* Book Container */
 .book-container {
+  width: 100%;
+  max-width: 750px; /* Increased width for better proportions */
+  height: 550px; /* Increased height to fit proportions */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 50px; /* Add spacing from the lamp and glow */
   transition: transform 0.5s ease, opacity 0.5s ease; /* Smooth transition for open/close */
 }
 
-.book-container.open {
-  transform: scale(1.1); /* Slight zoom when open */
-  opacity: 1; /* Ensure visibility */
-}
-
-.book-container.closed {
-  transform: scale(1); /* Default scale */
-  opacity: 1; /* Maintain visibility */
+/* Flipbook Pages */
+.page {
+  background: #fcdb8f;
 }
 
 /* Book Styles */
@@ -67,10 +63,6 @@
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.book:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
 }
 
 .book img {
@@ -92,6 +84,7 @@
 }
 
 .navigation-btn {
+  margin-top: 5px;
   width: 50px;
   height: 50px;
   background-color: #6a0dad;
@@ -113,7 +106,6 @@
 }
 
 .demo-book {
-  width: 350px;
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
@@ -136,6 +128,7 @@
 }
 
 .page-content {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -148,7 +141,6 @@
 }
 
 .page-text {
-  width: 90%;
   height: 200px;
   line-height: 1.4em;
   font-weight: bold;
@@ -165,132 +157,3 @@
   width: 90%;
   color: black;
 }
-
-/* NO USED*/
-/* Open Book Styles 
-.book-open {
-  display: flex;
-  width: 700px;
-  height: 500px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  position: relative;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-}
-
-.book-open .page-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-/* Page Styles 
-.page-left,
-.page-right {
-  width: 50%; 
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow: hidden;
-}
-
-.page-left {
-  background-color: #f9f9f9;
-  font-size: 16px;
-  line-height: 1.6;
-  font-family: "Georgia", serif; /* Classic book font 
-  color: #333;
-  text-align: left;
-}
-
-.page-right {
-  background-color: #fff;
-  text-align: center;
-}
-
-.page-right img {
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow 
-}
-
-/* Open Book Button 
-.open-book-btn {
-  position: absolute;
-  right: -30px; 
-  top: 50%; 
-  transform: translateY(-50%); 
-  width: 60px;
-  height: 60px; 
-  background-color: #6a0dad;
-  color: white;
-  font-size: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  z-index: 10;
-}
-
-.open-book-btn:hover {
-  background-color: #8a2be2;
-  transform: translateY(-50%) scale(1.1); 
-}
-
-
-
-/* Navigation Button (Flipping Pages) 
-.navigation-btn {
-  position: absolute;
-  right: -30px; /* Position on the right 
-  top: 50%;
-  transform: translateY(-50%);
-  width: 60px;
-  height: 60px;
-  background-color: #6a0dad;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-
-.navigation-btn:hover {
-  background-color: #8a2be2;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.navigation-btn.prev {
-  left: -30px; /* Move to the left for the previous button 
-  right: auto;
-}
-
-/* Media Controls 
-.media-controls {
-  position: absolute;
-  bottom: 20px;
-  width: 90%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-}
-
-audio {
-  width: 100%;
-  max-width: 400px;
-}*/

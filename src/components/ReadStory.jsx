@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, forwardRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import HTMLFlipBook from "react-pageflip";
 
-import axios from "axios"; // For API calls
+import axios from "axios";
 
 const PageCover = forwardRef((props, ref) => {
   return (
@@ -22,7 +22,6 @@ const Page = forwardRef((props, ref) => {
   return (
     <div className="page" ref={ref}>
       <div className="page-content">
-        {/*<h2 className="page-header">Page header - {props.number}</h2>*/}
         <div className="page-image">
           <img src={props.image} alt="Page Image" />
         </div>
@@ -40,7 +39,6 @@ const ReadStory = () => {
   const [totalPage, setTotalPage] = useState(0); // State to total page nos
   const [loading, setLoading] = useState(true); // State for loading indicator
   const [error, setError] = useState(null); // State for error handling
-  const [frontCoverImage, setFrontCoverImage] = useState(null); // State for front cover image
 
   const flipBook = useRef({});
 
@@ -50,12 +48,9 @@ const ReadStory = () => {
       try {
         const { data } = await axios.get(`http://localhost:400/stories/${id}`);
         setStory(data);
-
-        // Dynamically import the front cover image
-        const image = await import(`/Story${id}images/front_cover.jpg`);
-        setFrontCoverImage(image.default); // Set the imported image
-      } catch (error) {
-        setError("Failed to fetch story or image.");
+      } catch (err) {
+        console.error("Error fetching story:", err);
+        setError("Failed to load the story.");
       } finally {
         setLoading(false);
       }
@@ -72,23 +67,27 @@ const ReadStory = () => {
     <div className="reading-area">
       {/* Lamp and glow 
       <img src={lamp} alt="Lamp" className="lamp" />
+      maxShadowOpacity={0.5}
+      mobileScrollSupport={true}
+                  
       <div className="bulb glow"></div>*/}
       {!loading && !error && story && (
         <div className="book-container">
+          <Link to="/editStory">
+            <button>EDIT</button>
+          </Link>
           <HTMLFlipBook
             width={350}
             height={400}
             size="stretch"
             minWidth={350}
-            maxWidth={350}
+            maxWidth={700}
             minHeight={400}
             maxHeight={400}
-            maxShadowOpacity={0.5}
             showCover={true}
-            mobileScrollSupport={true}
             onFlip={onPageFlip}
             className="demo-book"
-            ref={(el) => (flipBook.current[story.id] = el)}
+            ref={flipBook}
           >
             {/* Front cover */}
             <PageCover cover={story.front_cover}>{story.title}</PageCover>
