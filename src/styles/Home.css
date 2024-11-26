@@ -1,42 +1,50 @@
-.home{
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Bubblegum Sans';
-    font-size: 1.5em;
-    margin-top: 20px;
+.home {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Bubblegum Sans";
+  font-size: 1.5em;
+  margin-top: 20px;
 }
 
-h2{
-    overflow: hidden;
-    white-space: nowrap; /* Keeps the content on a single line */
-    margin: 0 auto; 
-    letter-spacing: .15em; /* Adjust as needed */
-    animation: typing 5s steps(40, end);
+.type-writer {
+  overflow: hidden;
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto;
+  letter-spacing: 0.15em; /* Adjust as needed */
+  animation: typing 5s steps(40, end);
 }
 
 @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
-.cover-logo{
-    margin-top: 10px;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    animation: grow 4s linear;
-    opacity: 0.75;
+.cover-logo {
+  margin-top: 10px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  animation: grow 4s linear;
+  opacity: 0.75;
 }
 
 @keyframes grow {
-    from { opacity: 0 }
-    to { opacity: 0.75 }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.75;
+  }
 }
 
-.shine{
-    -webkit-box-shadow:0px 0px 105px 45px rgba(244, 244, 244, 0.9);
-    -moz-box-shadow: 0px 0px 105px 45px rgba(244, 244, 244, 0.9);
-    box-shadow: 0px 0px 105px 45px rgba(197, 195, 195, 0.9);
+.shine {
+  -webkit-box-shadow: 0px 0px 105px 45px rgba(244, 244, 244, 0.9);
+  -moz-box-shadow: 0px 0px 105px 45px rgba(244, 244, 244, 0.9);
+  box-shadow: 0px 0px 105px 45px rgba(197, 195, 195, 0.9);
 }

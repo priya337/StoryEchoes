@@ -5,12 +5,14 @@
   justify-content: center;
   align-items: center; /* Center the entire content vertically */
   position: relative;
+  margin-top: 50px;
 }
 
 /* Lamp and Glow */
 .lamp {
-  width: 80px;
-  height: 80px;
+  display: none;
+  width: 300px;
+  height: 50px;
   z-index: 10;
   position: absolute;
   top: 0; /* Align the lamp above the bulb */
@@ -23,30 +25,28 @@
   -moz-box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
   box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
   position: absolute;
-  top: 70px; /* Bring the glow closer to the lamp */
-  left: 50%;
   transform: translateX(-50%);
 }
 
-.round {
-  width: 30px;
-  height: 30px;
+.bulb {
+  display: none;
+  width: 80px;
+  height: 50px;
   border-radius: 50%;
   background-color: rgb(214, 221, 11);
   position: absolute;
-  top: 60px; /* Adjust the bulb's position closer to the lamp */
+  top: 17px; /* Adjust the bulb's position closer to the lamp */
   left: 50%;
   transform: translateX(-50%);
 }
 
 /* Book Container */
 .book-container {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 200px; /* Add spacing from the lamp and glow */
+  margin-top: 50px; /* Add spacing from the lamp and glow */
   transition: transform 0.5s ease, opacity 0.5s ease; /* Smooth transition for open/close */
 }
 
@@ -62,11 +62,8 @@
 
 /* Book Styles */
 .book {
-  position: relative;
   width: 350px;
-  height: 500px;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -83,10 +80,97 @@
   border-radius: 15px;
 }
 
-/* Open Book Styles */
+.page-nav-area {
+  display: flex;
+  align-items: center;
+}
+
+/* Arrow Icon */
+.arrow {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.navigation-btn {
+  width: 50px;
+  height: 50px;
+  background-color: #6a0dad;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigation-btn:hover {
+  background-color: #8a2be2;
+  transform: scale(1.1);
+}
+
+.page-nos {
+  margin: 0 10px;
+}
+
+.demo-book {
+  width: 350px;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fcdb8f;
+}
+
+.cover-page-title {
+  width: 80%;
+  height: 80px;
+  letter-spacing: 1.5px;
+  color: white;
+  background-color: #987ea9;
+  border-radius: 5px;
+}
+
+.cover-page-image {
+  width: 90%;
+  height: 300px;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.page-image {
+  height: 150px;
+}
+
+.page-text {
+  width: 90%;
+  height: 200px;
+  line-height: 1.4em;
+  font-weight: bold;
+  color: #37045c74;
+  background-color: #07866074;
+  letter-spacing: 1px;
+}
+
+.page-footer {
+  border-top: 1px solid grey;
+  margin-top: 10px;
+  padding-top: 5px;
+  height: 5vh;
+  width: 90%;
+  color: black;
+}
+
+/* NO USED*/
+/* Open Book Styles 
 .book-open {
   display: flex;
-  width: 700px; /* Double the size for both pages */
+  width: 700px;
   height: 500px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -101,10 +185,10 @@
   height: 100%;
 }
 
-/* Page Styles */
+/* Page Styles 
 .page-left,
 .page-right {
-  width: 50%; /* Split into two equal pages */
+  width: 50%; 
   height: 100%;
   display: flex;
   align-items: center;
@@ -117,7 +201,7 @@
   background-color: #f9f9f9;
   font-size: 16px;
   line-height: 1.6;
-  font-family: "Georgia", serif; /* Classic book font */
+  font-family: "Georgia", serif; /* Classic book font 
   color: #333;
   text-align: left;
 }
@@ -132,17 +216,17 @@
   height: 90%;
   object-fit: contain;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow 
 }
 
-/* Open Book Button */
+/* Open Book Button 
 .open-book-btn {
   position: absolute;
-  right: -30px; /* Move outside the book's right edge */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for perfect vertical centering */
-  width: 60px; /* Button width */
-  height: 60px; /* Button height */
+  right: -30px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  width: 60px;
+  height: 60px; 
   background-color: #6a0dad;
   color: white;
   font-size: 24px;
@@ -158,18 +242,15 @@
 
 .open-book-btn:hover {
   background-color: #8a2be2;
-  transform: translateY(-50%) scale(1.1); /* Enlarge slightly while keeping centered */
+  transform: translateY(-50%) scale(1.1); 
 }
 
-/* Arrow Icon */
-.arrow {
-  font-weight: bold;
-}
 
-/* Navigation Button (Flipping Pages) */
+
+/* Navigation Button (Flipping Pages) 
 .navigation-btn {
   position: absolute;
-  right: -30px; /* Position on the right */
+  right: -30px; /* Position on the right 
   top: 50%;
   transform: translateY(-50%);
   width: 60px;
@@ -194,11 +275,11 @@
 }
 
 .navigation-btn.prev {
-  left: -30px; /* Move to the left for the previous button */
+  left: -30px; /* Move to the left for the previous button 
   right: auto;
 }
 
-/* Media Controls */
+/* Media Controls 
 .media-controls {
   position: absolute;
   bottom: 20px;
@@ -212,4 +293,4 @@
 audio {
   width: 100%;
   max-width: 400px;
-}
+}*/

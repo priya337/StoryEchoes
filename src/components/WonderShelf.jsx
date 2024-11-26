@@ -1,8 +1,8 @@
 import "../styles/WonderShelf.css"; // Importing styles
 import Add from "../assets/plus.png"; // Importing Add Story icon
 import { useState, useEffect } from "react"; // Importing React hooks
-import axios from "axios"; // Importing Axios for API calls
-import { Link } from "react-router-dom"; // Importing Link for navigation
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const WonderShelf = () => {
   const [stories, setStories] = useState([]); // State to store stories
@@ -13,8 +13,8 @@ const WonderShelf = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/stories"); // Replace with your backend URL
-        setStories(response.data); // Save fetched stories in the state
+        const { data } = await axios.get("http://localhost:5000/stories"); // Replace with your backend URL
+        setStories(data); // Save fetched stories in the state
       } catch (error) {
         setError("Failed to fetch stories. Please try again later."); // Handle error
       } finally {
@@ -32,7 +32,9 @@ const WonderShelf = () => {
         {/* + Symbol for Adding a New Story */}
         <div className="story-item">
           <Link to="/addStory">
-            <img src={Add} alt="Add Story Logo" className="story-cover add-icon"></img>
+            <div>
+              <img src={Add} alt="Add Story Logo" className="add-icon"></img>
+            </div>
           </Link>
         </div>
 
@@ -46,11 +48,13 @@ const WonderShelf = () => {
         {stories.map((story) => (
           <div key={story.id} className="story-item">
             <Link to={`/readStory/${story.id}`}>
-              <img
-                src={story.imageforstorytile} // Use `imageforstorytile.jpg` for the story tile
-                alt={`${story.title} Tile`}
-                className="story-cover"
-              />
+              <div>
+                <img
+                  src={story.imageforstorytile} // Use `imageforstorytile.jpg` for the story tile
+                  alt={`${story.title} Tile`}
+                  className="story-cover"
+                />
+              </div>
             </Link>
           </div>
         ))}
