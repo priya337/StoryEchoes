@@ -1,0 +1,129 @@
+/* Reading Area */
+.reading-area {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    background-color: #121344; /* Dark background */
+  }
+  
+  /* Lamp and Glow */
+  .lamp {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 5px; /* Position lamp slightly below the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%);
+  }
+  
+  .glow {
+    box-shadow: 0px 0px 105px 45px rgba(241, 255, 45, 0.9);
+    position: absolute;
+    top: 70px; /* Adjusted glow position closer to lamp shade */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+  }
+  
+  .round {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgb(214, 221, 11);
+    position: absolute;
+    top: 59.9px; /* Adjusted to align bulb under lamp */
+    left: 50.1%;
+    transform: translateX(-50%);
+  }
+  
+  /* Flipbook Container */
+  .book-container {
+    width: 100%;
+    max-width: 750px; /* Increased width for better proportions */
+    margin-top: 120px; /* Adjusted margin to place the book above the footer */
+    height: 550px; /* Increased height to fit proportions */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Flipbook Pages */
+  .page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #fff; /* White background for contrast */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+  
+  /* Front Cover and Back Cover */
+  .page-content img {
+    width: 125%;
+    object-fit: cover; /* Ensure the image covers the full page */
+    border-radius: 10px;
+  }
+  
+  /* Left Page */
+  .page-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    text-align: justify;
+    font-size: 14px;
+    line-height: 1.2;
+    font-family: "Arial", serif;
+    color: #333;
+    overflow-y: auto; /* Added scrolling for overflowing content */
+  }
+  
+  /* Right Page */
+  .page-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .page-right img {
+  
+    flex-direction: column; /* Align items vertically */
+    justify-content: flex-start; /* Align content to the top */
+    height: 350px;
+    width: 350px;
+    object-fit: cover; /* Ensure images are not cut off */
+    border-radius: 10px;
+    box-shadow: 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  
+  /* Back Cover */
+  .back-cover {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
+  }
+  
+  /* Footer */
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    background-color: #121344;
+    color: #fff;
+    font-size: 14px;
+    z-index: 10; /* Ensure the footer appears above other elements */
+  }
+  

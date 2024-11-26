@@ -1,12 +1,31 @@
 .footer {
-  height: 5%;
+  height: 5%; /* Increased height */
   width: 100vw;
+  background-color: rgba(242, 238, 238, 0.5); /* Fallback color */
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
 }
 
-/*Mobile Screen*/
+.footer-content {
+  display: flex; 
+  align-items: center; 
+}
+
+.github-text {
+  font-size: 20px; 
+  margin: 0; 
+}
+
+/* Mobile Screen */
 @media screen and (max-device-width: 425px) {
+  /* Add mobile-specific styles here if needed */
 }
 
-/*Tablet Screen*/
+/* Tablet Screen */
 @media screen and (max-device-width: 768px) and (min-width: 426px) {
+  /* Add tablet-specific styles here if needed */
 }
