@@ -99,7 +99,9 @@ Response:
 
 # Please Note : 
 
-As this is a Mock backend ensure to use the port number assigned to the json server on your local system. 
+As this is a Mock backend ensure please use port 400 while starting the db json: 
+
+json-server --watch db.json --port 400 
 
 # API Integration: 
 
