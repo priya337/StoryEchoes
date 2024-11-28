@@ -2,34 +2,27 @@ import "../styles/ActionBar.css";
 import play from "../assets/play.png";
 import stop from "../assets/stop.png";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+
+import { VoicesContext } from "../contexts/voices.context.jsx";
 
 const ActionBar = ({ story, storyToSpeak, page }) => {
   const [isReading, setIsReading] = useState(false);
-  const [voices, setVoices] = useState([]);
   const synth = window.speechSynthesis;
-  let voice;
-
-  function populateVoiceList() {
-    //Searching for a Female voice for story narration
-    if (typeof speechSynthesis === "undefined") {
-      return;
-    }
-
-    voice = speechSynthesis
-      .getVoices()
-      .filter((voice) => voice.name.toUpperCase().search("FEMALE") >= 0);
-    setVoices[voice];
-  }
+  const voices = useContext(VoicesContext);
 
   const playStory = () => {
     if (isReading) {
       synth.cancel(); // Stop any ongoing narration
     } else {
+      //Create utterance & add end even to change Reading icon back to play
       const utterance = new SpeechSynthesisUtterance(storyToSpeak);
-      if (voice && voice.length > 0) {
-        utterance.voice = voice[0];
+      utterance.addEventListener("end", () => setIsReading((prev) => !prev));
+
+      //We play on the Female voice if available
+      if (voices && voices.length > 0) {
+        utterance.voice = voices[0];
         synth.speak(utterance);
       } else {
         window.speechSynthesis.speak(utterance); //Fallback voice
@@ -43,10 +36,6 @@ const ActionBar = ({ story, storyToSpeak, page }) => {
       // Stop any ongoing narration on Page flips
       synth.cancel();
       setIsReading((prev) => !prev);
-    }
-
-    if (storyToSpeak) {
-      populateVoiceList();
     }
   }, [page]);
 
