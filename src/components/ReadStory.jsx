@@ -24,7 +24,7 @@ const ReadStory = () => {
     // Fetch story data
     const fetchStory = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/stories/${id}`);
+        const { data } = await axios.get(`http://localhost:400/stories/${id}`);
         setStory(data);
         setStoryToSpeak(data.title);
       } catch (err) {
