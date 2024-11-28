@@ -6,12 +6,13 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <div className="navbar">
+      <Link to="/">
+        <div className="logo-area">
+          <img src={Logo} alt="Story Echoes Logo" className="app-logo"></img>
+          <span> Story Echoes</span>
+        </div>
+      </Link>
 
-      <div className="logo-area">
-        <img src={Logo} alt="Story Echoes Logo" className="app-logo"></img>
-        <span> Story Echoes</span>
-      </div>
-      
       <div className="menu-area">
         <Link to="/wonderShelf" className="menu-item">
           <span>Wonder Shelf</span>
