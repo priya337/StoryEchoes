@@ -38,10 +38,11 @@ const ReadStory = () => {
     fetchStory();
   }, [id]);
 
-  const fetchContentToSpeak = (page) => {
+  const fetchContentToNarrate = (page) => {
     if (page === 0) {
       return story.title;
     } else {
+      //Concatenate 2 pages text to be narrated
       const storyNarration = story.content
         .slice(page - 1, page + 1)
         .reduce((a, b) => {
@@ -53,8 +54,8 @@ const ReadStory = () => {
 
   const onPageFlip = (e) => {
     setPage(e.data);
-    const storyNarration = fetchContentToSpeak(e.data);
-    setStoryToSpeak(storyNarration);
+    const storyNarration = fetchContentToNarrate(e.data);
+    setStoryToSpeak(storyNarration); //Set the narration text on page flip
   };
 
   const nextButtonClick = () => {
@@ -95,7 +96,11 @@ const ReadStory = () => {
 
   return (
     <div className="read-container">
-      <ActionBar story={story} storyToSpeak={storyToSpeak}></ActionBar>
+      <ActionBar
+        story={story}
+        storyToSpeak={storyToSpeak}
+        page={page}
+      ></ActionBar>
 
       <div className="reading-area">
         {!error && story && (

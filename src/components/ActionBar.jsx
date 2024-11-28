@@ -5,48 +5,50 @@ import stop from "../assets/stop.png";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const ActionBar = ({ story, storyToSpeak }) => {
+const ActionBar = ({ story, storyToSpeak, page }) => {
   const [isReading, setIsReading] = useState(false);
+  const [voices, setVoices] = useState([]);
   const synth = window.speechSynthesis;
+  let voice;
 
   function populateVoiceList() {
+    //Searching for a Female voice for story narration
     if (typeof speechSynthesis === "undefined") {
       return;
     }
 
-    const voices = speechSynthesis
+    voice = speechSynthesis
       .getVoices()
-      .filter((voice) => voice.lang === "en-US");
-
-    for (let i = 0; i < voices.length; i++) {
-      const option = document.createElement("option");
-      option.textContent = `${voices[i].name} (${voices[i].lang})`;
-
-      if (voices[i].default) {
-        option.textContent += " — DEFAULT";
-      }
-
-      option.setAttribute("data-lang", voices[i].lang);
-      option.setAttribute("data-name", voices[i].name);
-      //document.getElementById("voiceSelect").appendChild(option);
-    }
+      .filter((voice) => voice.name.toUpperCase().search("FEMALE") >= 0);
+    setVoices[voice];
   }
 
   const playStory = () => {
     if (isReading) {
-      synth.cancel(); // Stop any ongoing speech
+      synth.cancel(); // Stop any ongoing narration
     } else {
       const utterance = new SpeechSynthesisUtterance(storyToSpeak);
-      window.speechSynthesis.speak(utterance);
+      if (voice && voice.length > 0) {
+        utterance.voice = voice[0];
+        synth.speak(utterance);
+      } else {
+        window.speechSynthesis.speak(utterance); //Fallback voice
+      }
     }
     setIsReading((prev) => !prev);
   };
 
   useEffect(() => {
+    if (isReading) {
+      // Stop any ongoing narration on Page flips
+      synth.cancel();
+      setIsReading((prev) => !prev);
+    }
+
     if (storyToSpeak) {
       populateVoiceList();
     }
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     return () => synth.cancel(); //Cleanup on Unmount

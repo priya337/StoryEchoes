@@ -112,7 +112,7 @@ const WonderShelf = () => {
                 <div className="story-card">
                   <img src={story.front_cover} alt={`${story.title} Tile`} />
                   <h2>{story.title}</h2>
-                  <h3>Echoed by{story.author}</h3>
+                  <h3>Echoed by {story.author ? story.author : "Anonymous"}</h3>
                 </div>
               </Link>
             </div>
