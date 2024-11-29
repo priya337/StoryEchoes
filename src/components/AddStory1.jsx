@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/AddStory.css";
-import RevAiIntegration from "./RevAiIntegration";
 
 // Import assets
 import PlusIcon from "../assets/pluss.png";
-// import BeeIcon from "../assets/bee.png"; // Add a bee icon image to your assets
 
 const AddStory = () => {
   const [title, setTitle] = useState("");
@@ -15,16 +13,16 @@ const AddStory = () => {
   const [errors, setErrors] = useState({});
   const [limitReached, setLimitReached] = useState(false);
   const [beeMessage, setBeeMessage] = useState("🐝 Bzzz... Click me to submit your story!"); // Default message
-  const [transcriptionStatus, setTranscriptionStatus] = useState("Idle"); // For transcription status updates
   const navigate = useNavigate();
+
   const MAX_PAGES = 7;
 
   // Add a new page
-  const addPage = (transcription = "") => {
+  const addPage = () => {
     if (pages.length < MAX_PAGES) {
       setPages((prevPages) => [
         ...prevPages,
-        { page: prevPages.length + 1, text: transcription, image: "" },
+        { page: prevPages.length + 1, text: "", image: "" },
       ]);
     }
     if (pages.length + 1 === MAX_PAGES) {
@@ -127,19 +125,6 @@ const AddStory = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle transcription completion
-  const handleTranscriptionComplete = (transcription) => {
-    addPage(transcription); // Add transcription to a new page
-    setBeeMessage("🐝 Transcription added! Keep creating your magical adventure!");
-    setTranscriptionStatus("Completed ✅");
-  };
-
-  // Start transcription process
-  const handleStartTranscription = () => {
-    setBeeMessage("🐝 Transcription in progress... Hang tight!");
-    setTranscriptionStatus("In Progress...");
-  };
-
   // Handle form submission
   const handleSubmit = async () => {
     if (!validate()) return;
@@ -178,20 +163,7 @@ const AddStory = () => {
 
   return (
     <div className="add-story-container">
-      {/* Honey Bee Section */}
-      <div
-        className="honey-bee-transcription"
-        onClick={handleStartTranscription} // Ensure this function exists in your component
-        style={{ cursor: "pointer", fontSize: "1.5rem", textAlign: "center" }}
-      >
-        <p>🐝 Click me to start transcription!</p>
-      </div>
-      <div className="transcription-status">
-        <p>Status: {transcriptionStatus}</p> {/* Ensure transcriptionStatus state exists */}
-      </div>
-  
       <h1>Create Your Magical Adventure</h1>
-  
       <form className="story-form">
         <div className="row">
           <div className={`form-group ${errors.title ? "error-highlight" : ""}`}>
@@ -203,7 +175,7 @@ const AddStory = () => {
             />
             {errors.title && <span className="error">{errors.title}</span>}
           </div>
-  
+
           <div className={`form-group ${errors.author ? "error-highlight" : ""}`}>
             <label>Author</label>
             <input
@@ -214,7 +186,7 @@ const AddStory = () => {
             {errors.author && <span className="error">{errors.author}</span>}
           </div>
         </div>
-  
+
         <div
           className={`form-group front-cover-group ${
             errors.frontCover ? "error-highlight" : ""
@@ -244,7 +216,7 @@ const AddStory = () => {
             <span className="error">{errors.frontCover}</span>
           )}
         </div>
-  
+
         <div className="pages-container">
           {pages.map((page, index) => (
             <div key={index} className="page-input-group">
@@ -306,7 +278,7 @@ const AddStory = () => {
           )}
           {errors.pages && <span className="error">{errors.pages}</span>}
         </div>
-  
+
         {/* Honey Bee Submit Button */}
         <div
           className="honey-bee-message"
@@ -318,5 +290,6 @@ const AddStory = () => {
       </form>
     </div>
   );
-}  
+};
+
 export default AddStory;

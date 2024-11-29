@@ -1,31 +1,65 @@
 .footer {
-  height: 5%; /* Increased height */
+  height: 5%;
   width: 100vw;
-  background-color: rgba(242, 238, 238, 0.5); /* Fallback color */
-  background-size: cover; 
-  background-repeat: no-repeat; 
-  background-position: center; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+  background-repeat: repeat;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.footer-content {
-  display: flex; 
-  align-items: center; 
+.footer-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit; /* Maintain the text and icon color consistent */
 }
 
-.github-text {
-  font-size: 20px; 
-  margin: 0; 
+.github-logo {
+  width: 60px;
+  height: 30px;
+}
+
+.open-link-icon-wrapper {
+  margin-left: -8px; /* Add space between the GitHub logo and the open link icon */
+}
+
+.open-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* Pointer behavior for the open link icon */
+  text-decoration: none;
+  color: #26d6b3;
+  
+}
+
+.open-link-icon svg {
+  fill: currentColor; /* Matches the text/icon color */
+  transition: transform 0.2s ease;
+}
+
+.open-link-icon:hover svg {
+  transform: scale(1.2); /* Slight animation on hover */
 }
 
 /* Mobile Screen */
 @media screen and (max-device-width: 425px) {
-  /* Add mobile-specific styles here if needed */
+  .github-logo {
+    width: 50px;
+    height: 25px;
+  }
+
+  .open-link-icon svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 /* Tablet Screen */
 @media screen and (max-device-width: 768px) and (min-width: 426px) {
-  /* Add tablet-specific styles here if needed */
+  .github-logo {
+    width: 55px;
+    height: 28px;
+  }
 }

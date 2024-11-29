@@ -46,7 +46,7 @@ const ReadStory = () => {
     // Fetch story data
     const fetchStory = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:400/stories/${id}`);
+        const { data } = await axios.get(`http://localhost:9001/stories/${id}`);
         setStory(data);
       } catch (err) {
         console.error("Error fetching story:", err);

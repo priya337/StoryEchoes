@@ -3,10 +3,8 @@
     {
       "id": "1",
       "title": "Nibbles and the Perfect Hat",
-      "imageforstorytile": "/Story1images/imageforstorytile.jpg",
-      "description": "Follow Nibbles the garden gnome as he embarks on an adventure to find the perfect hat fit.",
+      "Author": "David Todd",
       "front_cover": "/Story1images/front_cover.jpg",
-      "back_cover": "/Story1images/back_cover.jpg",
       "content": [
         {
           "page": 1,
@@ -46,57 +44,13 @@
       ]
     },
     {
-      "id": "2",
-      "title": "Danny and the Blue Adventure",
-      "description": "Join Danny the dinosaur as he makes a new friend and explores the jungle.",
-      "front_cover": "/Story2images/front_cover.jpg",
-      "imageforstorytile": "/Story2images/imageforstorytile.jpg",
-      "back_cover": "/Story2images/back_cover.jpg",
-      "content": [
-        {
-          "page": 1,
-          "text": "In a vibrant jungle lived a green dinosaur named Danny. One sunny day, he decided to explore his home and make new friends.",
-          "image": "/Story2images/page1.jpg"
-        },
-        {
-          "page": 2,
-          "text": "Walking along, Danny stumbled upon a little blue toy car caught on a vine. The car seemed sad, so Danny helped free it.",
-          "image": "/Story2images/page2.jpg"
-        },
-        {
-          "page": 3,
-          "text": "Danny and the blue toy car became fast friends. They began their journey through the jungle, discovering new places together.",
-          "image": "/Story2images/page3.jpg"
-        },
-        {
-          "page": 4,
-          "text": "As they played in a clearing, a sudden rainstorm began. Danny and the blue car found shelter beneath a large leaf.",
-          "image": "/Story2images/page4.jpg"
-        },
-        {
-          "page": 5,
-          "text": "Once the rain stopped, they came across a river too wide for the blue car to cross. Danny helped the car by carrying it.",
-          "image": "/Story2images/page5.jpg"
-        },
-        {
-          "page": 6,
-          "text": "By evening, the duo reached the edge of the jungle. They climbed a hill to watch the sky change colors as the sun set.",
-          "image": "/Story2images/page6.jpg"
-        },
-        {
-          "page": 7,
-          "text": "Danny and the blue toy car returned to the jungle, their hearts filled with the warmth of friendship and adventure.",
-          "image": "/Story2images/page7.jpg"
-        }
-      ]
+      "id": "2"
     },
     {
       "id": "fd2e",
       "title": "The Rooster and the Fox",
-      "description": "A clever rooster and a cunning fox learn valuable lessons about wisdom and respect in a lush green forest.",
+      "Author": "James Foster Todd",
       "front_cover": "/Storyfd2eimages/front_cover.jpg",
-      "imageforstorytile": "/Storyfd2eimages/imageforstorytile.jpg",
-      "back_cover": "/Storyfd2eimages/back_cover.jpg",
       "content": [
         {
           "page": 1,
@@ -132,6 +86,32 @@
           "page": 7,
           "text": "And so the rooster and the fox lived their lives with new wisdom. The rooster stayed clever and cautious, while the fox learned to respect the intelligence of others. They both found a way to live peacefully, each with their own lessons learned.",
           "image": "/Storyfd2eimages/page7.jpg"
+        }
+      ]
+    },
+    {
+      "title": "Lily's Garden Adventures",
+      "author": "Sarah Brown",
+      "front_cover": "http://localhost:9000/uploads/1732810777496-front_cover.jpg",
+      "content": [
+        {
+          "page": 1,
+          "text": "Creating this book for testing purpose. ",
+          "image": "https://i.graphicmama.com/uploads/2021/1/60141aa598abd-cute-little-duck-cartoon-vector-character.png"
+        }
+      ],
+      "id": "804d"
+    },
+    {
+      "id": "50bc",
+      "title": "Test",
+      "author": "Test",
+      "front_cover": "http://localhost:9000/uploads/1732835125318-front_cover.jpg",
+      "content": [
+        {
+          "page": 1,
+          "text": "Testing the content",
+          "image": "http://localhost:9000/uploads/1732835138134-page4.jpg"
         }
       ]
     }
