@@ -24,7 +24,7 @@ const ReadStory = () => {
     // Fetch story data
     const fetchStory = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:9001/stories/${id}`);
+        const { data } = await axios.get(`http://localhost:400/stories/${id}`);
         setStory(data);
         setStoryToSpeak(data.title);
       } catch (err) {
@@ -37,14 +37,6 @@ const ReadStory = () => {
 
     fetchStory();
   }, [id]);
-
-  if (!story) {
-    return (
-      <div className="loading-container" style={{ textAlign: "center", fontFamily: "'Bubblegum Sans', cursive" }}>
-        <p>Loading story...</p> {/* Display loading message while the story is fetched */}
-      </div>
-    );
-  }
 
   const fetchContentToNarrate = (page) => {
     if (page === 0) {
@@ -84,7 +76,7 @@ const ReadStory = () => {
   };
 
   /* Display loading indicator */
-  if (loading) {
+  if (loading || !story) {
     return (
       <div className="message-area">
         <Spinner animation="grow" variant="info" />
@@ -103,7 +95,6 @@ const ReadStory = () => {
   }
 
   return (
-    
     <div className="read-container">
       <ActionBar
         story={story}
@@ -180,15 +171,17 @@ const ReadStory = () => {
 
             {/* Button to navigate the book */}
             <div className="page-nav-area">
-              <div className="navigation-btn" onClick={prevButtonClick}>
-                <span className="arrow">🠘</span>
-              </div>
+              <div
+                className="navigation-btn left-arrow"
+                onClick={prevButtonClick}
+              ></div>
               <span className="page-nos">
                 {page} : {story.content.length}
               </span>{" "}
-              <div className="navigation-btn" onClick={nextButtonClick}>
-                <span className="arrow">🠚</span>
-              </div>
+              <div
+                className="navigation-btn right-arrow"
+                onClick={nextButtonClick}
+              ></div>
             </div>
           </div>
         )}

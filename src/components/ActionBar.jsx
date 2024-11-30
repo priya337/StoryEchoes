@@ -50,7 +50,7 @@ const ActionBar = ({ story, storyToSpeak, page }) => {
         <img src={story.front_cover} alt="Book thumbnail" />
         <h2 className="bar-title">{story.title}</h2>
         <h2 className="bar-author">
-          Echoed by {story.author ? story.author : "Anonymous"}
+          Echoed by {story.Author ? story.Author : "Anonymous"}
         </h2>
       </div>
 

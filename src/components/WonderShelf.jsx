@@ -4,36 +4,18 @@ import { useState, useEffect } from "react"; // Importing React hooks
 import { Link } from "react-router-dom";
 
 import Spinner from "react-bootstrap/Spinner";
-import axios from "axios";
 
+import { useStories } from "../contexts/stories.context.jsx";
 import FunctionBar from "./FunctionBar";
 import ActionBar from "./ActionBar";
 
 const WonderShelf = () => {
-  const [stories, setStories] = useState([]); // State to store stories
-  const [loading, setLoading] = useState(true); // State for loading indicator
-  const [error, setError] = useState(null); // State for error handling
+  const { stories, loading, error } = useStories(); //Fetched stories in Context API
   const [searchStr, setSearchStr] = useState(""); // State for search text
   const [filteredBooks, setFilteredBooks] = useState([...stories]);
   const [hasResults, setHasResults] = useState(0);
   const [ascSort, setAscSort] = useState(true);
   const [gridMode, setGridMode] = useState(true);
-
-  // Fetch stories from the backend API when the component loads
-  useEffect(() => {
-    const fetchStories = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:9001/stories"); // Replace with your backend URL
-        setStories(data); // Save fetched stories in the state
-      } catch (error) {
-        setError("Failed to fetch stories. Please try again later."); // Handle error
-      } finally {
-        setLoading(false); // Stop loading indicator
-      }
-    };
-
-    fetchStories(); // Call the fetch function
-  }, []); // Runs once when the component mounts
 
   useEffect(() => {
     /*Search filter added here*/
@@ -54,7 +36,7 @@ const WonderShelf = () => {
     return books.sort((a, b) => {
       const titleA = a.title || ""; // Fallback to empty string
       const titleB = b.title || ""; // Fallback to empty string
-  
+
       if (ascSort) {
         return titleA.localeCompare(titleB);
       } else {
@@ -62,21 +44,21 @@ const WonderShelf = () => {
       }
     });
   }
-  
+
   useEffect(() => {
     let tempBooks = stories.filter((story) => story.title); // Exclude invalid entries
-  
+
     if (searchStr) {
       tempBooks = tempBooks.filter((oneStory) =>
         oneStory.title.toUpperCase().includes(searchStr.toUpperCase())
       );
     }
-  
+
     tempBooks = sortByTitle(tempBooks);
     setFilteredBooks([...tempBooks]);
     setHasResults(tempBooks.length);
   }, [searchStr, stories, ascSort]);
-  
+
   /* Display loading indicator */
   if (loading) {
     return (
@@ -129,7 +111,7 @@ const WonderShelf = () => {
                 <div className="story-card">
                   <img src={story.front_cover} alt={`${story.title} Tile`} />
                   <h2>{story.title}</h2>
-                  <h3>Echoed by {story.author ? story.author : "Anonymous"}</h3>
+                  <h3>Echoed by {story.Author ? story.Author : "Anonymous"}</h3>
                 </div>
               </Link>
             </div>

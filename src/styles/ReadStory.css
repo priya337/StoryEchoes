@@ -159,12 +159,22 @@
   transform: scale(1.1);
 }
 
-.arrow {
-  font-weight: bold;
-  font-size: 1em;
+.left-arrow {
+  background-image: url("../assets/left-arrow.png");
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.right-arrow {
+  background-image: url("../assets/right-arrow.png");
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 50%;
 }
 
 .page-nos {
+  color: white;
   font-family: "Bubblegum Sans";
   margin: 0 10px;
 }
