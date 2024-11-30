@@ -5,12 +5,14 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import HTMLFlipBook from "react-pageflip";
 import Spinner from "react-bootstrap/Spinner";
+import { useStories } from "../contexts/stories.context.jsx";
 
-import axios from "axios";
+import api from "../api";
 import ActionBar from "./ActionBar";
 
 const ReadStory = () => {
   const { id } = useParams(); // Get the story ID from the route
+  const { stories, setStories } = useStories(); //Fetched stories in Context API
 
   const [story, setStory] = useState(null); // State to store story data
   const [page, setPage] = useState(0); // State to store page no
@@ -24,9 +26,12 @@ const ReadStory = () => {
     // Fetch story data
     const fetchStory = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:400/stories/${id}`);
+        const { data } = await api.get(`/stories/${id}`);
         setStory(data);
-        setStoryToSpeak(data.title);
+        setStoryToSpeak(
+          data.title + (data.Author ? `. Echoed by ${data.Author}` : "")
+        );
+        updateStoryReadCount(data);
       } catch (err) {
         console.error("Error fetching story:", err);
         setError("Failed to load the story.");
@@ -37,6 +42,26 @@ const ReadStory = () => {
 
     fetchStory();
   }, [id]);
+
+  function updateStoryReadCount(story) {
+    //Call Update function & update the story read count
+    story.readCount = story.readCount ? story.readCount + 1 : 1;
+    let tempStories = stories.map((oneStory) => {
+      if (oneStory.id === story.id) {
+        oneStory.readCount = story.readCount;
+      }
+      return oneStory;
+    });
+
+    api
+      .put(`/stories/${story.id}`, story)
+      .then(() => {
+        setStories([...tempStories]); //Update the Context Data
+      })
+      .catch((error) =>
+        console.log("Error during story update Read Count:", error)
+      );
+  }
 
   const fetchContentToNarrate = (page) => {
     if (page === 0) {
@@ -100,6 +125,7 @@ const ReadStory = () => {
         story={story}
         storyToSpeak={storyToSpeak}
         page={page}
+        mode={"Edit"}
       ></ActionBar>
 
       <div className="reading-area">
@@ -128,6 +154,9 @@ const ReadStory = () => {
                     alt="Front Cover"
                     className="cover-page-image"
                   />
+                  <h6 className="cover-page-author">
+                    Echoed by {story.Author ? story.Author : "Anonymous"}
+                  </h6>
                 </div>
               </div>
 

@@ -1,21 +1,23 @@
 import "../styles/WonderShelf.css"; // Importing styles
-import Add from "../assets/plus.png"; // Importing Add Story icon
 import { useState, useEffect } from "react"; // Importing React hooks
-import { Link } from "react-router-dom";
-
+import { useSearchParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 
 import { useStories } from "../contexts/stories.context.jsx";
 import FunctionBar from "./FunctionBar";
-import ActionBar from "./ActionBar";
+import StoryGridView from "./StoryGridView.jsx";
+import StoryListView from "./StoryListView.jsx";
 
 const WonderShelf = () => {
   const { stories, loading, error } = useStories(); //Fetched stories in Context API
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchStr, setSearchStr] = useState(""); // State for search text
   const [filteredBooks, setFilteredBooks] = useState([...stories]);
   const [hasResults, setHasResults] = useState(0);
   const [ascSort, setAscSort] = useState(true);
   const [gridMode, setGridMode] = useState(true);
+
+  const mode = searchParams.get("mode");
 
   useEffect(() => {
     /*Search filter added here*/
@@ -60,7 +62,7 @@ const WonderShelf = () => {
   }, [searchStr, stories, ascSort]);
 
   /* Display loading indicator */
-  if (loading) {
+  if (!stories || loading) {
     return (
       <div className="message-area">
         <Spinner animation="grow" variant="info" />
@@ -94,40 +96,18 @@ const WonderShelf = () => {
 
       {/* Display stories in Grid Mode*/}
       {gridMode && (
-        <div className="story-list">
-          {/* + Symbol for Adding a New Story */}
-          <div>
-            <Link to="/addStory">
-              <div>
-                <img src={Add} alt="Add Story Logo" className="add-icon"></img>
-              </div>
-            </Link>
-          </div>
-
-          {/* Display book cards with cover, title & author */}
-          {filteredBooks.map((story) => (
-            <div key={story.id} className="story-item">
-              <Link to={`/readStory/${story.id}`}>
-                <div className="story-card">
-                  <img src={story.front_cover} alt={`${story.title} Tile`} />
-                  <h2>{story.title}</h2>
-                  <h3>Echoed by {story.Author ? story.Author : "Anonymous"}</h3>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </div>
+        <StoryGridView
+          filteredBooks={filteredBooks}
+          mode={mode}
+        ></StoryGridView>
       )}
 
-      {/* Display stories in Grid Mode*/}
+      {/* Display stories in List Mode*/}
       {!gridMode && (
-        <div className="story-list-view">
-          {filteredBooks.map((story) => (
-            <Link to={`/readStory/${story.id}`}>
-              <ActionBar story={story}></ActionBar>
-            </Link>
-          ))}
-        </div>
+        <StoryListView
+          filteredBooks={filteredBooks}
+          mode={mode}
+        ></StoryListView>
       )}
     </div>
   );

@@ -1,16 +1,38 @@
 import "../styles/ActionBar.css";
-import play from "../assets/play.png";
-import stop from "../assets/stop.png";
 
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
 
 import { VoicesContext } from "../contexts/voices.context.jsx";
+import { useStories } from "../contexts/stories.context.jsx";
 
-const ActionBar = ({ story, storyToSpeak, page }) => {
+import api from "../api";
+
+import LikeButton from "./LikeButton";
+import PlayButton from "./PlayButton";
+import ReadCount from "./ReadCount";
+import EditDeleteButton from "./EditDeleteButton.jsx";
+
+const ActionBar = ({ story, storyToSpeak, page, mode }) => {
+  const { stories, setStories } = useStories(); //Fetched stories in Context API
+
   const [isReading, setIsReading] = useState(false);
   const synth = window.speechSynthesis;
   const voices = useContext(VoicesContext);
+
+  function handleLike(e) {
+    e.preventDefault(); //On Click of Like Button the Story should not open for read
+    story.liked = story.liked ? false : true;
+
+    //Call Update function & update the story like
+    api
+      .put(`/stories/${story.id}`, story)
+      .then(() => {
+        setStories([...stories]); //Update the Context Data
+      })
+      .catch((error) =>
+        console.log("Error during story update Story Like:", error)
+      );
+  }
 
   const playStory = () => {
     if (isReading) {
@@ -45,30 +67,34 @@ const ActionBar = ({ story, storyToSpeak, page }) => {
 
   return (
     <div className="action-bar">
+      {/*Like Button*/}
+      <LikeButton story={story} handleLike={handleLike} />
+
       {/*Story Metadata*/}
       <div className="bar-story-details">
         <img src={story.front_cover} alt="Book thumbnail" />
         <h2 className="bar-title">{story.title}</h2>
-        <h2 className="bar-author">
-          Echoed by {story.Author ? story.Author : "Anonymous"}
-        </h2>
+        {!storyToSpeak && (
+          <h2 className="bar-author">
+            Echoed by {story.Author ? story.Author : "Anonymous"}
+          </h2>
+        )}
       </div>
+
+      {/*View Count*/}
+      {mode && mode === "View" && <ReadCount story={story}></ReadCount>}
 
       {/*Action Buttons*/}
       <div className="bar-actions">
+        {/*Play Button*/}
         {storyToSpeak && (
-          <div
-            className="play-button action-button"
-            onClick={playStory}
-            style={{
-              backgroundImage: isReading ? `url(${stop})` : `url(${play})`,
-            }}
-          ></div>
+          <PlayButton playStory={playStory} isReading={isReading} />
         )}
-        <div className="delete-button action-button"></div>
-        <Link to={`/editStory/${story.id}`}>
-          <button className="edit-button action-button"></button>
-        </Link>
+
+        {/*Delete Button*/}
+        {mode && mode === "Edit" && (
+          <EditDeleteButton story={story}></EditDeleteButton>
+        )}
       </div>
     </div>
   );

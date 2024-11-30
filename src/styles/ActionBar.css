@@ -56,6 +56,15 @@
   cursor: pointer;
 }
 
+.like-button {
+  background-image: url("../assets/like.png");
+}
+
+.edit-del-buttons {
+  display: flex;
+  align-items: center;
+}
+
 .edit-button {
   background-image: url("../assets/edit.png");
 }
@@ -67,6 +76,21 @@
 .play-button {
   background-image: url("../assets/play.png");
   background-size: 25px;
+}
+
+.read-show {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.read-icon {
+  width: 20px;
+}
+
+.read-show h3 {
+  margin: 0;
+  font-size: 1em;
 }
 
 /*Mobile Screen*/

@@ -14,10 +14,10 @@ const Navbar = () => {
       </Link>
 
       <div className="menu-area">
-        <Link to="/wonderShelf" className="menu-item">
+        <Link to="/wonderShelf?mode=Edit" className="menu-item">
           <span>Wonder Shelf</span>
         </Link>
-        <Link to="/wonderShelf" className="menu-item">
+        <Link to="/wonderShelf?mode=View" className="menu-item">
           <span>My Story Picks</span>
         </Link>
         <Link to="/who-we-are" className="menu-item">

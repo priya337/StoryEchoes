@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-import axios from "axios";
+import api from "../api";
 
 const StoriesContext = createContext();
 
@@ -14,7 +14,7 @@ function StoriesProviderWrapper(props) {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const { data } = await axios.get("http://localhost:400/stories"); // Replace with your backend URL
+        const { data } = await api.get("/stories"); // Replace with your backend URL
         setStories(data); // Save fetched stories in the state
       } catch (error) {
         setError("Failed to fetch stories. Please try again later."); // Handle error

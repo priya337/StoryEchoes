@@ -1,3 +1,6 @@
+import GridIcon from "../assets/grid.png";
+import ListIcon from "../assets/list.png";
+
 const FunctionBar = ({
   searchStr,
   setSearchStr,
@@ -15,18 +18,16 @@ const FunctionBar = ({
         value={searchStr}
         onChange={(e) => setSearchStr(e.target.value)}
       />
-      <button
-        className="sort-button func-button"
-        onClick={() => setAscSort(!ascSort)}
-      >
+      <button className="func-button" onClick={() => setAscSort(!ascSort)}>
         {ascSort ? "Z-A" : "A-Z"}
       </button>
-      <button
-        className="view-button func-button"
+      <div
+        className="view-button"
+        style={{
+          backgroundImage: `url(${gridMode ? ListIcon : GridIcon})`,
+        }}
         onClick={() => setGridMode(!gridMode)}
-      >
-        {gridMode ? "List View" : "Grid View"}
-      </button>
+      ></div>
     </>
   );
 };
