@@ -5,9 +5,11 @@ import RevAiIntegration from "./RevAiIntegration";
 
 // Import assets
 import PlusIcon from "../assets/pluss.png";
-// import BeeIcon from "../assets/bee.png"; // Add a bee icon image to your assets
+import FallbackImage from "../assets/fallback.jpg"; 
+
 
 const AddStory = () => {
+  const [isStoryAdded, setIsStoryAdded] = useState(false); // Track if the story is added
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [frontCover, setFrontCover] = useState(""); // Stores server URL for the uploaded file
@@ -143,29 +145,34 @@ const AddStory = () => {
   // Handle form submission
   const handleSubmit = async () => {
     if (!validate()) return;
-
+  
+    // Prepare the story object with fallback images for missing image URLs
     const story = {
       title,
       author,
-      front_cover: frontCover,
-      content: pages,
+      front_cover: frontCover || FallbackImage, // Use fallback image for front cover if missing
+      content: pages.map((page) => ({
+        ...page,
+        image: page.image || FallbackImage, // Use fallback image for missing page images
+      })),
     };
-
+  
     try {
       setBeeMessage("🐝 Submitting your story...");
       const response = await fetch("http://localhost:9001/stories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(story),
+        body: JSON.stringify(story), // Send the prepared story with fallback images
       });
-
+  
       if (response.ok) {
         const responseData = await response.json();
         setBeeMessage("🐝 Hooray! Your story has been submitted successfully!");
+        setIsStoryAdded(true); // Set the state to true after story is successfully added
         setTimeout(() => {
           setBeeMessage("🐝 Click me to submit another story!");
-          navigate(`/read-story/${responseData.id}`);
-        }, 3000);
+          navigate(`/read-story/${responseData.id}`); // Navigate to the submitted story
+        }, 2000);
       } else {
         setBeeMessage("🐝 Oops! Failed to submit your story. Try again.");
         console.error("Failed to add story.");
@@ -175,20 +182,9 @@ const AddStory = () => {
       console.error("Error submitting story:", error);
     }
   };
-
+  
   return (
     <div className="add-story-container">
-      {/* Honey Bee Section */}
-      <div
-        className="honey-bee-transcription"
-        onClick={handleStartTranscription} // Ensure this function exists in your component
-        style={{ cursor: "pointer", fontSize: "1.5rem", textAlign: "center" }}
-      >
-        <p>🐝 Click me to start transcription!</p>
-      </div>
-      <div className="transcription-status">
-        <p>Status: {transcriptionStatus}</p> {/* Ensure transcriptionStatus state exists */}
-      </div>
   
       <h1>Create Your Magical Adventure</h1>
   
@@ -244,60 +240,116 @@ const AddStory = () => {
             <span className="error">{errors.frontCover}</span>
           )}
         </div>
-  
+        
         <div className="pages-container">
-          {pages.map((page, index) => (
-            <div key={index} className="page-input-group">
-              <h3>Page {page.page}</h3>
-              <label>Story Content</label>
-              <textarea
-                value={page.text || ""}
-                onChange={(e) => handlePageTextChange(e.target.value, index)}
-              />
-              <label>Image URL (local Path/URL)</label>
-              <input
-                type="text"
-                value={page.image || ""}
-                onChange={(e) =>
-                  setPages((prevPages) =>
-                    prevPages.map((p, i) =>
-                      i === index ? { ...p, image: e.target.value } : p
-                    )
-                  )
-                }
-              />
-              <input
-                type="file"
-                accept="image/*"
-                id={`image-upload-${index}`}
-                style={{ display: "none" }}
-                onChange={(e) => handleFileUpload(e, index)}
-              />
-              <label htmlFor={`image-upload-${index}`}>
-                <img
-                  src={PlusIcon}
-                  alt="Upload Image"
-                  className="add-image-icon"
-                />
-              </label>
-              <div className="page-buttons">
-                {index === pages.length - 1 && !limitReached && (
-                  <button
-                    type="button"
-                    className="add-page-button"
-                    onClick={addPage}
-                  ></button>
-                )}
-                {pages.length > 1 && (
-                  <button
-                    type="button"
-                    className="delete-page-button"
-                    onClick={() => deletePage(index)}
-                  ></button>
-                )}
-              </div>
-            </div>
-          ))}
+  {pages.map((page, index) => (
+    <div key={index} className="page-input-group">
+      <h3>Page {page.page}</h3>
+      <label>Story Content</label>
+      <div
+  style={{
+    textAlign: "center", // Center both elements
+    fontFamily: "'Bubblegum Sans', cursive", // Font applied
+  }}
+>
+  <div
+    className="honey-bee-transcription"
+    onClick={handleStartTranscription} // Ensure this function exists in your component
+    style={{
+      cursor: "pointer",
+      fontSize: "1rem",
+    }}
+  >
+    <p>🐝 Bzz... Click me to weave your magical tale. ✨</p>
+  </div>
+
+  <div
+    className="transcription-status"
+    style={{
+      fontWeight: "bold",
+      color:
+        transcriptionStatus === "Idle"
+          ? "magenta"
+          : "blue", // Dark blue for statuses other than Idle
+      fontSize: "1rem",
+    }}
+  >
+    Status: {transcriptionStatus}
+  </div>
+</div>
+      <textarea
+        value={typeof page.text === "string" ? page.text : ""}
+        onChange={(e) => handlePageTextChange(e.target.value, index)}
+      />
+      <label>Image URL (local Path/URL)</label>
+      <input
+        type="text"
+        value={page.image || ""}
+        onChange={(e) =>
+          setPages((prevPages) =>
+            prevPages.map((p, i) =>
+              i === index ? { ...p, image: e.target.value } : p
+            )
+          )
+        }
+      />
+      <input
+        type="file"
+        accept="image/*"
+        id={`image-upload-${index}`}
+        style={{ display: "none" }}
+        onChange={(e) => handleFileUpload(e, index)}
+      />
+      <label htmlFor={`image-upload-${index}`}>
+        <img
+          src={PlusIcon}
+          alt="Upload Image"
+          className="add-image-icon"
+        />
+      </label>
+
+      {/* Add/Delete Page Buttons */}
+      <div className="page-buttons" style={{ marginTop: "1rem" }}>
+        {index === pages.length - 1 && !limitReached && (
+          <button
+            type="button"
+            className="add-page-button"
+            onClick={addPage}
+            style={{
+              cursor: "pointer",
+              marginRight: "1rem",
+              backgroundColor: "#4caf50",
+              color: "white",
+              padding: "0.5rem 1rem",
+              border: "none",
+              borderRadius: "5px",
+            }}
+          >
+          </button>
+        )}
+        {pages.length > 1 && (
+          <button
+            type="button"
+            className="delete-page-button"
+            onClick={() => deletePage(index)}
+            style={{
+              cursor: "pointer",
+              backgroundColor: "#f44336",
+              color: "white",
+              padding: "0.5rem 1rem",
+              border: "none",
+              borderRadius: "5px",
+            }}
+          >
+          </button>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
+{/* Single Bee Button Outside Pages Container */}
+<div>
           {limitReached && (
             <div className="limit-message">
               🎉 You’ve reached the maximum of 7 pages. Time to wrap up your

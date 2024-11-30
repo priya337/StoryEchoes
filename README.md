@@ -37,13 +37,13 @@ json
 {
   "id": "1",
   "title": "Nibbles and the Perfect Hat",
-  "front_cover": "./src/assets/Story1images/front_cover.jpg",
-  "back_cover": "./src/assets/Story1images/back_cover.jpg",
+  "front_cover": "/path_to_image/front_cover.jpg",
+  "back_cover": "/path_to_image/back_cover.jpg",
   "content": [
     {
       "page": 1,
       "text": "Nibbles the garden gnome loved his hat...",
-      "image": "./src/assets/Story1images/page1.jpg"
+      "image": "/path_to_image/Story1images/page1.jpg"
     },
     ...
   ]
@@ -60,18 +60,18 @@ json
   "id": "3",
   "title": "A New Adventure",
   "description": "An amazing new story for young readers.",
-  "front_cover": "./src/assets/NewStoryImages/front_cover.jpg",
-  "back_cover": "./src/assets/NewStoryImages/back_cover.jpg",
+  "front_cover": "/path_to_image/front_cover.jpg",
+  "back_cover": "/path_to_image/back_cover.jpg",
   "content": [
     {
       "page": 1,
       "text": "This is the first page of the new adventure.",
-      "image": "./src/assets/NewStoryImages/page1.jpg"
+      "image": "/path_to_image/page1.jpg"
     },
     {
       "page": 2,
       "text": "This is the second page of the new adventure.",
-      "image": "./src/assets/NewStoryImages/page2.jpg"
+      "image": "/path_to_image/page2.jpg"
     }
   ]
 }
@@ -81,27 +81,28 @@ Response:
   "id": "3",
   "title": "A New Adventure",
   "description": "An amazing new story for young readers.",
-  "front_cover": "./src/assets/NewStoryImages/front_cover.jpg",
-  "back_cover": "./src/assets/NewStoryImages/back_cover.jpg",
+  "front_cover": "/path_to_image/front_cover.jpg",
+  "back_cover": "/path_to_image/back_cover.jpg",
   "content": [
     {
       "page": 1,
       "text": "This is the first page of the new adventure.",
-      "image": "./src/assets/NewStoryImages/page1.jpg"
+      "image": "/path_to_image/page1.jpg"
     },
     {
       "page": 2,
       "text": "This is the second page of the new adventure.",
-      "image": "./src/assets/NewStoryImages/page2.jpg"
+      "image": "/path_to_image/page2.jpg"
     }
   ]
 }
 
 # Please Note : 
 
-As this is a Mock backend ensure please use port 400 while starting the db json: 
+As this is a Mock backend ensure please use port 400 while starting the db json:
 
 json-server --watch db.json --port 400 
+
 
 # API Integration: 
 

@@ -1,0 +1,79 @@
+/* About container styling */
+.about-main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    min-height: calc(100vh - 50px); /* Adjust to fit the viewport below navbar */
+    box-sizing: border-box;
+    width: 100%; /* Set the width to 80% of the screen */
+    max-width: 100%; /* Max width for larger screens */
+    margin: 0 auto; /* Center the container horizontally */
+    background-image: url("../assets/back-stars.png"); /* Background image */
+    background-size: cover;
+    background-position: center;
+    color: white; /* Text color set to white for better readability */
+  }
+  
+  /* Ensure h1 is centered and visible */
+  .about-container h1 {
+    font-size: 4em;
+    color: #26d6b3;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    margin-top: 0;
+    padding-bottom: 20px;
+  }
+  
+  /* Styling for the list items */
+  .about-list-items {
+    display: flex;
+    justify-content: center; /* Center profile items */
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+    gap: 40px; /* Add gap between profiles */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+  
+  /* Each profile item */
+  .about-list-items li {
+    text-align: center;
+    margin: 10px;
+    max-width: 250px; /* Set a max-width to keep the profile items consistent */
+    flex: 1 1 auto; /* Allow the items to grow and shrink */
+  }
+  
+  /* Styling for the profile name */
+  .about-list-items .name {
+    font-size: 2.5em;
+    color: #26d6b3; /* Color to match the heading */
+    font-weight: 600;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    margin-top: 10px;
+  }
+  
+  /* Styling for profile image */
+  .profile-image {
+    width: 80%; /* Ensure image is proportionate */
+    max-width: 150px; /* Max width for consistency */
+    height: auto;
+    border: 2px solid rgb(126, 126, 214);
+    border-radius: 50%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
+    object-fit: cover; /* Crop image to fit the circle */
+    margin: 0 auto; /* Center image */
+  }
+  
+  /* Styling for the additional info (role, country) */
+  .about-list-items .additional-info {
+    font-size: 1.2em;
+    color: #f0f0f0; /* Light color for better contrast */
+    font-weight: normal;
+    padding: 0;
+    margin-top: 10px;
+    list-style-type: none;
+    text-align: center;
+  }
+  

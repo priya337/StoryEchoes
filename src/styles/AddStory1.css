@@ -1,5 +1,6 @@
-/* Import Bubblegum Sans Font */
+/* Import Bubblegum Sans and Comic Neue Font */
 @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
 
 /* Full Page Background */
 body {
@@ -37,6 +38,7 @@ body,
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Prevent horizontal scroll bar */
   position: relative;
+  margin-bottom: 35px;
 }
 
 /* Scrollbar Styling */
@@ -67,39 +69,100 @@ body,
   margin: 0; /* Remove unnecessary margins */
 }
 
-
 /* Front Cover Field Alignment */
 .front-cover-group {
-  position: relative; /* Enable relative positioning for icon placement */
-  width: 68.9%; /* Match with pages container */
-  margin: 0 auto 15px; /* Center align */
-  text-align: left;
-  margin-left: 142px;
+  display: flex;
+  flex-direction: column; /* Stack label, preview, and input vertically */
+  justify-content: center; /* Center content */
+  align-items: center; /* Center horizontally */
+  width: 100%; /* Make it responsive to the parent container */
+  max-width: 600px; /* Limit the maximum width for larger screens */
+  /* margin: 0 auto 15px; Center align and add spacing below */
+  text-align: auto; /* Align text to the left */
+  margin-left: 90px;
 }
 
+/* Adjust Label Styling */
 .front-cover-group label {
   font-size: 1.3rem;
-  margin-bottom: 5px;
-  display: block;
+  margin-bottom: 10px; /* Add spacing below label */
   color: rgb(104, 223, 201);
+  width: 100%;
+  text-align: left; /* Center label text */
+  margin-left: 190px;
+  margin-top: 25px;
 }
 
-/* Front Cover Input and Icon */
-.front-cover-group .add-image-icon {
-  position: absolute;
-  top: 65px; /* Positioned above the input field */
-  right: -17px; /* Slightly inset to align properly */
-  cursor: pointer;
-  width: 24px; /* Adjusted size for better proportions */
-  height: 24px;
-  background: url("../assets/pluss.png") center/contain repeat;
-  border: white;
-  /* transition: transform 0.3s ease; */
+/* Front Cover Preview Image */
+.front-cover-preview {
+  width: 100%; /* Take the full width of the container */
+  max-width: 300px; /* Limit size on larger screens */
+  aspect-ratio: 3/4; /* Maintain an image aspect ratio */
+  object-fit: cover; /* Ensure the image scales proportionally */
+  border: 2px dashed rgb(104, 223, 201); /* Dashed border for preview */
+  border-radius: 10px; /* Rounded corners */
+  margin-bottom: 10px; /* Spacing between preview and input field */
+}
 
+/* Front Cover Input Field */
+.front-cover-group input {
+  width: 100%; /* Responsive width */
+  max-width: 400px; /* Limit width for larger screens */
+  padding: 10px; /* Add padding for better usability */
+  font-size: 1.2rem; /* Ensure readability */
+  border: 2px solid rgb(104, 223, 201);
+  border-radius: 8px;
+  background-color: white;
+  color: black;
+  margin-bottom: 10px; /* Space below input field */
+}
+
+/* Upload Icon */
+.front-cover-group .add-image-icon {
+  position: relative; /* Adjust for responsive placement */
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  margin-top: -130px; /* Add spacing above the icon */
+  margin-left: 370px;
+  top:-5px;
+  background: url("../assets/pluss.png") center/contain no-repeat;
+  border: none;
 }
 
 .front-cover-group .add-image-icon:hover {
-  transform: scale(1.2); /* Slightly larger on hover */
+  transform: scale(1.2); /* Slight zoom effect on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) { /* For iPads and smaller screens */
+  .front-cover-group {
+    max-width: 90%; /* Adjust width for smaller screens */
+  }
+  
+  .front-cover-preview {
+    max-width: 250px; /* Reduce preview size */
+  }
+
+  .front-cover-group input {
+    font-size: 1rem; /* Slightly smaller font */
+  }
+}
+
+@media (max-width: 768px) { /* For mobile devices */
+  .front-cover-group {
+    width: 100%; /* Take full width */
+    padding: 0 15px; /* Add padding for better spacing */
+  }
+
+  .front-cover-preview {
+    max-width: 200px; /* Further reduce preview size */
+  }
+
+  .front-cover-group input {
+    font-size: 0.9rem; /* Smaller font for smaller screens */
+    padding: 8px; /* Adjust padding */
+  }
 }
 
 /* Form Group */
@@ -140,6 +203,7 @@ body,
   background-color: rgba(255, 255, 255, 0.9);
   width: 75%;
   margin: 15px auto;
+  margin-bottom: 100px;
 }
 
 .page-input-group {
@@ -173,8 +237,8 @@ body,
 /* Page Image Icon */
 .page-input-group .add-image-icon {
   position: absolute;
-  top: 160px; /* Positioned above the input field */
-  right:30px; /* Slightly inset to align properly */
+  top: 190px; /* Positioned above the input field */
+  right:50px; /* Slightly inset to align properly */
   cursor: pointer;
   width: 24px; /* Adjusted size for better proportions */
   height: 24px;
@@ -271,6 +335,54 @@ body,
   color: #cb33a5; /* Message color */
   margin-top: 10px; /* Space above the message */
   font-family: 'Comic Neue', cursive;
+}
+
+/* Honey Bee Section */
+.bee-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  background-color: #fff5c0; /* Soft yellow for a bee-themed section */
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #f0e68c;
+}
+
+.bee-message {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #333;
+}
+
+.bee-icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+.transcription-status {
+  font-size: 0.9rem;
+  color: #555;
+  margin-left: auto;
+  margin-right: 16px;
+}
+
+/* Transcription Button */
+.transcription-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.transcription-button:hover {
+  background-color: #0056b3;
 }
 
 

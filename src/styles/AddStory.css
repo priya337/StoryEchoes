@@ -1,5 +1,6 @@
-/* Import Bubblegum Sans Font */
+/* Import Bubblegum Sans and Comic Neue Font */
 @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
 
 /* Full Page Background */
 body {
@@ -37,6 +38,7 @@ body,
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Prevent horizontal scroll bar */
   position: relative;
+  margin-bottom: 35px;
 }
 
 /* Scrollbar Styling */
@@ -49,57 +51,121 @@ body,
   border-radius: 10px;
 }
 
-/* Title and Author Fields Side-by-Side */
+/* Title and Author Fields Container */
 .row {
   display: flex;
-  justify-content: space-between; /* Ensures fields align correctly */
+  justify-content: center; /* Center the fields horizontally */
   align-items: center; /* Align fields vertically */
-  margin: 0 auto;
-  width: 60%; /* Maintain proper alignment within the parent container */
-  gap: 40px; /* Space between the fields, adjust as needed */
+  margin: 0 auto; /* Center the container itself */
+  width: 100%; /* Allow the container to take full width */
+  max-width: 800px; /* Limit maximum width for large screens */
+  gap: 20px; /* Space between fields */
+  padding: 10px; /* Add some padding for spacing */
 }
 
+/* Title and Author Fields */
 .row .form-group {
-  width: 48%; /* Ensure both fields are equal in size */
-  text-align: left;
+  flex: 1; /* Allow fields to grow and shrink equally */
+  min-width: 150px; /* Set a minimum width for smaller screens */
+  max-width: 300px; /* Prevent fields from becoming too large */
+  text-align: left; /* Align the text inside the fields */
   color: #26d6b3;
-  font-size: 1.3rem;
+  font-size: 1.2rem; /* Ensure readability */
   margin: 0; /* Remove unnecessary margins */
 }
 
-
-/* Front Cover Field Alignment */
+/* Front Cover Field */
 .front-cover-group {
-  position: relative; /* Enable relative positioning for icon placement */
-  width: 68.9%; /* Match with pages container */
-  margin: 0 auto 15px; /* Center align */
-  text-align: left;
-  margin-left: 142px;
+  display: flex;
+  flex-direction: column; /* Stack label, preview, and input vertically */
+  align-items: center; /* Center align horizontally */
+  justify-content: center; /* Center align vertically */
+  width: 1000%; /* Responsive width */
+  max-width: 700px; /* Limit maximum width */
+  margin: 0 auto; /* Center align */
+  padding: 10px; /* Add consistent spacing */
+  gap: 15px; /* Space between elements */
 }
 
 .front-cover-group label {
-  font-size: 1.3rem;
-  margin-bottom: 5px;
-  display: block;
+  font-size: 1.2rem;
   color: rgb(104, 223, 201);
+  text-align: left; /* Center align the label */
+  width: 100%; /* Stretch to match input width */
+  text-align: center;
+  margin-top: 15px;
+  margin-left: 40px;
+  margin-bottom: -5px;
 }
 
-/* Front Cover Input and Icon */
+.front-cover-preview {
+  width: 100%; /* Automatically resize based on parent */
+  max-width: 400px; /* Limit size on larger screens */
+  aspect-ratio: 3/4; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure proportional scaling */
+  border: 2px dashed rgb(104, 223, 201);
+  border-radius: 10px;
+}
+
+.front-cover-group input {
+  width: 100%; /* Full width of parent */
+  max-width: 600px; /* Restrict width on large screens */
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 2px solid rgb(104, 223, 201);
+  border-radius: 8px;
+  box-sizing: border-box; /* Include padding in width */
+}
+
 .front-cover-group .add-image-icon {
   position: absolute;
-  top: 65px; /* Positioned above the input field */
-  right: -17px; /* Slightly inset to align properly */
+  top: 270px; /* Positioned above the input field */
+  right:190px; /* Slightly inset to align properly */
   cursor: pointer;
   width: 24px; /* Adjusted size for better proportions */
   height: 24px;
-  background: url("../assets/pluss.png") center/contain repeat;
-  border: white;
-  /* transition: transform 0.3s ease; */
-
+  background: url("../assets/pluss.png") center/contain no-repeat;
+  border: none;
+  transition: transform 0.3s ease;
 }
 
 .front-cover-group .add-image-icon:hover {
-  transform: scale(1.2); /* Slightly larger on hover */
+  transform: scale(1.2); /* Slight zoom effect on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 2000px) { /* For iPads and smaller screens */
+  .front-cover-group {
+    max-width: 90%; /* Adjust width for smaller screens */
+  }
+  
+  .front-cover-preview {
+    max-width: 250px; /* Reduce preview size */
+  }
+
+  .front-cover-group input {
+    font-size: 1rem; /* Slightly smaller font */
+  }
+  
+  .front-cover-group .add-image-icon:hover {
+    transform: scale(1.2); /* Slight zoom effect on hover */
+  }
+}
+
+@media (max-width: 768px) { /* For mobile devices */
+  .front-cover-group {
+    width: 90%; /* Take full width */
+    padding: 0 15px; /* Add padding for better spacing */
+  }
+
+  .front-cover-preview {
+    max-width: 100px; /* Further reduce preview size */
+  }
+
+  .front-cover-group input {
+    font-size: 0.9rem; /* Smaller font for smaller screens */
+    padding: 8px; /* Adjust padding */
+  }
 }
 
 /* Form Group */
@@ -140,6 +206,7 @@ body,
   background-color: rgba(255, 255, 255, 0.9);
   width: 75%;
   margin: 15px auto;
+  margin-bottom: 10px;
 }
 
 .page-input-group {
@@ -173,8 +240,8 @@ body,
 /* Page Image Icon */
 .page-input-group .add-image-icon {
   position: absolute;
-  top: 160px; /* Positioned above the input field */
-  right:30px; /* Slightly inset to align properly */
+  top: 260px; /* Positioned above the input field */
+  right:40px; /* Slightly inset to align properly */
   cursor: pointer;
   width: 24px; /* Adjusted size for better proportions */
   height: 24px;

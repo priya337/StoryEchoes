@@ -1,55 +1,9 @@
 {
   "stories": [
     {
-      "id": "1",
-      "title": "Nibbles and the Perfect Hat",
-      "Author": "David Todd",
-      "front_cover": "/Story1images/front_cover.jpg",
-      "content": [
-        {
-          "page": 1,
-          "text": "Nibbles the garden gnome loved his hat. It was large and floppy, but it always tilted to one side. His brown, fluffy hair peeked out from under it. Nibbles wished his hat fit better. He decided to trim his hair to see if it would help.",
-          "image": "/Story1images/page1.jpg"
-        },
-        {
-          "page": 2,
-          "text": "Nibbles found his tiny scissors. Snip, snip, snip! He carefully trimmed his brown hair. Now, his hat fit perfectly! Nibbles was so happy. He ran around the garden, feeling the hat stay in place. He was ready for new adventures.",
-          "image": "/Story1images/page2.jpg"
-        },
-        {
-          "page": 3,
-          "text": "With his hat fitting just right, Nibbles grabbed his tiny spade. He wanted to find hidden tunnels in the garden. Nibbles dug and dug. He found a small tunnel under a big rock. It was dark and mysterious.",
-          "image": "/Story1images/page3.jpg"
-        },
-        {
-          "page": 4,
-          "text": "Nibbles was curious. He crawled into the tunnel. It was a bit scary, but he was brave. Inside, he found sparkling stones and shiny pebbles. Nibbles was excited. He collected some stones to show his friends.",
-          "image": "/Story1images/page4.jpg"
-        },
-        {
-          "page": 5,
-          "text": "Nibbles crawled out of the tunnel. He held the sparkling stones tightly. His hat still fit perfectly. Nibbles felt proud. He couldn't wait to show his friends what he had found. They would be amazed!",
-          "image": "/Story1images/page5.jpg"
-        },
-        {
-          "page": 6,
-          "text": "Nibbles showed his friends the stones. They were amazed! They loved the sparkling stones. Nibbles told them about the tunnel. His friends wanted to explore too. Nibbles smiled. He was happy to share his adventure.",
-          "image": "/Story1images/page6.jpg"
-        },
-        {
-          "page": 7,
-          "text": "From that day on, Nibbles and his friends explored the garden together. They found many hidden tunnels and sparkling stones. Nibbles' hat always fit perfectly, thanks to his trimmed hair. He was glad he made the change. It was a perfect adventure!",
-          "image": "/Story1images/page7.jpg"
-        }
-      ]
-    },
-    {
-      "id": "2"
-    },
-    {
       "id": "fd2e",
       "title": "The Rooster and the Fox",
-      "Author": "James Foster Todd",
+      "Author": "David Todd",
       "front_cover": "/Storyfd2eimages/front_cover.jpg",
       "content": [
         {
@@ -90,28 +44,15 @@
       ]
     },
     {
+      "id": "d807",
       "title": "Lily's Garden Adventures",
-      "author": "Sarah Brown",
-      "front_cover": "http://localhost:9000/uploads/1732810777496-front_cover.jpg",
+      "Author": "David Todd ",
+      "front_cover": "http://localhost:9000/uploads/1732924813237-page3.jpg",
       "content": [
         {
           "page": 1,
-          "text": "Creating this book for testing purpose. ",
-          "image": "https://i.graphicmama.com/uploads/2021/1/60141aa598abd-cute-little-duck-cartoon-vector-character.png"
-        }
-      ],
-      "id": "804d"
-    },
-    {
-      "id": "50bc",
-      "title": "Test",
-      "author": "Test",
-      "front_cover": "http://localhost:9000/uploads/1732835125318-front_cover.jpg",
-      "content": [
-        {
-          "page": 1,
-          "text": "Testing the content",
-          "image": "http://localhost:9000/uploads/1732835138134-page4.jpg"
+          "text": "Lily's Garden Adventure is a great book to read. \nLily is a very Brave Girl. ",
+          "image": "http://localhost:9000/uploads/1732934287774-page6.jpg"
         }
       ]
     }

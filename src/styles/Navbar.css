@@ -1,20 +1,23 @@
 .navbar {
   height: 10%;
   width: 100vw;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Bubblegum Sans';
+
+  font-family: "Bubblegum Sans";
   font-size: 1.5em;
   position: relative;
   border-bottom: 1px solid slateblue;
 }
 
-.logo-area{
+.logo-area {
+  width: 100%;
+  margin: 0 20px;
+
   display: flex;
   align-items: center;
-  padding-left: 20px;
-  width: 50%;
 }
 
 .app-logo {
@@ -23,27 +26,47 @@
   margin-right: 10px;
 }
 
-.menu-area{
-  width: 40%;
+.menu-area {
+  margin-right: 20px;
+
   display: flex;
   justify-content: flex-end;
-
-  margin-right: 40px;
+  gap: 20px;
 }
 
-.menu-item{
-  margin-right: 30px;
+.menu-item {
   font-size: 0.65em;
 }
 
+.menu-item:hover {
+  color: #535bf2;
+}
 
 /*Mobile Screen*/
 @media screen and (max-device-width: 425px) {
-  .app-logo {
-    height: 45px;
-    width: 75px;
-  }
   .navbar {
     font-size: 1em;
+  }
+
+  .logo-area {
+    margin: 0 10px;
+    flex-direction: column;
+  }
+
+  .app-logo {
+    height: 25px;
+    width: 45px;
+  }
+}
+
+/* Tablet Screen */
+@media screen and (max-device-width: 768px) and (min-width: 426px) {
+  /* Add tablet-specific styles here if needed */
+  .navbar {
+    font-size: 2em;
+  }
+
+  .menu-area {
+    padding: 30px;
   }
 }
