@@ -21,6 +21,21 @@ const StoryListView = ({ filteredBooks, mode }) => {
     <>
       {mode === "View" && <h2 className="fav-title">Story Treasures</h2>}
       <div className="story-list-view">
+        {/* + Symbol for Adding a New Story */}
+        {mode === "Edit" && (
+          <div>
+            <Link to="/addStory">
+              <div>
+                <img
+                  src={AddLogo}
+                  alt="Add Story Logo"
+                  className="list-view-add"
+                ></img>
+              </div>
+            </Link>
+          </div>
+        )}
+
         {listBooks.map((story) => (
           <Link to={`/readStory/${story.id}`} key={story.id}>
             <ActionBar story={story} mode={mode}></ActionBar>

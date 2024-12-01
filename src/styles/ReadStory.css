@@ -40,6 +40,7 @@
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .page-content {
@@ -59,8 +60,6 @@
   color: white;
   background-color: #987ea9;
   border-radius: 5px;
-  display: flex;
-  align-items: center;
 }
 
 .cover-page-image {
@@ -184,5 +183,34 @@
   margin: 0 10px;
 }
 
+/*Tablet Screen -820*/
 @media only screen and (max-device-width: 768px) and (min-width: 426px) {
+  .book-container {
+    height: 750px;
+  }
+
+  .cover-page-title {
+    font-size: 3em;
+  }
+
+  .cover-page-author {
+    font-size: 1.5em;
+  }
+
+  .page-text {
+    font-size: 1.75em;
+  }
+
+  .end-page-title {
+    font-size: 3em;
+  }
+
+  .end-page-content h4 {
+    font-size: 1.75em;
+  }
+
+  .end-page-content img {
+    height: 60px;
+    width: 90px;
+  }
 }

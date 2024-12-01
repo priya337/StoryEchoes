@@ -18,6 +18,8 @@ const ActionBar = ({ story, storyToSpeak, page, mode }) => {
   const [isReading, setIsReading] = useState(false);
   const synth = window.speechSynthesis;
   const voices = useContext(VoicesContext);
+  //Create utterance
+  const utterance = new SpeechSynthesisUtterance();
 
   function handleLike(e) {
     e.preventDefault(); //On Click of Like Button the Story should not open for read
@@ -38,19 +40,33 @@ const ActionBar = ({ story, storyToSpeak, page, mode }) => {
     if (isReading) {
       synth.cancel(); // Stop any ongoing narration
     } else {
-      //Create utterance & add end even to change Reading icon back to play
-      const utterance = new SpeechSynthesisUtterance(storyToSpeak);
-      utterance.addEventListener("end", () => setIsReading((prev) => !prev));
+      utterance.text = storyToSpeak.slice(0, 180);
+      storyToSpeak = storyToSpeak.slice(180);
+      speak();
 
-      //We play on the Female voice if available
-      if (voices && voices.length > 0) {
-        utterance.voice = voices[0];
-        synth.speak(utterance);
-      } else {
-        window.speechSynthesis.speak(utterance); //Fallback voice
-      }
+      //Add end event to change Reading icon back to play
+      //or continue with next 180char text if story not finished(Prob playing more than 180 chars).
+      utterance.addEventListener("end", () => {
+        if (storyToSpeak) {
+          utterance.text = storyToSpeak.slice(0, 180);
+          storyToSpeak = storyToSpeak.slice(180);
+          speak();
+        } else {
+          setIsReading((prev) => !prev);
+        }
+      });
     }
     setIsReading((prev) => !prev);
+  };
+
+  const speak = () => {
+    //We play on the Female voice if available
+    if (voices && voices.length > 0) {
+      utterance.voice = voices[0];
+      synth.speak(utterance);
+    } else {
+      window.speechSynthesis.speak(utterance); //Fallback voice
+    }
   };
 
   useEffect(() => {
@@ -85,17 +101,18 @@ const ActionBar = ({ story, storyToSpeak, page, mode }) => {
       {mode && mode === "View" && <ReadCount story={story}></ReadCount>}
 
       {/*Action Buttons*/}
-      <div className="bar-actions">
-        {/*Play Button*/}
-        {storyToSpeak && (
-          <PlayButton playStory={playStory} isReading={isReading} />
-        )}
+      {mode && mode === "Edit" && (
+        <div className="bar-actions">
+          {/*Play Button*/}
+          {storyToSpeak && (
+            <PlayButton playStory={playStory} isReading={isReading} />
+          )}
 
-        {/*Delete Button*/}
-        {mode && mode === "Edit" && (
+          {/*Delete Button*/}
+
           <EditDeleteButton story={story}></EditDeleteButton>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

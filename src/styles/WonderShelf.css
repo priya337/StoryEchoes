@@ -27,6 +27,8 @@
   padding: 10px;
   border-radius: 15px;
   border: 1px solid grey;
+
+  font-family: "Comic Neue", cursive;
   font-size: 1em;
   text-indent: 20px;
 }
@@ -154,6 +156,21 @@
   gap: 20px;
 }
 
+.list-view-add {
+  margin-top: 10px;
+  width: 60px;
+  height: 60px;
+
+  background-color: rgba(0, 0, 0, 0.05);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #007bff;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
 .fav-title {
   margin: 10px 0 5px 0;
   color: white;
@@ -176,5 +193,10 @@
 
   .story-list {
     flex-direction: column;
+  }
+
+  .add-icon {
+    width: 50px;
+    height: 50px;
   }
 }

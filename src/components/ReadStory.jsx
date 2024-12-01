@@ -7,8 +7,8 @@ import HTMLFlipBook from "react-pageflip";
 import Spinner from "react-bootstrap/Spinner";
 import { useStories } from "../contexts/stories.context.jsx";
 
-import api from "../api";
-import ActionBar from "./ActionBar";
+import api from "../api.js";
+import ActionBar from "./ActionBar.jsx";
 
 const ReadStory = () => {
   const { id } = useParams(); // Get the story ID from the route
@@ -19,8 +19,16 @@ const ReadStory = () => {
   const [loading, setLoading] = useState(true); // State for loading indicator
   const [error, setError] = useState(null); // State for error handling
   const [storyToSpeak, setStoryToSpeak] = useState(""); // Content to speak
-
+  const [bookDimensions, setBookDimensions] = useState(null); // Portrait mode for Tablet Screen
   const flipBook = useRef({});
+
+  useEffect(() => {
+    //Change dimensions for Portrait mode in Tablet Screen
+    const screenW = window.innerWidth;
+    const bookW = screenW <= 768 && screenW >= 426 ? 400 : 350;
+    const bookH = screenW <= 768 && screenW >= 426 ? 450 : 400;
+    setBookDimensions({ bookW, bookH });
+  }, []);
 
   useEffect(() => {
     // Fetch story data
@@ -101,7 +109,7 @@ const ReadStory = () => {
   };
 
   /* Display loading indicator */
-  if (loading || !story) {
+  if (!bookDimensions || loading || !story) {
     return (
       <div className="message-area">
         <Spinner animation="grow" variant="info" />
@@ -132,16 +140,17 @@ const ReadStory = () => {
         {!error && story && (
           <div className="book-container">
             <HTMLFlipBook
-              width={350}
-              height={400}
+              width={bookDimensions.bookW}
+              height={bookDimensions.bookH}
               size="stretch"
-              minWidth={350}
+              minWidth={bookDimensions.bookW}
               maxWidth={700}
               minHeight={400}
-              maxHeight={400}
+              maxHeight={450}
               showCover={true}
               maxShadowOpacity={0.5}
               mobileScrollSupport={true}
+              flippingTime={300} // Faster flipping time
               onFlip={onPageFlip}
               ref={flipBook}
             >
@@ -161,14 +170,14 @@ const ReadStory = () => {
               </div>
 
               {/* Story content*/}
-              {story.content.map((storyPage) => {
+              {story.content.map((storyPage, index) => {
                 return (
                   <div className="page" key={storyPage.page}>
                     <div className="page-content">
                       <div className="page-image-cont">
                         <img
                           src={storyPage.image}
-                          alt="Page Image"
+                          alt={`Page ${index + 1} Image`}
                           className="page-image"
                         />
                       </div>

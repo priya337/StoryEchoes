@@ -31,11 +31,17 @@
   font-size: 1em;
 }
 
-.bar-author {
+.bar-author,
+.read-count {
   width: 25%;
   color: white;
   font-size: 0.8em;
   font-weight: bold;
+}
+
+.read-show h3 {
+  margin: 0;
+  font-size: 1em;
 }
 
 .bar-actions {
@@ -66,6 +72,7 @@
 }
 
 .edit-button {
+  padding: 10px 15px;
   background-image: url("../assets/edit.png");
 }
 
@@ -88,11 +95,6 @@
   width: 20px;
 }
 
-.read-show h3 {
-  margin: 0;
-  font-size: 1em;
-}
-
 /*Mobile Screen*/
 @media screen and (max-device-width: 425px) {
   .action-bar {
@@ -100,7 +102,7 @@
   }
 
   .bar-story-details {
-    width: 80%;
+    width: 65%;
   }
   .bar-title {
     font-size: 0.8em;
@@ -110,16 +112,21 @@
   }
 
   .bar-actions {
-    width: 16%;
+    width: 25%;
     margin-right: 10px;
 
-    gap: 0px;
+    gap: 5px;
   }
+
   .action-button {
     background-size: 15px;
 
     height: 20px;
     width: 20px;
+  }
+
+  .edit-button {
+    padding: 10px 10px;
   }
 }
 
@@ -127,5 +134,9 @@
 @media screen and (max-device-width: 768px) and (min-width: 426px) {
   .action-bar {
     width: 90vw;
+  }
+
+  .bar-title {
+    font-size: 1.2em;
   }
 }
