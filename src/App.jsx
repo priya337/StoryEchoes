@@ -10,6 +10,7 @@ import ReadStory from "./components/ReadStory";
 import WonderShelf from "./components/WonderShelf";
 import Whoweare from "./components/Whoweare";
 import EditStory from "./components/EditStory";
+import PageNotFound from "./components/PageNotFound";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
           <Route path="/addStory" element={<AddStory />} />
           <Route path="/who-we-are" element={<Whoweare />} />
           <Route path="/editstory/:id" element={<EditStory />} />
-          <Route path="/read-story/:id" element={<ReadStory />} /> {/* Route for reading the story */}
+          <Route path="/read-story/:id" element={<ReadStory />} />{" "}
+          {/* Route for reading the story */}
           {/* Updated route to handle dynamic story IDs */}
           <Route path="/readStory/:id" element={<ReadStory />} />
           {/* Placeholder route for individual story pages */}
@@ -30,6 +32,7 @@ function App() {
             path="/readStory/:id/page/:pageNumber"
             element={<div>Page View Placeholder</div>}
           />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
 

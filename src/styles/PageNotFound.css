@@ -1,0 +1,36 @@
+.notfound {
+  width: 100vw;
+  background-image: url("../assets/back-stars.png"); /* Background image */
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.notfound h3 {
+  font-weight: bold;
+}
+
+.notfound img {
+  width: 300px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 50%;
+}
+
+.shine {
+  -webkit-box-shadow: 0px 0px 105px 45px rgba(94, 134, 111, 0.9);
+  -moz-box-shadow: 0px 0px 105px 45px rgba(94, 134, 111, 0.9);
+  box-shadow: 0px 0px 105px 45px rgba(94, 134, 111, 0.9);
+}
+
+#back-home {
+  margin-top: 10px;
+  color: #cb33a5;
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
