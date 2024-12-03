@@ -8,6 +8,7 @@ import api from "../api";
 import LikeButton from "./LikeButton";
 import ReadCount from "./ReadCount";
 import EditDeleteButton from "./EditDeleteButton";
+import EmptyBookShelfPic from "../assets/empty-bookshelf.png";
 
 const StoryGridView = ({ filteredBooks, mode }) => {
   const { setRefresh } = useStories(); //Fetched stories in Context API
@@ -45,6 +46,21 @@ const StoryGridView = ({ filteredBooks, mode }) => {
     <>
       {mode === "View" && <h2 className="fav-title">Story Treasures</h2>}
       <div className="story-list">
+        {/*No Favourites*/}
+        {mode === "View" && listBooks.length <= 0 && (
+          <div>
+            <h4 className="empty-fav-msg">
+              Your bookshelf is looking a little lonely! <br />
+              ❤️ Mark your favorite stories to bring it to life!
+            </h4>
+            <img
+              src={EmptyBookShelfPic}
+              alt=""
+              className="empty-book-shelf-img"
+            />
+          </div>
+        )}
+
         {/* + Symbol for Adding a New Story */}
         {mode === "Edit" && (
           <div>
