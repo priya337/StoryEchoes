@@ -9,7 +9,7 @@ const PageNotFound = () => {
         Uh-ooooh!
         <br /> It looks like you’ve wandered off the story trail.
       </h3>
-      <img src={pageNotFound} className="shine" />
+      <img src={pageNotFound} className="jungle-shine" />
       <Link to="/" id="back-home">
         Take me Home
       </Link>

@@ -21,7 +21,7 @@ const Navbar = () => {
           <span>My Story Picks</span>
         </Link>
         <Link to="/who-we-are" className="menu-item">
-          <span>Who we are</span>
+          <span>Who We Are</span>
         </Link>
       </div>
     </div>
