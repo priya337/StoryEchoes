@@ -4,6 +4,7 @@
   background-repeat: repeat;
   background-position: center;
   display: flex;
+  gap: 5px;
   align-items: center;
   justify-content: center;
 }
@@ -20,6 +21,10 @@
   height: 30px;
 }
 
+.open-icon {
+  width: 15px;
+}
+
 .open-link-icon-wrapper {
   margin-left: -8px; /* Add space between the GitHub logo and the open link icon */
 }
@@ -31,7 +36,6 @@
   cursor: pointer; /* Pointer behavior for the open link icon */
   text-decoration: none;
   color: #26d6b3;
-  
 }
 
 .open-link-icon svg {
