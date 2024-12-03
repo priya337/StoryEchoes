@@ -12,7 +12,7 @@ import ActionBar from "./ActionBar.jsx";
 
 const ReadStory = () => {
   const { id } = useParams(); // Get the story ID from the route
-  const { stories, setStories } = useStories(); //Fetched stories in Context API
+  const { setRefresh } = useStories(); //Fetched stories in Context API
 
   const [story, setStory] = useState(null); // State to store story data
   const [page, setPage] = useState(0); // State to store page no
@@ -54,17 +54,12 @@ const ReadStory = () => {
   function updateStoryReadCount(story) {
     //Call Update function & update the story read count
     story.readCount = story.readCount ? story.readCount + 1 : 1;
-    let tempStories = stories.map((oneStory) => {
-      if (oneStory.id === story.id) {
-        oneStory.readCount = story.readCount;
-      }
-      return oneStory;
-    });
 
     api
       .put(`/stories/${story.id}`, story)
       .then(() => {
-        setStories([...tempStories]); //Update the Context Data
+        //Indicate Context API for refresh
+        setRefresh((prev) => prev + 1);
       })
       .catch((error) =>
         console.log("Error during story update Read Count:", error)

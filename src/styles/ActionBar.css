@@ -74,10 +74,23 @@
 .edit-button {
   padding: 10px 15px;
   background-image: url("../assets/edit.png");
+  border: none !important;
+}
+
+.edit-disabled-button {
+  padding: 10px 15px;
+  background-image: url("../assets/edit-disabled.png");
+  cursor: default !important;
+  border: none !important;
 }
 
 .delete-button {
   background-image: url("../assets/delete.png");
+}
+
+.delete-disabled-button {
+  background-image: url("../assets/delete-disabled.png");
+  cursor: default !important;
 }
 
 .play-button {

@@ -13,7 +13,7 @@ import ReadCount from "./ReadCount";
 import EditDeleteButton from "./EditDeleteButton.jsx";
 
 const ActionBar = ({ story, storyToSpeak, page, mode }) => {
-  const { stories, setStories } = useStories(); //Fetched stories in Context API
+  const { setRefresh } = useStories(); //Fetched stories in Context API
 
   const [isReading, setIsReading] = useState(false);
   const synth = window.speechSynthesis;
@@ -29,7 +29,8 @@ const ActionBar = ({ story, storyToSpeak, page, mode }) => {
     api
       .put(`/stories/${story.id}`, story)
       .then(() => {
-        setStories([...stories]); //Update the Context Data
+        //Indicate Context API for refresh
+        setRefresh((prev) => prev + 1);
       })
       .catch((error) =>
         console.log("Error during story update Story Like:", error)

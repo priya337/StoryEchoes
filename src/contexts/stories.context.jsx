@@ -9,6 +9,7 @@ function StoriesProviderWrapper(props) {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true); // State for loading indicator
   const [error, setError] = useState(null); // State for error handling
+  const [refresh, setRefresh] = useState(0);
 
   // Fetch stories from the backend API when the component loads
   useEffect(() => {
@@ -24,11 +25,11 @@ function StoriesProviderWrapper(props) {
     };
 
     fetchStories(); // Call the fetch function
-  }, []); // Runs once when the component mounts
+  }, [refresh]); // Runs once when the component mounts
 
   /* SET UP THE PROVIDER */
   return (
-    <StoriesContext.Provider value={{ stories, setStories, loading, error }}>
+    <StoriesContext.Provider value={{ stories, loading, error, setRefresh }}>
       {props.children}
     </StoriesContext.Provider>
   );

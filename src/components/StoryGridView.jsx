@@ -10,7 +10,7 @@ import ReadCount from "./ReadCount";
 import EditDeleteButton from "./EditDeleteButton";
 
 const StoryGridView = ({ filteredBooks, mode }) => {
-  const { stories, setStories } = useStories(); //Fetched stories in Context API
+  const { setRefresh } = useStories(); //Fetched stories in Context API
 
   const [listBooks, setListBooks] = useState([]);
 
@@ -28,18 +28,13 @@ const StoryGridView = ({ filteredBooks, mode }) => {
   function handleLike(e, story) {
     e.preventDefault(); //On Click of Like Button the Story should not open for read
     story.liked = story.liked ? false : true;
-    let tempStories = stories.map((oneStory) => {
-      if (oneStory.id === story.id) {
-        oneStory.liked = story.liked;
-      }
-      return oneStory;
-    });
 
     //Call Update function & update the story like
     api
       .put(`/stories/${story.id}`, story)
       .then(() => {
-        setStories([...tempStories]); //Update the Context Data
+        //Indicate Context API for refresh
+        setRefresh((prev) => prev + 1);
       })
       .catch((error) =>
         console.log("Error during story update Story Like:", error)
