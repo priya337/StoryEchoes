@@ -52,50 +52,21 @@
 }
 
 .action-button {
-  background-size: 20px;
-  background-repeat: no-repeat;
-  background-color: transparent;
+  width: 20px;
+  padding: 0;
+  margin-right: 10px;
 
-  height: 25px;
-  width: 25px;
-
-  cursor: pointer;
+  border: none;
+  background-color: transparent !important;
 }
 
-.like-button {
-  background-image: url("../assets/like.png");
+.action-button img {
+  width: 20px;
 }
 
 .edit-del-buttons {
   display: flex;
   align-items: center;
-}
-
-.edit-button {
-  padding: 10px 15px;
-  background-image: url("../assets/edit.png");
-  border: none !important;
-}
-
-.edit-disabled-button {
-  padding: 10px 15px;
-  background-image: url("../assets/edit-disabled.png");
-  cursor: default !important;
-  border: none !important;
-}
-
-.delete-button {
-  background-image: url("../assets/delete.png");
-}
-
-.delete-disabled-button {
-  background-image: url("../assets/delete-disabled.png");
-  cursor: default !important;
-}
-
-.play-button {
-  background-image: url("../assets/play.png");
-  background-size: 25px;
 }
 
 .read-show {

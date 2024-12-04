@@ -1,15 +1,44 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import api from "../api";
 import { useStories } from "../contexts/stories.context.jsx";
 
 import VerticallyCenteredModal from "./VerticallyCenteredModal";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
+import EditIcon from "../assets/edit.png";
+import EditDisabledIcon from "../assets/edit-disabled.png";
+import DelIcon from "../assets/delete.png";
+import DelDisabledIcon from "../assets/delete-disabled.png";
 
 const EditDeleteButton = ({ story }) => {
   const [showDelConf, setShowDelConf] = useState(false);
+  const navigate = useNavigate();
 
   const { setRefresh } = useStories(); //Fetched stories in Context API
+
+  function checkEdit(e) {
+    e.preventDefault();
+
+    if (story.staticBook) {
+      return;
+    }
+
+    //Navigate to the edit page for the story
+    navigate(`/editStory/${story.id}`);
+  }
+
+  function checkDelete(e) {
+    e.preventDefault();
+
+    if (story.staticBook) {
+      return;
+    }
+
+    setShowDelConf(false);
+  }
 
   function onDelete() {
     //Call Delete API to delete the story
@@ -25,27 +54,42 @@ const EditDeleteButton = ({ story }) => {
   return (
     <div className="edit-del-buttons">
       {/*Edit Button*/}
-      <Link to={`/editStory/${story.id}`}>
-        <button
-          className={
-            story.staticBook
-              ? "edit-disabled-button action-button"
-              : "edit-button action-button"
-          }
-        ></button>
-      </Link>
+      <OverlayTrigger
+        placement="top"
+        overlay={
+          <Tooltip id="edit-tooltip">
+            {story.staticBook
+              ? "Static Book: Editing Disabled"
+              : "Edit the Story"}
+          </Tooltip>
+        }
+      >
+        <button className="action-button" onClick={checkEdit}>
+          <img
+            src={story.staticBook ? EditDisabledIcon : EditIcon}
+            alt="Edit Icon"
+          />
+        </button>
+      </OverlayTrigger>
 
       {/*Delete Button*/}
-      <div
-        className={
-          story.staticBook
-            ? "delete-disabled-button action-button"
-            : "delete-button action-button"
+      <OverlayTrigger
+        placement="top"
+        overlay={
+          <Tooltip id="delete-tooltip">
+            {story.staticBook
+              ? "Static Book: Delete Disabled"
+              : "Delete the Story"}
+          </Tooltip>
         }
-        onClick={() =>
-          story.staticBook ? setShowDelConf(false) : setShowDelConf(true)
-        }
-      ></div>
+      >
+        <button className="action-button" onClick={checkDelete}>
+          <img
+            src={story.staticBook ? DelDisabledIcon : DelIcon}
+            alt="Delete Icon"
+          />
+        </button>
+      </OverlayTrigger>
 
       {/*Show Delete confirmation*/}
       <VerticallyCenteredModal
