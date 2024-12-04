@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import ActionBar from "./ActionBar";
 import { useEffect, useState } from "react";
 
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 const StoryListView = ({ filteredBooks, mode }) => {
   const [listBooks, setListBooks] = useState([]);
 
@@ -25,13 +28,14 @@ const StoryListView = ({ filteredBooks, mode }) => {
         {mode === "Edit" && (
           <div>
             <Link to="/addStory">
-              <div>
-                <img
-                  src={AddLogo}
-                  alt="Add Story Logo"
-                  className="list-view-add"
-                ></img>
-              </div>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip id="like-tooltip">Add a Story</Tooltip>}
+              >
+                <button className="add-button">
+                  <img src={AddLogo} alt="Add Icon" />
+                </button>
+              </OverlayTrigger>
             </Link>
           </div>
         )}

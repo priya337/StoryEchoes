@@ -10,6 +10,9 @@ import ReadCount from "./ReadCount";
 import EditDeleteButton from "./EditDeleteButton";
 import EmptyBookShelfPic from "../assets/empty-bookshelf.png";
 
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 const StoryGridView = ({ filteredBooks, mode }) => {
   const { setRefresh } = useStories(); //Fetched stories in Context API
 
@@ -65,13 +68,14 @@ const StoryGridView = ({ filteredBooks, mode }) => {
         {mode === "Edit" && (
           <div>
             <Link to="/addStory">
-              <div>
-                <img
-                  src={AddLogo}
-                  alt="Add Story Logo"
-                  className="add-icon"
-                ></img>
-              </div>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip id="like-tooltip">Add a Story</Tooltip>}
+              >
+                <button className="add-button">
+                  <img src={AddLogo} alt="Add Icon" />
+                </button>
+              </OverlayTrigger>
             </Link>
           </div>
         )}
