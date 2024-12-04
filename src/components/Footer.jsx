@@ -10,12 +10,10 @@ const Footer = () => {
       className="footer"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <img src={githubLogo} alt="GitHub" className="github-logo" />
-      <span className="open-link-icon-wrapper">
-        <Link to="https://github.com/priya337/StoryEchoes.git">
-          <img src={openIcon} alt="Open Icon" className="open-icon" />
-        </Link>
-      </span>
+      <Link to="https://github.com/priya337/StoryEchoes.git">
+        <img src={githubLogo} alt="GitHub" className="github-logo" />
+        <img src={openIcon} alt="Open Icon" className="open-icon" />
+      </Link>
     </div>
   );
 };
