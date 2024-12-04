@@ -189,6 +189,10 @@
     height: 750px;
   }
 
+  .read-container {
+    gap: 20px;
+  }
+
   .cover-page-title {
     font-size: 3em;
   }
@@ -212,5 +216,22 @@
   .end-page-content img {
     height: 60px;
     width: 90px;
+  }
+}
+
+/*Laptop Screen */
+@media only screen and (min-width: 769px) {
+  .book-container {
+    height: 600px;
+  }
+
+  .page-image-cont {
+    height: 55%;
+  }
+
+  .page-image {
+    height: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 25px rgba(20, 20, 20, 0.912);
   }
 }

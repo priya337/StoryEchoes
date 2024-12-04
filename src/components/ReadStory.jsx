@@ -23,10 +23,21 @@ const ReadStory = () => {
   const flipBook = useRef({});
 
   useEffect(() => {
-    //Change dimensions for Portrait mode in Tablet Screen
     const screenW = window.innerWidth;
-    const bookW = screenW <= 768 && screenW >= 426 ? 400 : 350;
-    const bookH = screenW <= 768 && screenW >= 426 ? 450 : 400;
+    //Default size for mobile
+    let bookW = 350;
+    let bookH = 400;
+
+    if (screenW <= 768 && screenW >= 426) {
+      //Tablet Screen
+      bookW = 400;
+      bookH = 450;
+    } else if (screenW >= 769) {
+      //Laptop Screen
+      bookW = 350;
+      bookH = 500;
+    }
+
     setBookDimensions({ bookW, bookH });
   }, []);
 
