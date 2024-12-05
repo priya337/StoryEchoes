@@ -1,5 +1,7 @@
 import "../styles/ReadStory.css";
 import Logo from "../assets/logo.png";
+import playIcon from "../assets/play.png";
+import stopIcon from "../assets/stop.png";
 
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
@@ -20,6 +22,8 @@ const ReadStory = () => {
   const [error, setError] = useState(null); // State for error handling
   const [storyToSpeak, setStoryToSpeak] = useState(""); // Content to speak
   const [bookDimensions, setBookDimensions] = useState(null); // Portrait mode for Tablet Screen
+  const [isMediaPlaying, setIsMediaPlaying] = useState(false);
+  const audioRef = useRef(null);
   const flipBook = useRef({});
 
   useEffect(() => {
@@ -114,6 +118,33 @@ const ReadStory = () => {
     }
   };
 
+  //Play page media
+  function playPageMedia(e, url) {
+    e.preventDefault();
+
+    if (!audioRef.current) {
+      // Create the audio object if it doesn't exist
+      audioRef.current = new Audio(url);
+    } else {
+      // Change the audio source if a new URL is provided
+      if (audioRef.current.src !== url) {
+        audioRef.current.src = url;
+      }
+    }
+
+    if (isMediaPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsMediaPlaying(!isMediaPlaying);
+
+    // Handle audio end event
+    audioRef.current.onended = () => {
+      setIsMediaPlaying(false);
+    };
+  }
+
   /* Display loading indicator */
   if (!bookDimensions || loading || !story) {
     return (
@@ -188,7 +219,20 @@ const ReadStory = () => {
                         />
                       </div>
                       <div className="page-text">{storyPage.text}</div>
-                      <div className="page-footer">{storyPage.page}</div>
+                      <div className="page-footer">
+                        {storyPage.page}
+                        {storyPage.media && (
+                          <button
+                            className="glow-button action-button"
+                            onClick={(e) => playPageMedia(e, storyPage.media)}
+                          >
+                            <img
+                              src={isMediaPlaying ? stopIcon : playIcon}
+                              alt="Play/Stop Icon"
+                            />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
