@@ -37,7 +37,7 @@ const EditDeleteButton = ({ story }) => {
       return;
     }
 
-    setShowDelConf(false);
+    setShowDelConf(true);
   }
 
   function onDelete() {

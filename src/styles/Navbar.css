@@ -31,6 +31,7 @@
 
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 20px;
 }
 
@@ -42,6 +43,35 @@
   color: #535bf2;
 }
 
+.my-picks {
+  color: #dce6e4;
+  cursor: pointer;
+}
+
+.login-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-area h6 {
+  margin: 0;
+}
+
+.signin-button {
+  padding: 5px 10px;
+  border-radius: 15px;
+
+  background-color: white;
+  font-size: 0.65em;
+}
+
+.signedin-button {
+  padding: 2px 5px;
+  font-size: 0.5em;
+}
+
 /*Mobile Screen*/
 @media screen and (max-device-width: 425px) {
   .navbar {
@@ -49,13 +79,17 @@
   }
 
   .logo-area {
-    margin: 0 10px;
+    margin: 0 5px;
     flex-direction: column;
   }
 
   .app-logo {
     height: 25px;
     width: 45px;
+  }
+
+  .menu-area {
+    gap: 10px;
   }
 }
 
@@ -67,6 +101,6 @@
   }
 
   .menu-area {
-    padding: 30px;
+    gap: 15px;
   }
 }

@@ -1,10 +1,8 @@
 import "../styles/ActionBar.css";
-
 import React, { useState, useEffect, useContext } from "react";
 
 import { VoicesContext } from "../contexts/voices.context.jsx";
-import { useStories } from "../contexts/stories.context.jsx";
-
+import { useUsers } from "../contexts/user.context.jsx";
 import api from "../api";
 
 import LikeButton from "./LikeButton";
@@ -13,7 +11,7 @@ import ReadCount from "./ReadCount";
 import EditDeleteButton from "./EditDeleteButton.jsx";
 
 const ActionBar = ({ story, storyToSpeak, page, mode }) => {
-  const { setRefresh } = useStories(); //Fetched stories in Context API
+  const { user, userDetails, setUserDetails } = useUsers(); //Fetched stories in Context API
 
   const [isReading, setIsReading] = useState(false);
   const synth = window.speechSynthesis;
@@ -23,14 +21,22 @@ const ActionBar = ({ story, storyToSpeak, page, mode }) => {
 
   function handleLike(e) {
     e.preventDefault(); //On Click of Like Button the Story should not open for read
-    story.liked = story.liked ? false : true;
+
+    if (!user) return;
+
+    if (userDetails.bookIds.includes(story.id)) {
+      // Disliked the book
+      userDetails.bookIds = userDetails.bookIds.filter((id) => id !== story.id);
+    } else {
+      // Liked the book
+      userDetails.bookIds.push(story.id);
+    }
 
     //Call Update function & update the story like
     api
-      .put(`/stories/${story.id}`, story)
-      .then(() => {
-        //Indicate Context API for refresh
-        setRefresh((prev) => prev + 1);
+      .put(`/users/${userDetails.id}`, userDetails)
+      .then(({ data }) => {
+        setUserDetails(data);
       })
       .catch((error) =>
         console.log("Error during story update Story Like:", error)
