@@ -51,6 +51,12 @@ const ReadStory = () => {
     const fetchStory = async () => {
       try {
         const { data } = await api.get(`/stories/${id}`);
+
+        data.liked = false;
+        if (userDetails.bookIds && userDetails.bookIds.includes(data.id)) {
+          data.liked = true; //Set the like indicator on book
+        }
+
         setStory(data);
         setStoryToSpeak(
           data.title + (data.Author ? `. Echoed by ${data.Author}` : "")
@@ -65,7 +71,17 @@ const ReadStory = () => {
     };
 
     fetchStory();
-  }, [id, userDetails]);
+  }, [id]);
+
+  useEffect(() => {
+    if (story) {
+      story.liked = false;
+      if (userDetails.bookIds && userDetails.bookIds.includes(story.id)) {
+        story.liked = true; //Set the like indicator on book
+      }
+      setStory({ ...story });
+    }
+  }, [userDetails]);
 
   function updateStoryReadCount(story) {
     //Call Update function & update the story read count
