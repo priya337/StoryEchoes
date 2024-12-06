@@ -23,7 +23,7 @@ export default function SignInModal(props) {
         <Modal.Title id="contained-modal-title-vcenter">Sign In</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form>
+        <form className="login-form">
           <label htmlFor="user">User Name: </label>
           <input
             type="text"

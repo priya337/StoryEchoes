@@ -9,9 +9,13 @@ function VerticallyCenteredModal({
   message,
   onDelete,
 }) {
-  const handleClose = () => setShow(false);
+  const handleClose = (e) => {
+    e.preventDefault();
+    setShow(false);
+  };
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.preventDefault();
     onDelete();
     handleClose();
   };

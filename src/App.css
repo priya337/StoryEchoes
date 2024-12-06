@@ -37,4 +37,8 @@ body {
   .content {
     height: 84%;
   }
+
+  .login-form {
+    padding-top: 3px;
+  }
 }
