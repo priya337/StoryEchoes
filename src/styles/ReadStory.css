@@ -19,7 +19,6 @@
   display: flex;
   justify-content: center;
   align-items: center; /* Center the entire content vertically */
-  position: relative;
 }
 
 /* Book Container */
@@ -32,6 +31,7 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.5s ease, opacity 0.5s ease; /* Smooth transition for open/close */
+  position: relative;
 }
 
 /* Flipbook Pages */
@@ -102,34 +102,62 @@
   width: 90%;
   color: black;
   font-family: "Bubblegum Sans";
-  position: relative;
 }
 
 .glow-button {
+  width: 30px !important;
+  height: 30px !important;
   position: absolute;
   top: 10px;
-  right: 10px;
+  left: 48%;
 
-  box-shadow: 0 0 10px #ffd600, 0 0 20px #ffd600, 0 0 40px #ffd600,
-    0 0 80px #ffd600;
-  transition: box-shadow 0.3s ease-in-out;
-  animation: glow 2s infinite alternate;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  border: none;
+  display: inline-block;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-animation: glowing 4s infinite;
+  animation: glowing 4s infinite;
 }
 
-.glow-button:hover {
-  box-shadow: 0 0 15px #ffd600, 0 0 30px #ffd600, 0 0 60px #ffd600,
-    0 0 120px #ffd600;
-}
-
-@keyframes glow {
+@-webkit-keyframes glowing {
   0% {
-    box-shadow: 0 0 10px #ffd600, 0 0 20px #ffd600, 0 0 40px #ffd600,
-      0 0 80px #ffd600;
+    background-color: #ffd600;
+    -webkit-box-shadow: 0 0 3px #ffd600;
+  }
+  50% {
+    background-color: white;
+    -webkit-box-shadow: 0 0 40px white;
   }
   100% {
-    box-shadow: 0 0 15px #ffd600, 0 0 30px #ffd600, 0 0 60px #ffd600,
-      0 0 120px #ffd600;
+    background-color: #ffd600;
+    -webkit-box-shadow: 0 0 3px #ffd600;
   }
+}
+
+@keyframes glowing {
+  0% {
+    background-color: #ffd600;
+    box-shadow: 0 0 3px #ffd600;
+  }
+  50% {
+    background-color: white;
+    box-shadow: 0 0 40px white;
+  }
+  100% {
+    background-color: #ffd600;
+    box-shadow: 0 0 3px #ffd600;
+  }
+}
+
+.media-hide {
+  display: none;
+}
+
+.media-show {
+  display: block;
 }
 
 .end-page-content {
@@ -245,6 +273,10 @@
     height: 60px;
     width: 90px;
   }
+
+  .glow-button {
+    left: 10px;
+  }
 }
 
 /*Laptop Screen */
@@ -261,5 +293,13 @@
     height: 100%;
     border-radius: 15px;
     box-shadow: 0 4px 25px rgba(20, 20, 20, 0.912);
+  }
+
+  .glow-button {
+    left: -5%;
+  }
+
+  #media-play-right {
+    left: 102%;
   }
 }

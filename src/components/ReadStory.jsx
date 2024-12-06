@@ -1,20 +1,21 @@
 import "../styles/ReadStory.css";
 import Logo from "../assets/logo.png";
-import playIcon from "../assets/play.png";
-import stopIcon from "../assets/stop.png";
 
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import HTMLFlipBook from "react-pageflip";
 import Spinner from "react-bootstrap/Spinner";
 import { useStories } from "../contexts/stories.context.jsx";
+import { useUsers } from "../contexts/user.context.jsx";
 
 import api from "../api.js";
 import ActionBar from "./ActionBar.jsx";
+import MediaButton from "./MediaButton.jsx";
 
 const ReadStory = () => {
   const { id } = useParams(); // Get the story ID from the route
   const { setRefresh } = useStories(); //Fetched stories in Context API
+  const { userDetails } = useUsers(); //Fetched stories in Context API
 
   const [story, setStory] = useState(null); // State to store story data
   const [page, setPage] = useState(0); // State to store page no
@@ -25,9 +26,9 @@ const ReadStory = () => {
   const [isMediaPlaying, setIsMediaPlaying] = useState(false);
   const audioRef = useRef(null);
   const flipBook = useRef({});
+  const screenW = window.innerWidth;
 
   useEffect(() => {
-    const screenW = window.innerWidth;
     //Default size for mobile
     let bookW = 350;
     let bookH = 400;
@@ -64,7 +65,7 @@ const ReadStory = () => {
     };
 
     fetchStory();
-  }, [id]);
+  }, [id, userDetails]);
 
   function updateStoryReadCount(story) {
     //Call Update function & update the story read count
@@ -99,6 +100,12 @@ const ReadStory = () => {
     setPage(e.data);
     const storyNarration = fetchContentToNarrate(e.data);
     setStoryToSpeak(storyNarration); //Set the narration text on page flip
+
+    if (isMediaPlaying) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsMediaPlaying(!isMediaPlaying);
+    }
   };
 
   const nextButtonClick = () => {
@@ -119,16 +126,23 @@ const ReadStory = () => {
   };
 
   //Play page media
-  function playPageMedia(e, url) {
-    e.preventDefault();
+  function playPageMedia(loc) {
+    let mediaUrl;
+
+    if (loc === "left") {
+      mediaUrl = story.content[page - 1].media;
+    } else {
+      mediaUrl = story.content[page].media;
+    }
 
     if (!audioRef.current) {
       // Create the audio object if it doesn't exist
-      audioRef.current = new Audio(url);
+      audioRef.current = new Audio(mediaUrl);
+      audioRef.current.volume = 0.25;
     } else {
       // Change the audio source if a new URL is provided
-      if (audioRef.current.src !== url) {
-        audioRef.current.src = url;
+      if (audioRef.current.src !== mediaUrl) {
+        audioRef.current.src = mediaUrl;
       }
     }
 
@@ -176,6 +190,24 @@ const ReadStory = () => {
       <div className="reading-area">
         {!error && story && (
           <div className="book-container">
+            <MediaButton
+              buttonId={"media-play-left"}
+              story={story}
+              page={page}
+              playPageMedia={playPageMedia}
+              isMediaPlaying={isMediaPlaying}
+              location={"left"}
+            ></MediaButton>
+
+            <MediaButton
+              buttonId={"media-play-right"}
+              story={story}
+              page={page}
+              playPageMedia={playPageMedia}
+              isMediaPlaying={isMediaPlaying}
+              location={"right"}
+            ></MediaButton>
+
             <HTMLFlipBook
               width={bookDimensions.bookW}
               height={bookDimensions.bookH}
@@ -219,20 +251,7 @@ const ReadStory = () => {
                         />
                       </div>
                       <div className="page-text">{storyPage.text}</div>
-                      <div className="page-footer">
-                        {storyPage.page}
-                        {storyPage.media && (
-                          <button
-                            className="glow-button action-button"
-                            onClick={(e) => playPageMedia(e, storyPage.media)}
-                          >
-                            <img
-                              src={isMediaPlaying ? stopIcon : playIcon}
-                              alt="Play/Stop Icon"
-                            />
-                          </button>
-                        )}
-                      </div>
+                      <div className="page-footer">{storyPage.page}</div>
                     </div>
                   </div>
                 );
@@ -256,7 +275,6 @@ const ReadStory = () => {
                 </div>
               </div>
             </HTMLFlipBook>
-
             {/* Button to navigate the book */}
             <div className="page-nav-area">
               <div
@@ -264,7 +282,8 @@ const ReadStory = () => {
                 onClick={prevButtonClick}
               ></div>
               <span className="page-nos">
-                {page} : {story.content.length}
+                {page > story.content.length ? story.content.length : page} :{" "}
+                {story.content.length}
               </span>{" "}
               <div
                 className="navigation-btn right-arrow"
