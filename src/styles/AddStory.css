@@ -1,4 +1,4 @@
-/* Import Bubblegum Sans and Comic Neue Font */
+/* Import Bubblegum Sans */
 @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
 
 
@@ -28,7 +28,7 @@ body,
 
 /* Form Container */
 .add-story-container {
-  width: 80%;
+  width: 70%;
   max-height: 80vh;
   margin: 70px auto;
   padding: 20px;
@@ -51,90 +51,70 @@ body,
   border-radius: 10px;
 }
 
-/* Title and Author Fields Container */
+/* Title and Author Fields Side-by-Side */
 .row {
   display: flex;
-  justify-content: center; /* Center the fields horizontally */
+  justify-content: space-between; /* Ensures fields align correctly */
   align-items: center; /* Align fields vertically */
-  margin: 0 auto; /* Center the container itself */
-  width: 100%; /* Allow the container to take full width */
-  max-width: 800px; /* Limit maximum width for large screens */
-  gap: 20px; /* Space between fields */
-  padding: 10px; /* Add some padding for spacing */
+  margin: 0 auto;
+  width: 60%; /* Maintain proper alignment within the parent container */
+  gap: 40px; /* Space between the fields, adjust as needed */
 }
 
-/* Title and Author Fields */
 .row .form-group {
-  flex: 1; /* Allow fields to grow and shrink equally */
-  min-width: 150px; /* Set a minimum width for smaller screens */
-  max-width: 300px; /* Prevent fields from becoming too large */
-  text-align: left; /* Align the text inside the fields */
+  width: 48%; /* Ensure both fields are equal in size */
+  text-align: left;
   color: #26d6b3;
-  font-size: 1.2rem; /* Ensure readability */
+  font-size: 1.3rem;
   margin: 0; /* Remove unnecessary margins */
 }
 
-/* Front Cover Field */
+/* Front Cover Field Alignment */
 .front-cover-group {
   display: flex;
   flex-direction: column; /* Stack label, preview, and input vertically */
-  align-items: center; /* Center align horizontally */
-  justify-content: center; /* Center align vertically */
-  width: 1000%; /* Responsive width */
-  max-width: 700px; /* Limit maximum width */
-  margin: 0 auto; /* Center align */
-  padding: 10px; /* Add consistent spacing */
-  gap: 15px; /* Space between elements */
+  justify-content: center; /* Center content */
+  align-items: center; /* Center horizontally */
+  width: 100%; /* Make it responsive to the parent container */
+  max-width: 600px; /* Limit the maximum width for larger screens */
+  /* margin: 0 auto 15px; Center align and add spacing below */
+  text-align: auto; /* Align text to the left */
+  margin-left: 90px;
 }
 
+/* Adjust Label Styling */
 .front-cover-group label {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  margin-bottom: 10px; /* Add spacing below label */
   color: rgb(104, 223, 201);
-  text-align: left; /* Center align the label */
-  width: 100%; /* Stretch to match input width */
-  text-align: center;
-  margin-top: 15px;
-  margin-left: 40px;
-  margin-bottom: -5px;
+  width: 100%;
+  text-align: left; /* Center label text */
+  margin-left: 190px;
+  margin-top: 25px;
 }
 
-.front-cover-preview {
-  width: 100%; /* Automatically resize based on parent */
-  max-width: 400px; /* Limit size on larger screens */
-  aspect-ratio: 3/4; /* Maintain aspect ratio */
-  object-fit: cover; /* Ensure proportional scaling */
-  border: 2px dashed rgb(104, 223, 201);
-  border-radius: 10px;
-}
 
+
+/* Front Cover Input Field */
 .front-cover-group input {
-  width: 100%; /* Full width of parent */
-  max-width: 600px; /* Restrict width on large screens */
-  padding: 10px;
-  font-size: 1.2rem;
+  width: 50%; /* Responsive width */
+  max-width: 100px; /* Limit width for larger screens */
+  padding: 10px; /* Add padding for better usability */
+  font-size: 1.2rem; /* Ensure readability */
   border: 2px solid rgb(104, 223, 201);
   border-radius: 8px;
-  box-sizing: border-box; /* Include padding in width */
+  background-color: white;
+  color: black;
+  margin-bottom: 10px; /* Space below input field */
 }
 
-.front-cover-group .add-image-icon {
-  position: absolute;
-  top: 270px; /* Positioned above the input field */
-  right:190px; /* Slightly inset to align properly */
-  cursor: pointer;
-  width: 24px; /* Adjusted size for better proportions */
-  height: 24px;
-  background: url("../assets/pluss.png") center/contain no-repeat;
-  border: none;
-  transition: transform 0.3s ease;
-}
 
 .front-cover-group .add-image-icon:hover {
   transform: scale(1.2); /* Slight zoom effect on hover */
 }
 
 /* Responsive Design */
-@media (max-width: 2000px) { /* For iPads and smaller screens */
+@media (max-width: 1024px) { /* For iPads and smaller screens */
   .front-cover-group {
     max-width: 90%; /* Adjust width for smaller screens */
   }
@@ -146,20 +126,16 @@ body,
   .front-cover-group input {
     font-size: 1rem; /* Slightly smaller font */
   }
-  
-  .front-cover-group .add-image-icon:hover {
-    transform: scale(1.2); /* Slight zoom effect on hover */
-  }
 }
 
 @media (max-width: 768px) { /* For mobile devices */
   .front-cover-group {
-    width: 90%; /* Take full width */
+    width: 100%; /* Take full width */
     padding: 0 15px; /* Add padding for better spacing */
   }
 
   .front-cover-preview {
-    max-width: 100px; /* Further reduce preview size */
+    max-width: 200px; /* Further reduce preview size */
   }
 
   .front-cover-group input {
@@ -200,13 +176,13 @@ body,
 /* Pages Section */
 .pages-container {
   position: relative;
-  padding: 15px;
+  padding: 5px;
   border: 2px solid #28c4ac;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.9);
   width: 75%;
   margin: 15px auto;
-  margin-bottom: 10px;
+  margin-bottom: 90px;
 }
 
 .page-input-group {
@@ -237,49 +213,11 @@ body,
   color: black;
 }
 
-/* Page Image Icon */
-.page-input-group .add-image-icon {
-  position: absolute;
-  top: 260px; /* Positioned above the input field */
-  right:40px; /* Slightly inset to align properly */
-  cursor: pointer;
-  width: 24px; /* Adjusted size for better proportions */
-  height: 24px;
-  background: url("../assets/pluss.png") center/contain no-repeat;
-  border: none;
-  transition: transform 0.3s ease;
-}
 
 .page-input-group .add-image-icon:hover {
   transform: scale(1.2); /* Slightly larger on hover */
 }
 
-.page-buttons {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  display: flex;
-  gap: 5px;
-}
-
-.add-page-button,
-.delete-page-button {
-  width: 30px;
-  height: 30px;
-  background-size: contain;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.add-page-button {
-  background: url("../assets/add-button.gif") center/contain no-repeat;
-
-}
-
-.delete-page-button {
-  background: url("../assets/delete-button.gif") center/contain no-repeat;
-}
 
 .add-page-button:hover,
 .delete-page-button:hover {
