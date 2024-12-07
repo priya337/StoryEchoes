@@ -40,22 +40,8 @@ function StoriesProviderWrapper(props) {
     };
 
     fetchStories(); // Call the fetch function
-  }, [refresh, userDetails]); // Runs when the component mounts & refresh is requested
+  }, [refresh, userDetails]); // Runs when the component mounts, userDetails changes & refresh is requested
 
-  /*useEffect(() => {
-    if (userDetails.bookIds && stories.length > 0) {
-      let checkLikedStories = stories.map((oneStory) => {
-        oneStory.liked = false;
-        if (userDetails.bookIds.includes(oneStory.id)) {
-          oneStory.liked = true;
-        }
-        return oneStory;
-      });
-
-      setStories([...checkLikedStories]);
-    }
-  }, [userDetails]); // Runs once when user details changes
-   SET UP THE PROVIDER */
   return (
     <StoriesContext.Provider value={{ stories, loading, error, setRefresh }}>
       {props.children}
