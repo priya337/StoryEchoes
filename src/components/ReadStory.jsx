@@ -59,7 +59,7 @@ const ReadStory = () => {
 
         setStory(data);
         setStoryToSpeak(
-          data.title + (data.Author ? `. Echoed by ${data.Author}` : "")
+          data.title + (data.author ? `. Echoed by ${data.author}` : "")
         );
         updateStoryReadCount(data);
       } catch (err) {
@@ -146,9 +146,9 @@ const ReadStory = () => {
     let mediaUrl;
 
     if (loc === "left") {
-      mediaUrl = story.content[page - 1].media;
+      mediaUrl = story.content[page - 1].mediaUrl;
     } else {
-      mediaUrl = story.content[page].media;
+      mediaUrl = story.content[page].mediaUrl;
     }
 
     if (!audioRef.current) {
@@ -249,7 +249,7 @@ const ReadStory = () => {
                     className="cover-page-image"
                   />
                   <h6 className="cover-page-author">
-                    Echoed by {story.Author ? story.Author : "Anonymous"}
+                    Echoed by {story.author ? story.author : "Anonymous"}
                   </h6>
                 </div>
               </div>

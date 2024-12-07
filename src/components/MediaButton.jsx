@@ -24,11 +24,11 @@ const MediaButton = ({
       mediaShowClass = "media-hide"; //No media on cover page
     } else if (screenW < 769 && loc === "right") {
       mediaShowClass = "media-hide"; //Right media only available on laptops
-    } else if (loc === "left" && !story.content[page - 1].media) {
+    } else if (loc === "left" && !story.content[page - 1].mediaUrl) {
       mediaShowClass = "media-hide"; //No media on Left page
     } else if (
       loc === "right" &&
-      (page >= story.content.length || !story.content[page].media)
+      (page >= story.content.length || !story.content[page].mediaUrl)
     ) {
       mediaShowClass = "media-hide"; //No media on Right page
     }

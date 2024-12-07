@@ -99,7 +99,7 @@ const ActionBar = ({ story, storyToSpeak, page, mode }) => {
         <h2 className="bar-title">{story.title}</h2>
         {!storyToSpeak && (
           <h2 className="bar-author">
-            Echoed by {story.Author ? story.Author : "Anonymous"}
+            Echoed by {story.author ? story.author : "Anonymous"}
           </h2>
         )}
       </div>
