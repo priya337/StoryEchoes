@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useUsers } from "./user.context";
-import api from "../api";
+import axios from "axios";
+import { API_URL } from "../config/apiConfig.js";
 
 const StoriesContext = createContext();
 
@@ -17,7 +18,7 @@ function StoriesProviderWrapper(props) {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const { data } = await api.get("/stories"); // Replace with your backend URL
+        const { data } = await axios.get(`${API_URL}/stories`); // Replace with your backend URL
 
         if (userDetails.bookIds && data.length > 0) {
           let checkLikedStories = data.map((oneStory) => {

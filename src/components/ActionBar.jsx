@@ -3,7 +3,8 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { VoicesContext } from "../contexts/voices.context.jsx";
 import { useUsers } from "../contexts/user.context.jsx";
-import api from "../api";
+import axios from "axios";
+import { API_URL } from "../config/apiConfig.js";
 
 import LikeButton from "./LikeButton";
 import PlayButton from "./PlayButton";
@@ -33,8 +34,8 @@ const ActionBar = ({ story, storyToSpeak, page, mode }) => {
     }
 
     //Call Update function & update the story like
-    api
-      .put(`/users/${userDetails.id}`, userDetails)
+    axios
+      .put(`${API_URL}/users/${userDetails.id}`, userDetails)
       .then(({ data }) => {
         setUserDetails(data);
       })

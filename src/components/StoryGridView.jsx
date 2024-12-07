@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { useUsers } from "../contexts/user.context.jsx";
-import api from "../api";
+import axios from "axios";
+import { API_URL } from "../config/apiConfig.js";
 
 import LikeButton from "./LikeButton";
 import ReadCount from "./ReadCount";
@@ -43,8 +44,8 @@ const StoryGridView = ({ filteredBooks, mode }) => {
     }
 
     //Call Update function & update the story like
-    api
-      .put(`/users/${userDetails.id}`, userDetails)
+    axios
+      .put(`${API_URL}/users/${userDetails.id}`, userDetails)
       .then(({ data }) => {
         setUserDetails(data);
       })

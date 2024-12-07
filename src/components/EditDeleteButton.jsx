@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import api from "../api";
+import axios from "axios";
+import { API_URL } from "../config/apiConfig.js";
 import { useStories } from "../contexts/stories.context.jsx";
 import { useToast } from "../contexts/toast.context.jsx";
 
@@ -44,8 +45,8 @@ const EditDeleteButton = ({ story }) => {
 
   function onDelete() {
     //Call Delete API to delete the story
-    api
-      .delete(`/stories/${story.id}`)
+    axios
+      .delete(`${API_URL}/stories/${story.id}`)
       .then(() => {
         //Indicate Context API for refresh
         setRefresh((prev) => prev + 1);

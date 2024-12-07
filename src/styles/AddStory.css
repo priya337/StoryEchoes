@@ -1,6 +1,5 @@
 /* Import Bubblegum Sans */
-@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap");
 
 /* Full Page Background */
 body {
@@ -15,7 +14,7 @@ body {
 .error {
   color: #cb33a5;
   font-weight: bold;
-  font-size: 1.0rem;
+  font-size: 1rem;
 }
 
 /* Bold All Text */
@@ -23,14 +22,22 @@ body,
 .form-group label,
 .submit-button::after,
 .page-input-group h3 {
- font-weight: bold;
+  font-weight: bold;
+}
+
+/* Add Story Header */
+.add-story-header {
+  font-family: "Comic Neue", cursive;
+  font-weight: bold;
+  font-size: 2.5em;
+  margin-top: 5px;
 }
 
 /* Form Container */
 .add-story-container {
   width: 70%;
   max-height: 80vh;
-  margin: 70px auto;
+  margin: 0px auto;
   padding: 20px;
   background: url("../assets/back-stars.png") center/cover no-repeat;
   border-radius: 20px;
@@ -39,6 +46,8 @@ body,
   overflow-x: hidden; /* Prevent horizontal scroll bar */
   position: relative;
   margin-bottom: 35px;
+
+  font-family: "Comic Neue", cursive;
 }
 
 /* Scrollbar Styling */
@@ -93,8 +102,6 @@ body,
   margin-top: 25px;
 }
 
-
-
 /* Front Cover Input Field */
 .front-cover-group input {
   width: 50%; /* Responsive width */
@@ -108,17 +115,17 @@ body,
   margin-bottom: 10px; /* Space below input field */
 }
 
-
 .front-cover-group .add-image-icon:hover {
   transform: scale(1.2); /* Slight zoom effect on hover */
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) { /* For iPads and smaller screens */
+@media (max-width: 1024px) {
+  /* For iPads and smaller screens */
   .front-cover-group {
     max-width: 90%; /* Adjust width for smaller screens */
   }
-  
+
   .front-cover-preview {
     max-width: 250px; /* Reduce preview size */
   }
@@ -128,7 +135,8 @@ body,
   }
 }
 
-@media (max-width: 768px) { /* For mobile devices */
+@media (max-width: 768px) {
+  /* For mobile devices */
   .front-cover-group {
     width: 100%; /* Take full width */
     padding: 0 15px; /* Add padding for better spacing */
@@ -191,13 +199,13 @@ body,
 }
 
 .page-input-group h3 {
-  font-family: 'Bubblegum Sans', cursive;
+  font-family: "Bubblegum Sans", cursive;
   color: #cb33a5;
 }
 
 .page-input-group label {
   font-size: 0.1 rem;
-  font-family: 'Bubblegum Sans', cursive;
+  font-family: "Bubblegum Sans", cursive;
   display: block;
   margin-bottom: 5px;
 }
@@ -208,16 +216,14 @@ body,
   padding: 10px;
   border: 2px solid #28c4ac;
   border-radius: 8px;
-  font-family: 'Bubblegum Sans', cursive;
+  font-family: "Bubblegum Sans", cursive;
   background-color: white;
   color: black;
 }
 
-
 .page-input-group .add-image-icon:hover {
   transform: scale(1.2); /* Slightly larger on hover */
 }
-
 
 .add-page-button:hover,
 .delete-page-button:hover {
@@ -275,7 +281,7 @@ body,
   font-size: 1.2rem; /* Message font size */
   color: #cb33a5; /* Message color */
   margin-top: 10px; /* Space above the message */
-  font-family: 'Comic Neue', cursive;
+  font-family: "Comic Neue", cursive;
 }
 
 /* Honey Bee Section */
@@ -325,6 +331,3 @@ body,
 .transcription-button:hover {
   background-color: #0056b3;
 }
-
-
-

@@ -8,7 +8,8 @@ import Spinner from "react-bootstrap/Spinner";
 import { useStories } from "../contexts/stories.context.jsx";
 import { useUsers } from "../contexts/user.context.jsx";
 
-import api from "../api.js";
+import axios from "axios";
+import { API_URL } from "../config/apiConfig.js";
 import ActionBar from "./ActionBar.jsx";
 import MediaButton from "./MediaButton.jsx";
 
@@ -50,7 +51,7 @@ const ReadStory = () => {
     // Fetch story data
     const fetchStory = async () => {
       try {
-        const { data } = await api.get(`/stories/${id}`);
+        const { data } = await axios.get(`${API_URL}/stories/${id}`);
 
         data.liked = false;
         if (userDetails.bookIds && userDetails.bookIds.includes(data.id)) {
@@ -87,8 +88,8 @@ const ReadStory = () => {
     //Call Update function & update the story read count
     story.readCount = story.readCount ? story.readCount + 1 : 1;
 
-    api
-      .put(`/stories/${story.id}`, story)
+    axios
+      .put(`${API_URL}/stories/${story.id}`, story)
       .then(() => {
         //Indicate Context API for refresh
         setRefresh((prev) => prev + 1);

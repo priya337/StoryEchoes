@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-import api from "../api";
+import axios from "axios";
+import { API_URL } from "../config/apiConfig.js";
 
 const UserContext = createContext();
 
@@ -15,7 +16,7 @@ function UserProviderWrapper(props) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const { data } = await api.get("/users"); // Replace with your backend URL
+        const { data } = await axios.get(`${API_URL}/users`); // Replace with your backend URL
         setUsers(data); // Save fetched users in the state
       } catch (error) {
         setError("Failed to fetch users. Please try again later."); // Handle error
@@ -37,8 +38,8 @@ function UserProviderWrapper(props) {
         bookIds: [],
       };
 
-      api
-        .post("/users", newUser)
+      axios
+        .post(`${API_URL}/users`, newUser)
         .then(({ data }) => {
           setUserDetails(data);
           setRefreshUsers((prev) => prev + 1);

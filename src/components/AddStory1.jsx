@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/AddStory.css";
+import { API_URL } from "../config/apiConfig.js";
 
 // Import assets
 import PlusIcon from "../assets/pluss.png";
@@ -12,7 +13,9 @@ const AddStory = () => {
   const [pages, setPages] = useState([{ page: 1, text: "", image: "" }]); // Stores pages with text and image URLs
   const [errors, setErrors] = useState({});
   const [limitReached, setLimitReached] = useState(false);
-  const [beeMessage, setBeeMessage] = useState("🐝 Bzzz... Click me to submit your story!"); // Default message
+  const [beeMessage, setBeeMessage] = useState(
+    "🐝 Bzzz... Click me to submit your story!"
+  ); // Default message
   const navigate = useNavigate();
 
   const MAX_PAGES = 7;
@@ -115,7 +118,8 @@ const AddStory = () => {
     if (!author.trim())
       newErrors.author = "Who is the storyteller? Add your name! 📖";
     if (!frontCover.trim())
-      newErrors.frontCover = "Your story needs a cover! Add an image URL or file path. 🖼️";
+      newErrors.frontCover =
+        "Your story needs a cover! Add an image URL or file path. 🖼️";
 
     const emptyPages = pages.filter((page) => !page.text.trim());
     if (emptyPages.length > 0)
@@ -138,7 +142,7 @@ const AddStory = () => {
 
     try {
       setBeeMessage("🐝 Submitting your story...");
-      const response = await fetch("http://localhost:9001/stories", {
+      const response = await fetch(`${API_URL}/stories`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(story),
@@ -166,7 +170,9 @@ const AddStory = () => {
       <h1>Create Your Magical Adventure</h1>
       <form className="story-form">
         <div className="row">
-          <div className={`form-group ${errors.title ? "error-highlight" : ""}`}>
+          <div
+            className={`form-group ${errors.title ? "error-highlight" : ""}`}
+          >
             <label>Title</label>
             <input
               type="text"
@@ -176,7 +182,9 @@ const AddStory = () => {
             {errors.title && <span className="error">{errors.title}</span>}
           </div>
 
-          <div className={`form-group ${errors.author ? "error-highlight" : ""}`}>
+          <div
+            className={`form-group ${errors.author ? "error-highlight" : ""}`}
+          >
             <label>Author</label>
             <input
               type="text"
