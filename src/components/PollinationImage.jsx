@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 //import { usePollinationsImage } from "@pollinations/react";
 
 const PollinationImage = ({ prompt, onComplete, onError }) => {
-  const imageUrl1 = usePollinationsImage(prompt, {
+  /*const imageUrl = usePollinationsImage(prompt, {
     width: 512, // Width of the generated image
     height: 512, // Height of the generated image
     seed: 42, // Seed for consistent generation
     model: "flux", // Model used for image generation
     nologo: true, // Disable logo
-  });
+  });*/
 
   const imageUrl = "";
 
