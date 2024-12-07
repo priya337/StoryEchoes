@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import api from "../api";
 import { useStories } from "../contexts/stories.context.jsx";
+import { useToast } from "../contexts/toast.context.jsx";
 
 import VerticallyCenteredModal from "./VerticallyCenteredModal";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -18,6 +19,7 @@ const EditDeleteButton = ({ story }) => {
   const navigate = useNavigate();
 
   const { setRefresh } = useStories(); //Fetched stories in Context API
+  const { setToast } = useToast(); //Use setToast context to set message
 
   function checkEdit(e) {
     e.preventDefault();
@@ -47,6 +49,8 @@ const EditDeleteButton = ({ story }) => {
       .then(() => {
         //Indicate Context API for refresh
         setRefresh((prev) => prev + 1);
+        navigate("/wonderShelf?mode=Edit");
+        setToast(`'${story.title}' was Deleted!`);
       })
       .catch((error) => console.log("Error during story delete:", error));
   }

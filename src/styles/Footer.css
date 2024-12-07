@@ -7,6 +7,7 @@
   gap: 5px;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .footer-link {
@@ -45,6 +46,16 @@
 
 .open-link-icon:hover svg {
   transform: scale(1.2); /* Slight animation on hover */
+}
+
+.footer-toast {
+  position: absolute;
+  right: 0;
+  top: -15px;
+}
+
+.toast-text {
+  font-size: medium;
 }
 
 /* Mobile Screen */

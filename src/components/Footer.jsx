@@ -3,6 +3,7 @@ import "../styles/Footer.css";
 import githubLogo from "../assets/GitHub-logo.jpg";
 import openIcon from "../assets/open.png";
 import backgroundImage from "../assets/back.png";
+import DeleteToast from "./DeleteToast.jsx";
 
 const Footer = () => {
   return (
@@ -14,6 +15,9 @@ const Footer = () => {
         <img src={githubLogo} alt="GitHub" className="github-logo" />
         <img src={openIcon} alt="Open Icon" className="open-icon" />
       </Link>
+
+      {/*Show Delete Toast Message*/}
+      <DeleteToast className="footer-toast"></DeleteToast>
     </div>
   );
 };
