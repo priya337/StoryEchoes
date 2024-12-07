@@ -1,494 +1,1047 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/EditStory.css";
-import PlusIcon from "../assets/pluss.png";
 import FallbackImage from "../assets/fallback.jpg";
+import PollinationImage from './PollinationImage'; // Import the PollinationImage component
+import axios from "axios";
 
 const EditStory = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const { id } = useParams();
+const navigate = useNavigate();
+const pagesContainerRef = useRef(null);
+const [temporaryComponent, setTemporaryComponent] = useState(null);
+const [generalErrorMessage, setGeneralErrorMessage] = useState(); // State for error message
+const [title, setTitle] = useState("");
+const [author, setAuthor] = useState("");
+const [frontCover, setFrontCover] = useState("");
+const [pages, setPages] = useState([{
+page: 1,
+text: "",
+image: null,
+audio: null,
+imageFileName: "", // Track image file name
+audioFileName: "", // Track audio file name
+mediaUrl: "",
+// beeMessage: "🐝 Click me to narrate your magical tale!",
+// transcriptionStatus: "Idle",
+imageError: null,
+audioError: null,
+mediaUrlError: null,
+isPlaying: false, // Track audio playing state
+audioInstance: null, // Store audio instance
+isGenerating: false, // Track if AI image is being generated
+imageGenerated: false
+}]);
+const [errors, setErrors] = useState({});
+const [beeMessage, setBeeMessage] = useState("🐝 Bzz... Click me to save your edited magical adventure. ✨");
+const [limitReached, setLimitReached] = useState(false); // Track if max pages limit is reached
+const fileInputRefs = useRef([]); // Create a ref array for file inputs
+// State for tracking transcription statuses per page
+const [transcriptionStatuses, setTranscriptionStatuses] = useState({});
+const MAX_PAGES = 7;
+const CHARACTER_LIMIT = 300; // Define your character limit
 
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [frontCover, setFrontCover] = useState("");
-  const [pages, setPages] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [beeMessage, setBeeMessage] = useState("🐝 Bzz... Click me to save your edited magical adventure. ✨");
-  const [limitReached, setLimitReached] = useState(false); // Track if max pages limit is reached
+// Function to scroll to the first error field
+const scrollToError = () => {
+const firstErrorField = document.querySelector('.error-highlight');
+if (firstErrorField) {
+firstErrorField.scrollIntoView({
+behavior: 'smooth', // Smooth scrolling
+block: 'center', // Center the field vertically
+});
+}
+};
 
-  // State for tracking transcription statuses per page
-  const [transcriptionStatuses, setTranscriptionStatuses] = useState({});
+// Auto-scroll functionality
+useEffect(() => {
+if (pages.length > 0) {
+const firstErrorField = document.querySelector(".error-highlight");
+if (firstErrorField) {
+firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+}
+}, [pages, errors]);
 
-  const MAX_PAGES = 7;
+useEffect(() => {
+console.log("Pages updated:", pages);
+}, [pages]);
 
-  // Function to scroll to the first error field
-  const scrollToError = () => {
-    const firstErrorField = document.querySelector('.error-highlight');
-    if (firstErrorField) {
-      firstErrorField.scrollIntoView({
-        behavior: 'smooth', // Smooth scrolling
-        block: 'center', // Center the field vertically
-      });
-    }
-  };
+const scrollToErrors = () => {
+const errorFields = document.querySelectorAll(".error-highlight");
+if (errorFields.length > 0) {
+errorFields.forEach((field, i) => {
+setTimeout(() => {
+field.scrollIntoView({ behavior: "smooth", block: "center" });
+}, i * 300); // Delay scrolling to avoid overlapping
+});
+}
+};
 
-  // Fetch the story details from the API
-  useEffect(() => {
-    const fetchStory = async () => {
-      try {
-        setBeeMessage("🐝 Loading your story...");
-        const response = await fetch(`http://localhost:9001/stories/${id}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch story. Status: ${response.status}`);
-        }
-        const data = await response.json();
+// Call this during validation
+scrollToErrors();
 
-        setTitle(data.title || "Untitled Story");
-        setAuthor(data.Author || "Unknown Author");
-        setFrontCover(data.front_cover || FallbackImage);
-        setPages(data.content || []);
+useEffect(() => {
+if (generalErrorMessage && pagesContainerRef.current) {
+// Scroll to the bottom of the container when a general message is set
+pagesContainerRef.current.scrollTo({
+top: pagesContainerRef.current.scrollHeight,
+behavior: "smooth",
+});
+}
+}, [generalErrorMessage]);
 
-        // Initialize transcription statuses for each page as 'Idle'
-        const initialStatuses = {};
-        data.content.forEach((_, index) => {
-          initialStatuses[index] = "Idle"; // Set initial status for each page as 'Idle'
-        });
-        setTranscriptionStatuses(initialStatuses);
 
-        setBeeMessage("🐝 Bzz... Click me to save your edited magical adventure. ✨");
-      } catch (error) {
-        console.error("Error fetching story:", error);
-        setBeeMessage("🐝 Oops! Couldn't load your story. Try again later.");
-      }
-    };
+// Fetch the story details from the API
+useEffect(() => {
+const fetchStory = async () => {
+try {
+setBeeMessage("🐝 Loading your story...");
+const response = await fetch(`http://localhost:9001/stories/${id}`);
+if (!response.ok) {
+throw new Error(`Failed to fetch story. Status: ${response.status}`);
+}
+const data = await response.json();
 
-    if (id) {
-      fetchStory();
-    }
-  }, [id]);
+setTitle(data.title || "Untitled Story");
+setAuthor(data.Author || "Unknown Author");
+setFrontCover(data.front_cover || FallbackImage);
+setPages(data.content || []);
 
-  // Validate form before submission
-  const validate = () => {
-    const newErrors = {};
-    if (!title.trim()) newErrors.title = "Oops! Every story needs a title! 🌟";
-    if (!author.trim()) newErrors.author = "Oops! Add your name as the storyteller! 📖";
-    if (!frontCover.trim()) newErrors.frontCover = "Oops! Your story needs a cover! 🖼️";
 
-    // Front Cover URL validation (local path or HTTP/HTTPS URL)
-    const isValidURL = (url) => {
-      const regex = /^(https?:\/\/.*\.(?:jpg|jpeg|png|gif|bmp|svg|webp))$|^(.*\.(?:jpg|jpeg|png|gif|bmp|svg|webp))$/i;
-      return regex.test(url);
-    };
+// Initialize transcription statuses for each page as 'Idle'
+const initialStatuses = {};
+data.content.forEach((_, index) => {
+initialStatuses[index] = "Idle"; // Set initial status for each page as 'Idle'
+});
+setTranscriptionStatuses(initialStatuses);
 
-    if (frontCover && !isValidURL(frontCover)) {
-      newErrors.frontCover = "Oops! Please enter a valid image URL for the front cover. 🖼️";
-    }
+setBeeMessage("🐝 Bzz... Click me to save your edited magical adventure. ✨");
+} catch (error) {
+console.error("Error fetching story:", error);
+setBeeMessage("🐝 Oops! Couldn't load your story. Try again later.");
+}
+};
 
-    // Validate Page 1 for content
-    if (pages.length === 1 && !pages[0].text.trim()) {
-      newErrors.pages = "Oops! Story Content cannot be empty! Please add some text. ✍️";
-    }
+if (id) {
+fetchStory();
+}
+}, [id]);
 
-    // Validate all pages for content
-    pages.forEach((page, index) => {
-      if (!page.text.trim()) {
-        newErrors[`page-${index}-text`] = `Oops! Page ${index + 1} is missing content! Story Content cannot be empty! ✍️`;
-      }
-    });
+// Update text for a specific page
+const handlePageTextChange = (value, index) => {
+const updatedPages = pages.map((page, i) =>
+i === index ? { ...page, text: value } : page
+);
+setPages(updatedPages);
+if (value.length > CHARACTER_LIMIT) {
+setErrors((prevErrors) => ({
+...prevErrors,
+pages: `Page ${index + 1} exceeds the character limit of ${CHARACTER_LIMIT} characters. Extra text has been trimmed.`,
+}));
+} else if (value.trim()) {
+// Clear errors for this page if within the limit and text exists
+setErrors((prevErrors) => {
+const updatedErrors = { ...prevErrors };
+delete updatedErrors.pages;
+return updatedErrors;
+});
+}
+// Reset error for that page if text is entered
+if (value.trim()) {
+setErrors((prevErrors) => {
+const updatedErrors = { ...prevErrors };
+delete updatedErrors[`page-${index}-text`]; // Remove error for this page
+return updatedErrors;
+});
+} else {
+// Revalidate the error if the field is empty again
+setErrors((prevErrors) => ({
+...prevErrors,
+[`page-${index}-text`]: `Oops! Page ${index + 1} is missing content! Story Content cannot be empty! ✍️`,
+}));
+}
+}
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+const handleFileUpload = async (e, index, type) => {
+const file = e.target.files[0];
+if (!file) {
+// Handle case where no file is selected
+if (type === "image") {
+if (index === null) {
+setFrontCover("");
+setErrors((prevErrors) => ({
+...prevErrors,
+frontCover: "Cover required!",
+}));
+} else {
+setPages((prevPages) =>
+prevPages.map((page, i) =>
+i === index ? { ...page, image: null, imageError: null } : page
+)
+);
+}
+} else if (type === "audio") {
+setPages((prevPages) =>
+prevPages.map((page, i) =>
+i === index ? { ...page, audio: null, audioError: null } : page
+)
+);
+}
+return;
+}
+const uploadAudioToCloudinary = async (audioFile) => {
+const formData = new FormData();
+formData.append("file", audioFile);
+formData.append("upload_preset", "your_upload_preset"); // Replace with your Cloudinary upload preset
 
-  // Update text for a specific page
-  const handlePageTextChange = (value, index) => {
-    const updatedPages = pages.map((page, i) =>
-      i === index ? { ...page, text: value } : page
-    );
-    setPages(updatedPages);
+try {
+const response = await axios.post("https://api.cloudinary.com/v1_1/your_cloud_name/video/upload", formData);
+return response.data.secure_url; // Return the URL of the uploaded audio
+} catch (error) {
+console.error("Error uploading audio:", error);
+throw new Error("Audio upload failed");
+}
+};
+const validImageExtensions = /\.(jpg|jpeg|png|gif|webp)$/i; // Only image formats
+const validAudioExtensions = /\.(mp3|mp4|wav|ogg)$/i; // Audio formats including mp4
+// Check for image file type
+if (type === "image") {
+if (!validImageExtensions.test(file.name)) {
+setErrors((prevErrors) => ({
+...prevErrors,
+frontCover: "Invalid file type. Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
+}));
+prevPages.map((page, i) =>
+i === index
+? {
+...page,
+image: null, // Clear the image
+imageError: "Invalid file type. Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
+}
+: page // Correctly return 'page' for other indices
+);
+return; // Exit the function to prevent further processing
 
-    // Reset error for that page if text is entered
-    if (value.trim()) {
-      setErrors((prevErrors) => {
-        const updatedErrors = { ...prevErrors };
-        delete updatedErrors[`page-${index}-text`]; // Remove error for this page
-        return updatedErrors;
-      });
-    } else {
-      // Revalidate the error if the field is empty again
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [`page-${index}-text`]: `Oops! Page ${index + 1} is missing content! Story Content cannot be empty! ✍️`,
-      }));
-    }
-  };
+}
+}
 
-  // Handle file uploads for cover or page images
-  const handleFileUpload = async (event, index = null) => {
-    const file = event.target.files[0];
-    if (!file) {
-      console.error("No file selected for upload.");
-      return;
-    }
+// Check for audio file type
+if (type === "audio") {
+if (!validAudioExtensions.test(file.name)) {
+setPages((prevPages) =>
+prevPages.map((page, i) =>
+i === index ? { ...page, audio: null, audioError: "Invalid file type. Supported formats: .mp3, .mp4, .wav, .ogg."
+}
+: page
+)
+);
+return; // Exit the function to prevent further processing
+}
+}
 
-    const formData = new FormData();
-    formData.append("file", file);
+// Proceed with file upload if the file type is valid
+const formData = new FormData();
+formData.append("file", file);
+formData.append("upload_preset", "StoryEchoes");
 
-    try {
-      const response = await fetch("http://localhost:9000/upload", {
-        method: "POST",
-        body: formData,
-      });
+try {
+const response = await axios.post(
+"https://api.cloudinary.com/v1_1/dhxwg8gcz/upload",
+formData
+);
 
-      if (!response.ok) {
-        console.error("File upload failed. Status:", response.status);
-        return;
-      }
+if (response.data.secure_url) {
+const uploadedUrl = response.data.secure_url;
 
-      const data = await response.json();
-      if (data.fileUrl) {
-        if (index === null) {
-          setFrontCover(data.fileUrl); // Update the front cover
-        } else {
-          setPages((prevPages) =>
-            prevPages.map((page, i) =>
-              i === index ? { ...page, image: data.fileUrl } : page
-            )
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error during file upload:", error);
-    }
-  };
-
-  // Add a new page
-// Add a new page only if the current page has content
-const addPage = () => {
-  // Check if the current page has content
-  const currentPageIndex = pages.length - 1;
-  if (!pages[currentPageIndex]?.text.trim()) {
-    // If the current page content is empty, show the error for that page
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [`page-${currentPageIndex}-text`]: `Oops! Page ${currentPageIndex + 1} is missing content! Story Content cannot be empty! ✍️`,
-    }));
-    return; // Prevent adding a new page
-  }
-
-  // If current page has content, allow adding the next page
-  if (pages.length < MAX_PAGES) {
-    const newPage = { page: pages.length + 1, text: "", image: "" };
-    setPages((prevPages) => [...prevPages, newPage]);
-
-    // Clear any error related to page content for the new page
-    setErrors((prevErrors) => {
-      const updatedErrors = { ...prevErrors };
-      delete updatedErrors[`page-${currentPageIndex}-text`]; // Remove error for current page if it's filled
-      return updatedErrors;
-    });
-  }
-
-  // Show a message if max pages are reached
-  if (pages.length + 1 === MAX_PAGES) {
-    setLimitReached(true);
-  }
+if (type === "image") {
+if (index === null) {
+setFrontCover(uploadedUrl);
+setErrors((prevErrors) => {
+const updatedErrors = { ...prevErrors };
+delete updatedErrors.frontCover;
+return updatedErrors;
+});
+} else {
+setPages((prevPages) =>
+prevPages.map((page, i) =>
+i === index ? { ...page, image: uploadedUrl, imageError: null } : page
+)
+);
+}
+} else if (type === "audio") {
+setPages((prevPages) =>
+prevPages.map((page, i) =>
+i === index ? { ...page, audio: uploadedUrl, audioError: null } : page
+)
+);
+}
+}
+} catch (error) {
+console.error("File upload failed:", error);
+alert("An error occurred while uploading. Please try again.");
+}
 };
 
 
-  // Handle start of transcription for each page
-  const handleStartTranscription = (index) => {
-    // Set transcription status to 'In Progress' for the current page
-    setTranscriptionStatuses((prevStatuses) => ({
-      ...prevStatuses,
-      [index]: "In Progress...",
-    }));
+// Validate form before submission
+const validate = () => {
+const newErrors = {};
 
-    // Simulate transcription process (replace with actual transcription logic/API)
-    setTimeout(() => {
-      // After transcription completes, update the status to 'Completed ✅'
-      setTranscriptionStatuses((prevStatuses) => ({
-        ...prevStatuses,
-        [index]: "Completed ✅",
-      }));
+// Validate title
+if (!title.trim()) {
+newErrors.title = "Every story needs a title! ✨";
+}
 
-      // Optionally, update the page content with transcribed text (simulated content)
-      const updatedPages = [...pages];
-      updatedPages[index].text = "This is the transcribed content!"; // Replace with actual transcription result
-      setPages(updatedPages);
+// Validate author
+if (!author.trim()) {
+newErrors.author = "Who is the storyteller? Add your name! 📖";
+}
 
-      // Optional: Change bee message after transcription
-      setBeeMessage("🐝 Transcription completed! You can continue editing your story.");
-    }, 3000); // Simulate 3-second transcription delay
+// Validate front cover
+if (!frontCover.trim()) {
+newErrors.frontCover = "Your story needs a cover! Add an image.";
+}
+
+          // Validate all pages
+          const emptyPages = pages
+            .map((page, index) => ({
+              pageNumber: index + 1,
+              hasText: page.text.trim() !== "",
+            }))
+            .filter((page) => !page.hasText); // Filter out pages without text
+        
+          // General error message for multiple empty pages
+          if (emptyPages.length > 1) {
+            const pageNumbers = emptyPages.map((p) => p.pageNumber).join(", ");
+            setGeneralErrorMessage(`The following pages need text: ${pageNumbers}.`); // General message
+          } else {
+            setGeneralErrorMessage(""); // Clear general message if fewer than 2 empty pages
+          }
+        
+          // Specific error message for a single empty page
+          if (emptyPages.length === 1) {
+            newErrors.pages = `Page ${emptyPages[0].pageNumber} needs text.`; // Specific page error
+          }
+        
+          // Add a combined general error message to newErrors if multiple pages are empty
+          if (emptyPages.length > 0) {
+            newErrors.general = "Some pages are missing content. Please review all pages to ensure they have text.";
+          }
+        
+          // Validate media or image for each page
+          pages.forEach((page, index) => {
+            if (!page.mediaUrl?.trim() && !page.image) {
+              newErrors[`page${index + 1}`] = `Page ${index + 1} requires either an image or a media URL.`;
+            }
+          });
+
+// Validate character limit
+const limitExceededPages = pages.filter((page) => page.text.length > CHARACTER_LIMIT);
+if (limitExceededPages.length > 0) {
+const pageNumbers = limitExceededPages.map((_, index) => index + 1).join(", ");
+newErrors.characterLimit = `The following pages exceed the character limit of ${CHARACTER_LIMIT} characters:
+${pageNumbers}.`;
+}
+
+// Log errors and prevent submission if errors exist
+if (Object.keys(newErrors).length > 0) {
+console.error("Validation failed with the following errors:", newErrors);
+}
+
+setErrors(newErrors);
+
+// Return false if there are any errors
+return Object.keys(newErrors).length === 0;
+};
+
+// Add a new page
+const addPage = () => {
+if (pages.length === 1 && !pages[0].text.trim()) {
+setErrors({ ...errors, pages: "Oops! Please fill in the content for Page 1 before adding a new page." });
+scrollToError();
+return;
+}
+
+if (pages.length < MAX_PAGES) { setPages((prevPages)=> [
+  ...prevPages,
+  { page: prevPages.length + 1, text: "", image: "" },
+  ]);
+  }
+
+  if (pages.length + 1 === MAX_PAGES) {
+  setLimitReached(true);
+  }
   };
 
-  // Delete page logic and reorder pages after deletion
-  const deletePage = (indexToDelete) => {
-    const updatedPages = pages.filter((_, index) => index !== indexToDelete);
+  const deletePage = async (indexToDelete) => {
+  try {
+  // Ensure the page exists
+  const pageToDelete = pages[indexToDelete];
+  if (!pageToDelete) {
+  console.error("Page to delete does not exist.");
+  return;
+  }
 
-    // Reorder pages: reset page numbers to be in correct order
-    const reorderedPages = updatedPages.map((page, index) => ({
-      ...page,
-      page: index + 1, // Update page numbers after deletion
-    }));
+  // Ensure the page has an ID
+  const pageId = pageToDelete.id;
+  if (!pageId) {
+  console.warn("Page does not have an ID. Cannot delete from the backend.");
+  // Remove locally and reindex if no ID
+  setPages((prevPages) =>
+  prevPages
+  .filter((_, index) => index !== indexToDelete)
+  .map((page, index) => ({
+  ...page,
+  page: index + 1,
+  }))
+  );
+  return;
+  }
 
-    setPages(reorderedPages);
+  const movePage = (pageIndex, direction) => {
+  setPages((prevPages) => {
+  const targetIndex = direction === "up" ? pageIndex - 1 : pageIndex + 1;
 
-    if (reorderedPages.length < MAX_PAGES) {
-      setLimitReached(false);
+  // Ensure the target index is within bounds
+  if (targetIndex < 0 || targetIndex>= prevPages.length) {
+    return prevPages;
     }
-  };
 
-  // Front Cover Change Handler
-  const handleFrontCoverChange = (e) => {
-    const value = e.target.value;
-    setFrontCover(value);
+    // Create a copy of the pages array
+    const updatedPages = [...prevPages];
 
-    // Validate URL
-    const isValidURL = (url) => {
+    // Swap the pages (explicitly handling all fields, including media)
+    const temp = { ...updatedPages[pageIndex] }; // Temporarily store the current page
+    updatedPages[pageIndex] = {
+    ...updatedPages[targetIndex],
+    page: pageIndex + 1, // Update page number
+    };
+    updatedPages[targetIndex] = {
+    ...temp,
+    page: targetIndex + 1, // Update page number
+    };
+
+    // Reset any file inputs if necessary (optional, if using file input fields)
+    if (fileInputRefs.current[pageIndex]) {
+    fileInputRefs.current[pageIndex].value = null; // Reset file input for the current page
+    }
+    if (fileInputRefs.current[targetIndex]) {
+    fileInputRefs.current[targetIndex].value = null; // Reset file input for the target page
+    }
+
+    // Return the updated pages
+    return updatedPages;
+    });
+    };
+
+    // Send DELETE request to backend
+    console.log(`Attempting to delete page with ID: ${pageId}`);
+    const response = await axios.delete(`http://localhost:9001/stories/${pageId}`);
+    if (response.status === 200) {
+    console.log("Page deleted successfully.");
+
+    // Update local state after successful deletion
+    setPages((prevPages) =>
+    prevPages
+    .filter((_, index) => index !== indexToDelete)
+    .map((page, index) => ({
+    ...page,
+    page: index + 1, // Reindex pages
+    }))
+    );
+    } else {
+    console.error(`Failed to delete the page. Status: ${response.status}`);
+    }
+    } catch (error) {
+    console.error("Error deleting page:", error);
+    }
+    };
+
+    const movePage = (pageIndex, direction) => {
+    setPages((prevPages) => {
+    const targetIndex = direction === "up" ? pageIndex - 1 : pageIndex + 1;
+
+    // Ensure the target index is within bounds
+    if (targetIndex < 0 || targetIndex>= prevPages.length) {
+      return prevPages;
+      }
+
+      // Create a copy of the pages array
+      const updatedPages = [...prevPages];
+
+      // Swap the pages (explicitly handling all fields, including media)
+      const temp = { ...updatedPages[pageIndex] }; // Temporarily store the current page
+      updatedPages[pageIndex] = {
+      ...updatedPages[targetIndex],
+      page: pageIndex + 1, // Update page number
+      };
+      updatedPages[targetIndex] = {
+      ...temp,
+      page: targetIndex + 1, // Update page number
+      };
+
+      // Reset any file inputs if necessary (optional, if using file input fields)
+      if (fileInputRefs.current[pageIndex]) {
+      fileInputRefs.current[pageIndex].value = null; // Reset file input for the current page
+      }
+      if (fileInputRefs.current[targetIndex]) {
+      fileInputRefs.current[targetIndex].value = null; // Reset file input for the target page
+      }
+
+      // Return the updated pages
+      return updatedPages;
+      });
+      };
+
+      // Front Cover Change Handler
+      const handleFrontCoverChange = (e) => {
+      const value = e.target.value;
+      setFrontCover(value);
+
+      // Validate URL
+      const isValidURL = (url) => {
       const regex = /^(https?:\/\/.*\.(?:jpg|jpeg|png|gif|bmp|svg|webp))$|^(.*\.(?:jpg|jpeg|png|gif|bmp|svg|webp))$/i;
       if (!regex.test(url)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          frontCover: "Oops! Please enter a valid image URL for the front cover. 🖼️",
-        }));
+      setErrors((prevErrors) => ({
+      ...prevErrors,
+      frontCover: "Oops! Please enter a valid image URL for the front cover. 🖼️",
+      }));
       } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          frontCover: "",
-        }));
+      setErrors((prevErrors) => ({
+      ...prevErrors,
+      frontCover: "",
+      }));
       }
-    };
+      };
 
-    if (value.trim()) {
+      if (value.trim()) {
       isValidURL(value);
-    }
-  };
+      }
+      };
 
-  // Handle form submission
-  const handleSubmit = async () => {
-    if (!validate()) {
-      scrollToError();
+
+      const handleImageGenerated = async (index, text) => {
+      try {
+      console.log("Starting image generation process...");
+
+      // Step 1: Update state to indicate generation in progress
+      setPages((prevPages) =>
+      prevPages.map((p, i) =>
+      i === index ? { ...p, isGenerating: true, imageGenerated: false } : p
+      )
+      );
+
+      // Step 2: Dynamically render PollinationImage and generate the image
+      const generatedImageUrl = await new Promise((resolve, reject) => {
+      if (!setTemporaryComponent || typeof setTemporaryComponent !== "function") {
+      const error = new Error("setTemporaryComponent is not available.");
+      console.error(error.message);
+      reject(error);
       return;
-    }
+      }
 
-    const story = {
-      id,
-      title,
-      Author: author,
-      front_cover: frontCover || FallbackImage,
-      content: pages.map((page) => ({
+      setTemporaryComponent(
+      <PollinationImage prompt={text} onComplete={(url)=> {
+        if (!url) {
+        const error = new Error("Image generation failed: No URL returned.");
+        console.error(error.message);
+        reject(error);
+        setTemporaryComponent(null); // Clean up
+        return;
+        }
+        console.log("Image generated successfully:", url);
+        resolve(url); // Resolve the Promise with the image URL
+        setTemporaryComponent(null); // Clean up after success
+        }}
+        onError={(error) => {
+        console.error("Image generation failed:", error);
+        reject(error); // Reject with the error
+        setTemporaryComponent(null); // Clean up after failure
+        }}
+        />
+        );
+        });
+
+        if (fileInputRefs.current[index]) {
+        fileInputRefs.current[index].value = null; // Reset the file input field
+        }
+
+        // Step 3: Upload the generated image to Cloudinary
+        console.log("Uploading generated image to Cloudinary...");
+        const uploadedUrl = await uploadImageToCloudinary(generatedImageUrl);
+        console.log("Image uploaded to Cloudinary successfully:", uploadedUrl);
+
+        // Step 4: Save the uploaded image URL to the database
+        console.log("Saving the uploaded image URL to the database...");
+        await saveImageUrlToDatabase(uploadedUrl, index);
+        console.log("Image URL saved successfully in the database.");
+
+        // Step 5: Update state with the uploaded image
+        setPages((prevPages) =>
+        prevPages.map((p, i) =>
+        i === index
+        ? { ...p, image: uploadedUrl, imageGenerated: true, isGenerating: false }
+        : p
+        )
+        );
+
+        console.log("Image generation and upload process completed successfully.");
+        } catch (error) {
+        console.error("Error during the image generation process:", error);
+
+        // Alert the user about the error
+        alert("An error occurred during the image generation process. Please try again.");
+
+        // Reset state in case of an error
+        setPages((prevPages) =>
+        prevPages.map((p, i) =>
+        i === index ? { ...p, isGenerating: false } : p
+        )
+        );
+        }};
+
+        const uploadImageToCloudinary = async (imageFile) => {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("upload_preset", "StoryEchoes");
+
+        console.time("Cloudinary API Call");
+        try {
+        console.log("Uploading image to Cloudinary...");
+        const response = await axios.post("https://api.cloudinary.com/v1_1/dhxwg8gcz/upload", formData);
+        console.log("Cloudinary response:", response.data);
+        console.timeEnd("Cloudinary API Call");
+        return response.data.secure_url; // Return the URL of the uploaded image
+        } catch (error) {
+        console.error("Error during Cloudinary upload:", error);
+        console.timeEnd("Cloudinary API Call");
+        throw new Error("Image upload failed");
+        }
+        };
+
+        const saveImageUrlToDatabase = async (imageUrl, index) => {
+        const storyId = "your_story_id";
+        const pageData = {
+        page: index + 1,
+        image: imageUrl,
+        storyId: storyId,
+        };
+
+        console.time("Database API Call");
+        try {
+        console.log("Sending image data to the database...");
+        const response = await axios.post("http://localhost:9001/stories", pageData);
+        if (response.status === 201) {
+        console.log("Image URL saved successfully:", response.data);
+        } else {
+        console.error("Database responded with an error:", response);
+        }
+        console.timeEnd("Database API Call");
+        } catch (error) {
+        console.error("Error during database save:", error);
+        console.timeEnd("Database API Call");
+        throw new Error("Database save failed");
+        }
+        };
+
+        const handleSubmit = async () => {
+        // Validate and ensure submission stops if errors exist
+        if (!validate()) {
+        console.error("Submission blocked due to validation errors.");
+        return;
+        }
+
+        if (generalErrorMessage) {
+        console.error("Cannot submit: unresolved errors exist.");
+        return; // Stop submission if general errors exist
+        }
+
+        // Prepare the story object for submission
+        const story = {
+        title,
+        author,
+        front_cover: frontCover || FallbackImage,
+        content: pages.map((page) => ({
         ...page,
         image: page.image || FallbackImage,
-      })),
-    };
+        audio: page.audio || null, // Include audio if present
+        mediaUrl: page.mediaUrl || null,
+        })),
+        };
 
-    try {
-      setBeeMessage("🐝 Saving your edits...");
-      const response = await fetch(`http://localhost:9001/stories/${id}`, {
+        try {
+        setBeeMessage("🐝 Saving your edits...");
+        const response = await fetch(`http://localhost:9001/stories/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(story),
-      });
+        });
 
-      if (response.ok) {
+        if (response.ok) {
         setBeeMessage("Awesome! Your story has been saved! 🚀");
         setTimeout(() => {
-          navigate(`/read-story/${id}`);
+        navigate(`/read-story/${id}`);
         }, 2000);
-      } else {
+        } else {
         setBeeMessage("🐝 Oh no! Couldn't save your story. Try again.");
-      }
-    } catch (error) {
-      console.error("Error saving story:", error);
-      setBeeMessage("🐝 Something went wrong. Please try again.");
-    }
-  };
+        }
+        } catch (error) {
+        console.error("Error saving story:", error);
+        setBeeMessage("🐝 Something went wrong. Please try again.");
+        }
+        };
 
-  return (
-    <div className="edit-story-container">
-      <h1>Edit Your Magical Story</h1>
-      <form className="story-form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-        {/* Title and Author */}
-        <div className="row">
-          <div
-            id="title"
-            className={`form-group ${
-              errors.title ? "error-highlight" : title.trim() ? "success-highlight" : ""
-            }`}
-          >
-            <label>Title</label>
-            <input
-              type="text"
-              value={title || ""}
-              onChange={(e) => {
+
+        // Function to toggle audio play/pause
+        const toggleAudio = (index) => {
+        const updatedPages = [...pages];
+        const page = updatedPages[index];
+
+        if (page.audioInstance) {
+        // If audio is already playing, pause it
+        page.audioInstance.pause();
+        page.audioInstance = null; // Reset audio instance
+        } else {
+        // Create a new audio instance and play it
+        const audio = new Audio(page.mediaUrl);
+        audio.play();
+        updatedPages[index].audioInstance = audio; // Store the audio instance
+        }
+
+        // Update the playing state
+        updatedPages[index] = { ...page, isPlaying: !page.isPlaying };
+        setPages(updatedPages);
+        };
+
+        return (
+        <div className="edit-story-container">
+          <h1 style={{ fontFamily: "Comic Neuve, cursive", fontWeight: "bold" }}>Waeve in your edited Magical Story</h1>
+          <form className="story-form" onSubmit={(e)=> { e.preventDefault(); handleSubmit(); }}>
+
+            {/* Title and Author */}
+            <div className="row">
+              <div id="title" className={`form-group ${ errors.title ? "error-highlight" : title.trim()
+                ? "success-highlight" : "" }`}>
+                <label
+                  style={{ fontFamily: "Comic Neuve, cursive", fontWeight: "bold", fontSize: "1.5rem" }}>Title</label>
+                <input type="text" value={title || "" } onChange={(e)=> {
                 setTitle(e.target.value);
                 if (e.target.value.trim()) {
-                  setErrors((prevErrors) => ({ ...prevErrors, title: "" }));
+                setErrors((prevErrors) => ({ ...prevErrors, title: "" }));
                 }
-              }}
-              onBlur={() => validate()}
-            />
-            {errors.title && <span className="error">{errors.title}</span>}
-          </div>
-          <div
-            id="author"
-            className={`form-group ${
-              errors.author ? "error-highlight" : author.trim() ? "success-highlight" : ""
-            }`}
-          >
-            <label>Author</label>
-            <input
-              type="text"
-              value={author || ""}
-              onChange={(e) => {
+                }}
+                onBlur={() => validate()}
+                />
+                {errors.title && <span className="error">{errors.title}</span>}
+              </div>
+              <div id="author" className={`form-group ${ errors.author ? "error-highlight" : author.trim()
+                ? "success-highlight" : "" }`}>
+                <label
+                  style={{ fontFamily: "Comic Neuve, cursive", fontWeight: "bold", fontSize: "1.5rem" }}>Author</label>
+                <input type="text" value={author || "" } onChange={(e)=> {
                 setAuthor(e.target.value);
                 if (e.target.value.trim()) {
-                  setErrors((prevErrors) => ({ ...prevErrors, author: "" }));
+                setErrors((prevErrors) => ({ ...prevErrors, author: "" }));
                 }
-              }}
-              onBlur={() => validate()}
-            />
-            {errors.author && <span className="error">{errors.author}</span>}
-          </div>
-        </div>
+                }}
+                onBlur={() => validate()}
+                />
+                {errors.author && <span className="error">{errors.author}</span>}
+              </div>
+            </div>
 
-        {/* Front Cover */}
-        <div
-          id="frontCover"
-          className={`form-group front-cover-group ${
-            errors.frontCover ? "error-highlight" : frontCover.trim() && !errors.frontCover ? "success-highlight" : ""
-          }`}
-        >
-          <label>Front Cover (local Path/URL)</label>
-          <input
-            type="text"
-            value={frontCover || ""}
-            onChange={handleFrontCoverChange} // Link the function here
-            onBlur={() => validate()}
-          />
-          {errors.frontCover && <span className="error">{errors.frontCover}</span>}
-          <input
-            type="file"
-            accept="image/*"
-            id="front-cover-upload"
-            style={{ display: "none" }}
-            onChange={(e) => handleFileUpload(e)}
-          />
-          <label htmlFor="front-cover-upload">
-            <img src={PlusIcon} alt="Upload Front Cover" className="add-image-icon" />
-          </label>
-        </div>
+            {/* Front Cover */}
+            <div id="frontCover" className={`form-group front-cover-group ${ errors.frontCover ? "error-highlight" :
+              frontCover.trim() && !errors.frontCover ? "success-highlight" : "" }`}>
+              <div className={`form-group front-cover-group ${errors.frontCover ? "error-highlight" : "" }`}>
+                <label
+                  style={{ fontFamily: "Comic Neuve, cursive", fontWeight: "bold", fontSize: "1.5rem" , marginLeft: "10px"}}>Front
+                  Cover</label>
+                <input type="file" accept="image/*" onChange={(e)=> handleFileUpload(e, null, "image")}
+                style={{ width: "300px" }}
+                />
+                {frontCover && (
+                <img src={frontCover} alt="Front Cover" style={{ width: "120px", height: "120px", objectFit: "cover", marginRight: '-750px',marginTop : "-100px",
+              marginLeft: "-300px"
+            }} />
+                )}
+                {errors.frontCover && (
+                <span className="error"
+                  style={{ fontFamily: "Comic Neuve, cursive", fontWeight: "bold", fontSize: "1.1rem" }}>
+                  {errors.frontCover}
+                </span>
+                )}
+              </div>
+            </div>
 
-        {/* Pages Section */}
-        <div className="pages-container">
-          {pages.map((page, index) => (
-            <div key={index} className="page-input-group">
-              <h3>Page {page.page}</h3>
-              <label>Story Content</label>
-              <div style={{ textAlign: "center", fontFamily: "'Bubblegum Sans', cursive" }}>
-                <div
-                  className="honey-bee-transcription"
-                  onClick={() => handleStartTranscription(index)}
-                  style={{ cursor: "pointer", fontSize: "1rem" }}
-                >
-                  <p>🐝 Bzz... Click me to save your magical tale. ✨</p>
-                </div>
-                <div
-                  className="transcription-status"
-                  style={{
+            {/* Story Content Label */}
+            <h2
+              style={{ color: "#28c4ac", textAlign: "center", margin: "20px 0", fontWeight: "bold", fontSize: "1.5rem",fontFamily: "Comic Neuve, cursive" }}>
+              Story Content</h2>
+
+            {/* Pages Section */}
+            <div ref={pagesContainerRef} className="pages-container" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "550px" }}>              
+             {pages.map((page, index) => (
+              <div key={index} className="page-input-group">
+                <div style={{ textAlign: "center", fontFamily: "'Bubblegum Sans', cursive" }}>
+                  {/* <div className="honey-bee-transcription" onClick={()=> handleStartTranscription(index)}
+                    style={{ cursor: "pointer", fontSize: "1rem" }}
+                    >
+                    <p>🐝 Bzz... Click me to weave your magical tale. ✨</p>
+                  </div> */}
+                  {/* <div className="transcription-status" style={{
                     fontWeight: "bold",
                     color: transcriptionStatuses[index] === "Idle" ? "magenta" : "blue",
                     fontSize: "1rem",
-                  }}
-                >
-                  Status: {transcriptionStatuses[index] || "Idle"}
+                  }}>
+                    Status: {transcriptionStatuses[index] || "Idle"}
+                  </div> */}
                 </div>
-              </div>
+                {page.page > 1 ? (
+                <h3 style={{ fontFamily: "Bubblegum Sans", marginTop: "0" , marginBottom: "-70px"  }}>Page {page.page}
+                </h3>
+                ) : (
+                <h3 style={{ fontFamily: "Bubblegum Sans", marginTop: "0"}}>Page {page.page}</h3>
+                )}
 
-              <textarea
-                value={page.text || ""}
-                onChange={(e) => handlePageTextChange(e.target.value, index)}
-                onBlur={() => validate()}
-                className={
-                  errors[`page-${index}-text`] ? "error-highlight" : page.text.trim() ? "success-highlight" : ""
-                }
+                {page.page > 1 && (
+                <div
+                  style={{ width: "104%", height: "30px", backgroundColor: "darkblue", marginBottom: "30px", marginLeft: "-10px" }}>
+                </div>
+                )}
+                {/* Text Area */}
+                <textarea value={page.text} placeholder="Write your story here..." onChange={(e)=> handlePageTextChange(e.target.value, index)}
+                style={{ fontFamily: "Bubblegum Sans, cursive", height: "150px", marginBottom: "10px", marginTop: page.page === 1 ? "10px" : "25px" }}
               />
-              {errors[`page-${index}-text`] && <span className="error">{errors[`page-${index}-text`]}</span>}
-              <label>Image URL</label>
-              <input
-                type="text"
-                value={page.image || ""}
-                onChange={(e) =>
-                  setPages((prevPages) =>
-                    prevPages.map((p, i) =>
-                      i === index ? { ...p, image: e.target.value } : p
-                    )
-                  )
-                }
-              />
+              {errors.pages && index + 1 === parseInt(errors.pages.match(/\d+/)?.[0]) && (
+                <span className="error" style={{ fontFamily: "Comic Neuve, cursive" }}>{errors.pages}</span>
+              )}
+
+
+              {/* File Upload for Image */}
               <input
                 type="file"
                 accept="image/*"
-                id={`image-upload-${index}`}
-                style={{ display: "none" }}
-                onChange={(e) => handleFileUpload(e, index)}
+                ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
+                onChange={(e) => handleFileUpload(e, index, "image")} style={{ width: "270px", marginRight: "360px"}}
               />
-              <label htmlFor={`image-upload-${index}`}>
-                <img src={PlusIcon} alt="Upload Page Image" className="add-image-icon" />
-              </label>
+              {page.image && (
+                <img
+                  src={page.image}
+                  alt={`Page ${page.page}`}
+                  style={{ 
+                    width: "120px", // Adjust the width of the input field                    
+                    fontSize: "14px",
+                    padding: "1px",
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    marginLeft: "150px",
+                    marginTop: "-70px"                   }}
+                />
+              )}
+              {page.imageError && (
+                <span className="error" style={{ fontFamily: "Comic Neuve, cursive", fontWeight: "bold", fontSize: "1.1rem" }}>
+                  {page.imageError}
+                </span>
+              )}
 
-              {/* Add and Delete Page Buttons */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                {pages.length < MAX_PAGES && (
-                  <button
-                    type="button"
-                    className="add-page-button"
-                    onClick={addPage}
-                    style={{
-                      position: "absolute",
-                      top: "5px", // Adjust this to set the distance from the top
-                      right: "80px", // Adjust this to set the distance from the right edge
-                      backgroundColor: "#f44336",
-                      color: "white",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "5px",
-                    }}
-                  >
-              
-                  </button>
-                )}
+              {/* Media URL */}
+              <input
+                type="text"
+                placeholder="Paste media URL"
+                value={page.mediaUrl || ""}
+                onChange={(e) => handleMediaUrlInput(e, index)}
+                onBlur={(e) => handleMediaUrlInput(e, index)}
+                style={{ fontFamily: "Bubblegum Sans, cursive" , marginTop: "10px", width: "270px", marginRight: "360px"}} 
+              />
+              {page.mediaUrlError && <span className="error" style={{ fontFamily: "Comic Neuve, cursive" }}>{page.mediaUrlError}</span>}
+
+              {/* Play/Pause Button for Media URL */}
+              {page.mediaUrl && !page.mediaUrlError && (
                 <button
                   type="button"
-                  className="delete-page-button"
-                  onClick={() => deletePage(index)}
+                  onClick={() => toggleAudio(index)}
                   style={{
-                    display: index === -1 || pages.length === 1 ? "none" : "block",
+                    borderRadius: "30%",
+                    width: "40px", // Smaller size
+                    height: "40px", // Smaller size
+                    backgroundColor: page.isPlaying ? "white" : "darkblue",
+                    // backgroundColor: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "12px",
+                    alignContent: "center",
+                    marginLeft: "-10px",
+                    position: "absolute",
+                    // top: "50%",
+                    // left: "50%",
+                    transform: "translate(-700%, 40%)",
+
                   }}
                 >
+                  {page.isPlaying ? "⏸️" : "▶️"}
                 </button>
-              </div>
-            </div>
-          ))}
+              )}
+{page.text.trim() && (
+  <div style={{ marginBottom: "20px" }}> {/* Parent wrapper */}
+    {/* Dynamically Render the Temporary Component */}
+    {temporaryComponent}
+    {/* Generate Image Button */}
+    <button
+      type="button"
+      onClick={() => handleImageGenerated(index, page.text)}
+      disabled={page.isGenerating} // Disable the button while generating
+      style={{
+        backgroundColor: page.isGenerating ? "white" : "darkblue",
+        color: "Magenta",
+        fontfamily: "Bubblegum San",
+        cursor: page.isGenerating ? "not-allowed" : "pointer",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "5px",
+        fontWeight: "bold",
+        marginTop: "25px"
+        
+      }}
+    >
+      {page.isGenerating ? "Generating..." : "Generate Image"}
+    </button>
+  </div>
+)}
+<div className="page-buttons" style={{ display: "flex", gap: "10px" }}>
+  {/* Add Page Button (only on the last page and if limit not reached) */}
+  <div
+      style={{
+        display: "flex",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        gap: "10px",
+        marginBottom: "10px",
+      }}
+    > </div>
+  {index === pages.length - 1 && !limitReached && (
+    <button
+      type="button"
+      onClick={addPage}
+      style={{
+        fontFamily: "Bubblegum San",
+        fontSize: "small",
+        color: "Magenta",
+        backgroundColor: "darkblue",
+        fontWeight: "bold",
+        padding: "5px 5px", // Smaller padding
+        flex: "0.2", // Equal size
+        marginTop: page.page === 1 ? "20px" : "-30px" // Conditional margin
 
-          {/* Maximum Pages Reached Message */}
-          {limitReached && (
-            <div
-              className="limit-message"
-              style={{ textAlign: "center", fontSize: "1rem", color: "#003d99", marginTop: "20px" }}
-            >
-              🎉 You’ve reached the maximum of 7 pages. Time to wrap up your story! 🦄
+      }}
+    >
+    + Add
+    </button>
+  )}
+
+  {/* Move Up Button */}
+  {index > 0 && (
+    <button
+      type="button"
+      onClick={() => movePage(index, "up")}
+      style={{
+        fontFamily: "Comic Neuve, cursive",
+        fontSize: "small",
+        color: "darkblue",
+        backgroundColor: "lightgrey",
+        fontWeight: "bold",
+        position: "relative", // Ensure the button is positioned
+        top: "-15px", // Adjust the top position as needed
+      }}
+    >
+      ⬆️
+    </button>
+  )}
+
+  {/* Move Down Button */}
+  {index < pages.length - 1 && (
+    <button
+      type="button"
+      onClick={() => movePage(index, "down")}
+      style={{
+        fontFamily: "Comic Neuve, cursive",
+        fontSize: "small",
+        color: "darkblue",
+        backgroundColor: "lightgrey",
+        fontWeight: "bold",
+        position: "relative", // Ensure the button is positioned
+        top: "-15px", // Adjust the top position as needed
+        left: "-130px", // Adjust the left position as needed
+
+      }}
+    >
+      ⬇️
+    </button>
+  )}
+
+  {/* Delete Button */}
+  {pages.length > 1 && (
+    <button
+      type="button"
+      onClick={() => deletePage(index)}
+      style={{
+        fontFamily: "Bubblegum San",
+        fontSize: "0.9rem",
+        color: "Magenta",
+        backgroundColor: "darkblue",
+        fontWeight: "bold",
+        padding: "5px 5px", // Smaller padding
+        flex: "0.2", // Equal size
+        marginTop: "25px",
+        marginBottom: "50px",
+        marginRight: "100px"
+        
+      }}
+    >
+      - Delete
+    </button>
+  )}
+</div>
+{limitReached && (
+            <div className="limit-message">
+              🎉 You’ve reached the maximum of 7 pages. Time to wrap up your
+              story! 🦄
             </div>
           )}
+  </div>
+))}
         </div>
-
-        {/* Submit Button */}
-        <div className="honey-bee-message" onClick={handleSubmit} style={{ cursor: "pointer" }}>
-          <p>{beeMessage}</p>
-        </div>
+          {/* General Error Message */}
+  {generalErrorMessage && (
+    <div
+      style={{
+        color: "Magenta",
+        fontFamily: "Comic Neuve, cursive",
+        fontSize: "20px",
+        textAlign: "center",
+        marginTop: "20px",
+      }}
+    >
+      {generalErrorMessage} 
+   </div>
+  )}  
+  {/* Submit Button */}
+  <div
+    className="honey-bee-message"
+    onClick={handleSubmit}
+    style={{
+      cursor: "pointer",
+      fontFamily: "Comic Neuve, cursive",
+      fontSize: "1.5rem", // Increased font size
+      fontWeight: "bold", // Made bold
+      textAlign: "center",
+      marginTop: "20px",
+    }}
+  >
+    {beeMessage}
+  </div>
       </form>
     </div>
   );
 };
-
 export default EditStory;
