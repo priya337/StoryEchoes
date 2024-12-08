@@ -37,7 +37,7 @@ const EditStory = () => {
   ]);
   const [errors, setErrors] = useState({});
   const [beeMessage, setBeeMessage] = useState(
-    "🐝 Bzz... Click me to save your edited magical adventure. ✨"
+    "🐝 Bzz... Click me & save your edited magical adventure. ✨"
   );
   const [limitReached, setLimitReached] = useState(false); // Track if max pages limit is reached
   const fileInputRefs = useRef([]); // Create a ref array for file inputs
@@ -110,6 +110,9 @@ const EditStory = () => {
         setAuthor(data.author || "Unknown Author");
         setFrontCover(data.front_cover || FallbackImage);
         setPages(data.content || []);
+        if (data.content.length === MAX_PAGES) {
+          setLimitReached(true);
+        }
 
         // Initialize transcription statuses for each page as 'Idle'
         const initialStatuses = {};
@@ -119,7 +122,7 @@ const EditStory = () => {
         setTranscriptionStatuses(initialStatuses);
 
         setBeeMessage(
-          "🐝 Bzz... Click me to save your edited magical adventure. ✨"
+          "🐝 Bzz... Click me & save your edited magical adventure. ✨"
         );
       } catch (error) {
         console.error("Error fetching story:", error);
@@ -222,7 +225,7 @@ const EditStory = () => {
         setErrors((prevErrors) => ({
           ...prevErrors,
           frontCover:
-            "Invalid file type. Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
+            "Error! Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
         }));
         prevPages.map(
           (page, i) =>
@@ -231,7 +234,7 @@ const EditStory = () => {
                   ...page,
                   image: null, // Clear the image
                   imageError:
-                    "Invalid file type. Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
+                    "Error! Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
                 }
               : page // Correctly return 'page' for other indices
         );
@@ -249,7 +252,7 @@ const EditStory = () => {
                   ...page,
                   audio: null,
                   audioError:
-                    "Invalid file type. Supported formats: .mp3, .mp4, .wav, .ogg.",
+                    "Invalid File. Supported formats: .mp3, .mp4, .wav, .ogg.",
                 }
               : page
           )
@@ -476,6 +479,7 @@ ${pageNumbers}.`;
       const response = await axios.delete(`${API_URL}/stories/${pageId}`);
       if (response.status === 200) {
         console.log("Page deleted successfully.");
+        setLimitReached(false);
 
         // Update local state after successful deletion
         setPages((prevPages) =>
@@ -771,486 +775,470 @@ ${pageNumbers}.`;
   };
 
   return (
-    <div className="edit-story-container">
-      <h1 style={{ fontFamily: "Comic Neuve, cursive", fontWeight: "bold" }}>
-        Waeve in your edited Magical Story
-      </h1>
-      <form
-        className="story-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-        {/* Title and Author */}
-        <div className="row">
-          <div
-            id="title"
-            className={`form-group ${
-              errors.title
-                ? "error-highlight"
-                : title.trim()
-                ? "success-highlight"
-                : ""
-            }`}
-          >
-            <label
-              style={{
-                fontFamily: "Comic Neuve, cursive",
-                fontWeight: "bold",
-                fontSize: "1.5rem",
-              }}
-            >
-              Title
-            </label>
-            <input
-              type="text"
-              value={title || ""}
-              onChange={(e) => {
-                setTitle(e.target.value);
-                if (e.target.value.trim()) {
-                  setErrors((prevErrors) => ({ ...prevErrors, title: "" }));
-                }
-              }}
-              onBlur={() => validate()}
-            />
-            {errors.title && <span className="error">{errors.title}</span>}
-          </div>
-          <div
-            id="author"
-            className={`form-group ${
-              errors.author
-                ? "error-highlight"
-                : author.trim()
-                ? "success-highlight"
-                : ""
-            }`}
-          >
-            <label
-              style={{
-                fontFamily: "Comic Neuve, cursive",
-                fontWeight: "bold",
-                fontSize: "1.5rem",
-              }}
-            >
-              Author
-            </label>
-            <input
-              type="text"
-              value={author || ""}
-              onChange={(e) => {
-                setAuthor(e.target.value);
-                if (e.target.value.trim()) {
-                  setErrors((prevErrors) => ({ ...prevErrors, author: "" }));
-                }
-              }}
-              onBlur={() => validate()}
-            />
-            {errors.author && <span className="error">{errors.author}</span>}
-          </div>
-        </div>
-
-        {/* Front Cover */}
-        <div
-          id="frontCover"
-          className={`form-group front-cover-group ${
-            errors.frontCover
-              ? "error-highlight"
-              : frontCover.trim() && !errors.frontCover
-              ? "success-highlight"
-              : ""
-          }`}
+    <div>
+      <h1 className="add-story-header">Weave in your edited Magical Story</h1>
+      <div className="story-container">
+        <form
+          className="story-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
         >
-          <div
-            className={`form-group front-cover-group ${
-              errors.frontCover ? "error-highlight" : ""
-            }`}
-          >
-            <label
-              style={{
-                fontFamily: "Comic Neuve, cursive",
-                fontWeight: "bold",
-                fontSize: "1.5rem",
-                marginLeft: "10px",
-              }}
+          {/* Title and Author */}
+          <div className="row">
+            <div
+              id="title"
+              className={`form-group ${
+                errors.title
+                  ? "error-highlight"
+                  : title.trim()
+                  ? "success-highlight"
+                  : ""
+              }`}
             >
-              Front Cover
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleFileUpload(e, null, "image")}
-              style={{ width: "300px" }}
-            />
-            {frontCover && (
-              <img
-                src={frontCover}
-                alt="Front Cover"
-                style={{
-                  width: "120px",
-                  height: "120px",
-                  objectFit: "cover",
-                  marginRight: "-750px",
-                  marginTop: "-100px",
-                  marginLeft: "-300px",
+              <label>Title</label>
+              <input
+                type="text"
+                value={title || ""}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  if (e.target.value.trim()) {
+                    setErrors((prevErrors) => ({ ...prevErrors, title: "" }));
+                  }
                 }}
+                onBlur={() => validate()}
               />
-            )}
-            {errors.frontCover && (
-              <span
-                className="error"
-                style={{
-                  fontFamily: "Comic Neuve, cursive",
-                  fontWeight: "bold",
-                  fontSize: "1.1rem",
+              {errors.title && <span className="error">{errors.title}</span>}
+            </div>
+            <div
+              id="author"
+              className={`form-group ${
+                errors.author
+                  ? "error-highlight"
+                  : author.trim()
+                  ? "success-highlight"
+                  : ""
+              }`}
+            >
+              <label>Author</label>
+              <input
+                type="text"
+                value={author || ""}
+                onChange={(e) => {
+                  setAuthor(e.target.value);
+                  if (e.target.value.trim()) {
+                    setErrors((prevErrors) => ({ ...prevErrors, author: "" }));
+                  }
                 }}
-              >
-                {errors.frontCover}
-              </span>
-            )}
+                onBlur={() => validate()}
+              />
+              {errors.author && <span className="error">{errors.author}</span>}
+            </div>
           </div>
-        </div>
 
-        {/* Story Content Label */}
-        <h2
-          style={{
-            color: "#28c4ac",
-            textAlign: "center",
-            margin: "20px 0",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            fontFamily: "Comic Neuve, cursive",
-          }}
-        >
-          Story Content
-        </h2>
+          {/* Front Cover */}
+          <div className="row" style={{ marginTop: "5px" }}>
+            <div
+              id="frontCover"
+              className={`form-group front-cover-group ${
+                errors.frontCover
+                  ? "error-highlight"
+                  : frontCover.trim() && !errors.frontCover
+                  ? "success-highlight"
+                  : ""
+              } ${errors.frontCover ? "error-highlight" : ""}`}
+            >
+              <label>Front Cover</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileUpload(e, null, "image")}
+                style={{ width: "300px" }}
+              />
+              {errors.frontCover && (
+                <span className="error">{errors.frontCover}</span>
+              )}
+            </div>
+            <div
+              className="front-cover-img"
+              style={{
+                paddingLeft: "20px",
+              }}
+            >
+              {frontCover && (
+                <img
+                  src={frontCover}
+                  alt="Front Cover"
+                  style={{
+                    width: "80px",
+                    maxHeight: "80px",
+                    objectFit: "cover",
+                    borderRadius: "4px",
+                  }}
+                />
+              )}
+            </div>
+          </div>
 
-        {/* Pages Section */}
-        <div
-          ref={pagesContainerRef}
-          className="pages-container"
-          style={{
-            overflowY: "scroll",
-            overflowX: "hidden",
-            maxHeight: "550px",
-          }}
-        >
-          {pages.map((page, index) => (
-            <div key={index} className="page-input-group">
-              <div
-                style={{
-                  textAlign: "center",
-                  fontFamily: "'Bubblegum Sans', cursive",
-                }}
-              >
-                {/* <div className="honey-bee-transcription" onClick={()=> handleStartTranscription(index)}
+          <div className="row">
+            <div className="form-group">
+              {/* Story Content Label */}
+              <label>Story Content</label>
+            </div>
+          </div>
+
+          {/* Pages Section */}
+          <div ref={pagesContainerRef} className="pages-container">
+            {pages.map((page, index) => (
+              <div key={index} className="page-input-group">
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontFamily: "'Bubblegum Sans', cursive",
+                  }}
+                >
+                  {/* <div className="honey-bee-transcription" onClick={()=> handleStartTranscription(index)}
                     style={{ cursor: "pointer", fontSize: "1rem" }}
                     >
                     <p>🐝 Bzz... Click me to weave your magical tale. ✨</p>
                   </div> */}
-                {/* <div className="transcription-status" style={{
+                  {/* <div className="transcription-status" style={{
                     fontWeight: "bold",
                     color: transcriptionStatuses[index] === "Idle" ? "magenta" : "blue",
                     fontSize: "1rem",
                   }}>
                     Status: {transcriptionStatuses[index] || "Idle"}
                   </div> */}
-              </div>
-              {page.page > 1 ? (
-                <h3
-                  style={{
-                    fontFamily: "Bubblegum Sans",
-                    marginTop: "0",
-                    marginBottom: "-70px",
-                  }}
-                >
-                  Page {page.page}
-                </h3>
-              ) : (
-                <h3 style={{ fontFamily: "Bubblegum Sans", marginTop: "0" }}>
-                  Page {page.page}
-                </h3>
-              )}
-
-              {page.page > 1 && (
-                <div
-                  style={{
-                    width: "104%",
-                    height: "30px",
-                    backgroundColor: "darkblue",
-                    marginBottom: "30px",
-                    marginLeft: "-10px",
-                  }}
-                ></div>
-              )}
-              {/* Text Area */}
-              <textarea
-                value={page.text}
-                placeholder="Write your story here..."
-                onChange={(e) => handlePageTextChange(e.target.value, index)}
-                style={{
-                  fontFamily: "Bubblegum Sans, cursive",
-                  height: "150px",
-                  marginBottom: "10px",
-                  marginTop: page.page === 1 ? "10px" : "25px",
-                }}
-              />
-              {errors.pages &&
-                index + 1 === parseInt(errors.pages.match(/\d+/)?.[0]) && (
-                  <span
-                    className="error"
-                    style={{ fontFamily: "Comic Neuve, cursive" }}
-                  >
-                    {errors.pages}
-                  </span>
+                </div>
+                {page.page > 1 ? (
+                  <h3>--------- Page {page.page} ---------</h3>
+                ) : (
+                  <h3 style={{ fontFamily: "Bubblegum Sans", marginTop: "0" }}>
+                    --------- Page {page.page} ---------
+                  </h3>
                 )}
 
-              {/* File Upload for Image */}
-              <input
-                type="file"
-                accept="image/*"
-                ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
-                onChange={(e) => handleFileUpload(e, index, "image")}
-                style={{ width: "270px", marginRight: "360px" }}
-              />
-              {page.image && (
-                <img
-                  src={page.image}
-                  alt={`Page ${page.page}`}
-                  style={{
-                    width: "120px", // Adjust the width of the input field
-                    fontSize: "14px",
-                    padding: "1px",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                    marginLeft: "150px",
-                    marginTop: "-70px",
-                  }}
-                />
-              )}
-              {page.imageError && (
-                <span
-                  className="error"
-                  style={{
-                    fontFamily: "Comic Neuve, cursive",
-                    fontWeight: "bold",
-                    fontSize: "1.1rem",
-                  }}
-                >
-                  {page.imageError}
-                </span>
-              )}
-
-              {/* Media URL */}
-              <input
-                type="text"
-                placeholder="Paste media URL"
-                value={page.mediaUrl || ""}
-                onChange={(e) => handleMediaUrlInput(e, index)}
-                onBlur={(e) => handleMediaUrlInput(e, index)}
-                style={{
-                  fontFamily: "Bubblegum Sans, cursive",
-                  marginTop: "10px",
-                  width: "270px",
-                  marginRight: "360px",
-                }}
-              />
-              {page.mediaUrlError && (
-                <span
-                  className="error"
-                  style={{ fontFamily: "Comic Neuve, cursive" }}
-                >
-                  {page.mediaUrlError}
-                </span>
-              )}
-
-              {/* Play/Pause Button for Media URL */}
-              {page.mediaUrl && !page.mediaUrlError && (
-                <button
-                  type="button"
-                  onClick={() => toggleAudio(index)}
-                  style={{
-                    borderRadius: "30%",
-                    width: "40px", // Smaller size
-                    height: "40px", // Smaller size
-                    backgroundColor: page.isPlaying ? "white" : "darkblue",
-                    // backgroundColor: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                    fontSize: "12px",
-                    alignContent: "center",
-                    marginLeft: "-10px",
-                    position: "absolute",
-                    // top: "50%",
-                    // left: "50%",
-                    transform: "translate(-700%, 40%)",
-                  }}
-                >
-                  {page.isPlaying ? "⏸️" : "▶️"}
-                </button>
-              )}
-              {page.text.trim() && (
-                <div style={{ marginBottom: "20px" }}>
-                  {" "}
-                  {/* Parent wrapper */}
-                  {/* Dynamically Render the Temporary Component */}
-                  {temporaryComponent}
-                  {/* Generate Image Button */}
-                  <button
-                    type="button"
-                    onClick={() => handleImageGenerated(index, page.text)}
-                    disabled={page.isGenerating} // Disable the button while generating
+                {/* page.page > 1 && (
+                  <div
                     style={{
-                      backgroundColor: page.isGenerating ? "white" : "darkblue",
-                      color: "Magenta",
-                      fontfamily: "Bubblegum San",
-                      cursor: page.isGenerating ? "not-allowed" : "pointer",
-                      padding: "10px 20px",
-                      border: "none",
-                      borderRadius: "5px",
-                      fontWeight: "bold",
-                      marginTop: "25px",
-                    }}
-                  >
-                    {page.isGenerating ? "Generating..." : "Generate Image"}
-                  </button>
-                </div>
-              )}
-              <div
-                className="page-buttons"
-                style={{ display: "flex", gap: "10px" }}
-              >
-                {/* Add Page Button (only on the last page and if limit not reached) */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {" "}
-                </div>
-                {index === pages.length - 1 && !limitReached && (
-                  <button
-                    type="button"
-                    onClick={addPage}
-                    style={{
-                      fontFamily: "Bubblegum San",
-                      fontSize: "small",
-                      color: "Magenta",
+                      width: "104%",
+                      height: "30px",
                       backgroundColor: "darkblue",
-                      fontWeight: "bold",
-                      padding: "5px 5px", // Smaller padding
-                      flex: "0.2", // Equal size
-                      marginTop: page.page === 1 ? "20px" : "-30px", // Conditional margin
+                      marginBottom: "30px",
+                      marginLeft: "-10px",
                     }}
-                  >
-                    + Add
-                  </button>
-                )}
+                  ></div>
+                )*/}
 
-                {/* Move Up Button */}
-                {index > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => movePage(index, "up")}
+                {/* Text Area */}
+                <div style={{ display: "flex", marginBottom: "10px" }}>
+                  <div
                     style={{
-                      fontFamily: "Comic Neuve, cursive",
-                      fontSize: "small",
-                      color: "darkblue",
-                      backgroundColor: "lightgrey",
-                      fontWeight: "bold",
-                      position: "relative", // Ensure the button is positioned
-                      top: "-15px", // Adjust the top position as needed
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
                     }}
                   >
-                    ⬆️
-                  </button>
-                )}
+                    <textarea
+                      value={page.text}
+                      placeholder="Write your story here..."
+                      onChange={(e) =>
+                        handlePageTextChange(e.target.value, index)
+                      }
+                      style={{
+                        fontFamily: "Bubblegum Sans, cursive",
+                        height: "80px",
+                      }}
+                    />
+                    {errors.pages &&
+                      index + 1 ===
+                        parseInt(errors.pages.match(/\d+/)?.[0]) && (
+                        <span className="error">{errors.pages}</span>
+                      )}
+                  </div>
 
-                {/* Move Down Button */}
-                {index < pages.length - 1 && (
-                  <button
-                    type="button"
-                    onClick={() => movePage(index, "down")}
-                    style={{
-                      fontFamily: "Comic Neuve, cursive",
-                      fontSize: "small",
-                      color: "darkblue",
-                      backgroundColor: "lightgrey",
-                      fontWeight: "bold",
-                      position: "relative", // Ensure the button is positioned
-                      top: "-15px", // Adjust the top position as needed
-                      left: "-130px", // Adjust the left position as needed
-                    }}
-                  >
-                    ⬇️
-                  </button>
-                )}
+                  {/* Display image next to the Text*/}
+                  <div>
+                    {page.image && (
+                      <img
+                        src={page.image}
+                        alt={`Page ${page.page}`}
+                        style={{
+                          width: "80px", // Adjust the width of the input field
+                          height: "80px",
+                          border: "1px solid #ccc",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    )}
 
-                {/* Delete Button */}
-                {pages.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => deletePage(index)}
-                    style={{
-                      fontFamily: "Bubblegum San",
-                      fontSize: "0.9rem",
-                      color: "Magenta",
-                      backgroundColor: "darkblue",
-                      fontWeight: "bold",
-                      padding: "5px 5px", // Smaller padding
-                      flex: "0.2", // Equal size
-                      marginTop: "25px",
-                      marginBottom: "50px",
-                      marginRight: "100px",
-                    }}
-                  >
-                    - Delete
-                  </button>
-                )}
-              </div>
-              {limitReached && (
-                <div className="limit-message">
-                  🎉 You’ve reached the maximum of 7 pages. Time to wrap up your
-                  story! 🦄
+                    {/* Dynamically Render the Temporary Component */}
+                    {!page.image && temporaryComponent}
+
+                    {page.imageError && (
+                      <span
+                        className="error"
+                        style={{
+                          fontFamily: "Comic Neuve, cursive",
+                          fontWeight: "bold",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        {page.imageError}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              )}
+
+                {/* Image Button Area */}
+                <div className="page-image-buttons">
+                  {/* File Upload for Image */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
+                    onChange={(e) => handleFileUpload(e, index, "image")}
+                    style={{ width: "50%", maxHeight: "37px" }}
+                  />
+
+                  {page.text.trim() && (
+                    <div>
+                      {" "}
+                      {/* Parent wrapper */}
+                      {/* Generate Image Button */}
+                      <button
+                        type="button"
+                        onClick={() => handleImageGenerated(index, page.text)}
+                        disabled={page.isGenerating} // Disable the button while generating
+                        style={{
+                          backgroundColor: page.isGenerating
+                            ? "white"
+                            : "darkblue",
+                          color: "Magenta",
+                          fontfamily: "Bubblegum San",
+                          fontWeight: "bold",
+                          cursor: page.isGenerating ? "not-allowed" : "pointer",
+                          border: "none",
+                          borderRadius: "5px",
+                          height: "35px",
+                          fontSize: "0.8em",
+                        }}
+                      >
+                        {page.isGenerating ? "Generating..." : "Generate Image"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Media Area */}
+                <div className="page-media-buttons">
+                  <div
+                    style={{
+                      width: "50%",
+                    }}
+                  >
+                    {/* Media URL */}
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Paste media URL"
+                        value={page.mediaUrl || ""}
+                        onChange={(e) => handleMediaUrlInput(e, index)}
+                        onBlur={(e) => handleMediaUrlInput(e, index)}
+                        style={{
+                          fontFamily: "Bubblegum Sans, cursive",
+                          width: "100%",
+                        }}
+                      />
+                      {page.mediaUrlError && (
+                        <span
+                          className="error"
+                          style={{
+                            fontFamily: "Comic Neuve, cursive",
+                            paddingLeft: "10px",
+                            fontSize: "0.75em",
+                          }}
+                        >
+                          {page.mediaUrlError}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      alignSelf: "flex-start",
+                    }}
+                  >
+                    {/* Play/Pause Button for Media URL */}
+                    {page.mediaUrl && !page.mediaUrlError && (
+                      <button
+                        type="button"
+                        onClick={() => toggleAudio(index)}
+                        style={{
+                          backgroundColor: "transparent",
+                          padding: "5px 0 0 10px",
+                          border: "none",
+                        }}
+                      >
+                        {page.isPlaying ? "⏸️" : "▶️"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div
+                  className="page-buttons"
+                  style={{ display: "flex", gap: "10px" }}
+                >
+                  {/* Add Page Button (only on the last page and if limit not reached) */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      gap: "10px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {" "}
+                  </div>
+
+                  <div
+                    style={{
+                      width: "33%",
+                      display: "flex",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    {index === pages.length - 1 && !limitReached && (
+                      <button
+                        type="button"
+                        onClick={addPage}
+                        style={{
+                          fontFamily: "Bubblegum San",
+                          color: "Magenta",
+                          backgroundColor: "darkblue",
+                          fontWeight: "bold",
+                          border: "none",
+                          borderRadius: "5px",
+                          height: "35px",
+                          fontSize: "0.8em",
+                        }}
+                      >
+                        + Add
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Move Up Button */}
+                  <div className="move-buttons">
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => movePage(index, "up")}
+                        style={{
+                          backgroundColor: "transparent",
+                          padding: "0px",
+                          border: "none",
+                        }}
+                      >
+                        ⬆️
+                      </button>
+                    )}
+
+                    {/* Move Down Button */}
+                    {index < pages.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={() => movePage(index, "down")}
+                        style={{
+                          backgroundColor: "transparent",
+                          padding: "0px",
+                          border: "none",
+                        }}
+                      >
+                        ⬇️
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Delete Button */}
+                  <div
+                    style={{
+                      width: "33%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    {pages.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => deletePage(index)}
+                        style={{
+                          fontFamily: "Bubblegum San",
+                          color: "Magenta",
+                          backgroundColor: "darkblue",
+                          fontWeight: "bold",
+                          border: "none",
+                          borderRadius: "5px",
+                          height: "35px",
+                          fontSize: "0.8em",
+                        }}
+                      >
+                        - Delete
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {limitReached && (
+              <div className="limit-message">
+                🎉 You’ve reached the maximum of 7 pages. Time to wrap up your
+                story! 🦄
+              </div>
+            )}
+          </div>
+
+          {/* General Error Message */}
+          {generalErrorMessage && (
+            <div
+              style={{
+                color: "Magenta",
+                fontFamily: "Comic Neuve, cursive",
+                fontSize: "20px",
+                textAlign: "center",
+                marginTop: "20px",
+              }}
+            >
+              {generalErrorMessage}
             </div>
-          ))}
-        </div>
-        {/* General Error Message */}
-        {generalErrorMessage && (
+          )}
+
+          {/* Submit Button */}
           <div
+            className="honey-bee-message"
+            onClick={handleSubmit}
             style={{
-              color: "Magenta",
+              cursor: "pointer",
               fontFamily: "Comic Neuve, cursive",
-              fontSize: "20px",
+              fontSize: "1em", // Increased font size
               textAlign: "center",
-              marginTop: "20px",
+              marginTop: "10px",
+              borderRadius: "10px",
+              backgroundColor: "darkblue",
+
+              border: "2px solid #28c4ac",
+              padding: "2px 5px",
             }}
           >
-            {generalErrorMessage}
+            {beeMessage}
           </div>
-        )}
-        {/* Submit Button */}
-        <div
-          className="honey-bee-message"
-          onClick={handleSubmit}
-          style={{
-            cursor: "pointer",
-            fontFamily: "Comic Neuve, cursive",
-            fontSize: "1.5rem", // Increased font size
-            fontWeight: "bold", // Made bold
-            textAlign: "center",
-            marginTop: "20px",
-          }}
-        >
-          {beeMessage}
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

@@ -10,12 +10,14 @@ body {
   color: #cb33a5;
 }
 
-/* General Error Message Styling */
+/* General Error Message Styling 
+CSS Duplicate in Edit
 .error {
   color: #cb33a5;
   font-weight: bold;
   font-size: 1rem;
 }
+  */
 
 /* Bold All Text */
 body,
@@ -34,28 +36,27 @@ body,
 }
 
 /* Form Container */
-.add-story-container {
-  width: 70%;
+.story-container {
+  width: 100%;
   max-height: 80vh;
   margin: 0px auto;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   background: url("../assets/back-stars.png") center/cover no-repeat;
   border-radius: 20px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Prevent horizontal scroll bar */
   position: relative;
-  margin-bottom: 35px;
 
   font-family: "Comic Neue", cursive;
 }
 
 /* Scrollbar Styling */
-.add-story-container::-webkit-scrollbar {
+.story-container::-webkit-scrollbar {
   width: 10px;
 }
 
-.add-story-container::-webkit-scrollbar-thumb {
+.story-container::-webkit-scrollbar-thumb {
   background-color: #26d6b3;
   border-radius: 10px;
 }
@@ -79,28 +80,30 @@ body,
 }
 
 /* Front Cover Field Alignment */
+/* Same class in EditStory.css takes over so this id duplicate
 .front-cover-group {
   display: flex;
-  flex-direction: column; /* Stack label, preview, and input vertically */
-  justify-content: center; /* Center content */
-  align-items: center; /* Center horizontally */
-  width: 100%; /* Make it responsive to the parent container */
-  max-width: 600px; /* Limit the maximum width for larger screens */
-  /* margin: 0 auto 15px; Center align and add spacing below */
-  text-align: auto; /* Align text to the left */
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center; 
+  width: 100%; 
+  max-width: 600px; 
+  margin: 0 auto 15px;
+  text-align: auto; 
   margin-left: 90px;
-}
+}*/
 
-/* Adjust Label Styling */
+/* Adjust Label Styling 
+Same class in EditStory.css
 .front-cover-group label {
   font-size: 1.3rem;
-  margin-bottom: 10px; /* Add spacing below label */
+  margin-bottom: 10px; /* Add spacing below label 
   color: rgb(104, 223, 201);
   width: 100%;
-  text-align: left; /* Center label text */
+  text-align: left; /* Center label text 
   margin-left: 190px;
   margin-top: 25px;
-}
+}*/
 
 /* Front Cover Input Field */
 .front-cover-group input {
@@ -119,6 +122,12 @@ body,
   transform: scale(1.2); /* Slight zoom effect on hover */
 }
 
+.front-cover-img {
+  display: flex;
+  justify-content: flex-start;
+  width: 50%;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   /* For iPads and smaller screens */
@@ -135,7 +144,14 @@ body,
   }
 }
 
-@media (max-width: 768px) {
+/*Tablet Screen -820*/
+@media only screen and (max-device-width: 768px) and (min-width: 426px) {
+  .story-container {
+    padding: 0;
+  }
+}
+
+@media (max-width: 767px) {
   /* For mobile devices */
   .front-cover-group {
     width: 100%; /* Take full width */
@@ -157,19 +173,20 @@ body,
   margin-bottom: 15px;
 }
 
+/* Duplicated in Edit Story.css
 .form-group input,
 .form-group textarea {
   background-color: white;
   color: black;
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   font-size: 1.2rem;
   border: 2px solid rgb(104, 223, 201);
   border-radius: 8px;
   outline: none;
   transition: all 0.3s ease;
   font-family: "Comic Neue", cursive;
-}
+}*/
 
 .form-group textarea {
   resize: vertical;
@@ -181,7 +198,8 @@ body,
   /* box-shadow: 0 0 5px rgba(0, 61, 153, 0.7); */
 }
 
-/* Pages Section */
+/* Pages Section 
+CSS repeated in Edit
 .pages-container {
   position: relative;
   padding: 5px;
@@ -193,16 +211,19 @@ body,
   margin-bottom: 90px;
 }
 
+//Edit CSS repeat
 .page-input-group {
-  position: relative; /* Enable relative positioning for icon placement */
+  position: relative; /* Enable relative positioning for icon placement
   margin-bottom: 15px;
-}
+}*/
 
+/* Edit CSS repeat
 .page-input-group h3 {
   font-family: "Bubblegum Sans", cursive;
   color: #cb33a5;
 }
 
+//Edit CSS repeat
 .page-input-group label {
   font-size: 0.1 rem;
   font-family: "Bubblegum Sans", cursive;
@@ -210,6 +231,7 @@ body,
   margin-bottom: 5px;
 }
 
+//Edit CSS repeat
 .page-input-group input,
 .page-input-group textarea {
   width: 90%;
@@ -219,7 +241,7 @@ body,
   font-family: "Bubblegum Sans", cursive;
   background-color: white;
   color: black;
-}
+}*/
 
 .page-input-group .add-image-icon:hover {
   transform: scale(1.2); /* Slightly larger on hover */
