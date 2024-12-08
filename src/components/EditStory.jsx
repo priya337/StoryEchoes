@@ -837,29 +837,66 @@ ${pageNumbers}.`;
             </div>
           </div>
 
-          {/* Front Cover */}
-          <div className="row" style={{ marginTop: "5px" }}>
+          {/* Front Cover Area*/}
+          <div
+            className="row"
+            style={{
+              justifyContent: "space-between",
+            }}
+          >
+            {/* Select Front Cover pic*/}
             <div
-              id="frontCover"
-              className={`form-group front-cover-group ${
-                errors.frontCover
-                  ? "error-highlight"
-                  : frontCover.trim() && !errors.frontCover
-                  ? "success-highlight"
-                  : ""
-              } ${errors.frontCover ? "error-highlight" : ""}`}
+              style={{
+                width: "40%",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "0px",
+                alignItems: "center",
+              }}
             >
-              <label>Front Cover</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleFileUpload(e, null, "image")}
-                style={{ width: "300px" }}
-              />
-              {errors.frontCover && (
-                <span className="error">{errors.frontCover}</span>
-              )}
+              <div
+                id="frontCover"
+                className={`form-group front-cover-group ${
+                  errors.frontCover
+                    ? "error-highlight"
+                    : frontCover.trim() && !errors.frontCover
+                    ? "success-highlight"
+                    : ""
+                } ${errors.frontCover ? "error-highlight" : ""}`}
+              >
+                <label>Front Cover</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, null, "image")}
+                  style={{
+                    width: "100%",
+                    marginBottom: "0px",
+                    fontFamily: "Comic Neuve, cursive",
+                  }}
+                />
+                {errors.frontCover && (
+                  <span className="error">{errors.frontCover}</span>
+                )}
+              </div>
+
+              {/*Doodle Button Place holder*/}
+              <div
+                style={{
+                  width: "20%",
+                  padding: "30px 0 0 10px",
+                }}
+              >
+                <button
+                  style={{
+                    height: "35px",
+                  }}
+                >
+                  DOODLE
+                </button>
+              </div>
             </div>
+
             <div
               className="front-cover-img"
               style={{
