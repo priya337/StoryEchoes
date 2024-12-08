@@ -3,16 +3,21 @@ import { useNavigate } from "react-router-dom";
 import "../styles/AddStory.css";
 import FallbackImage from "../assets/fallback.jpg";
 import axios from "axios";
+import Doodle from "./Doodle";
 import { API_URL } from "../config/apiConfig.js";
-import PollinationImage from "./PollinationImage"; // Import the PollinationImage component
+import PollinationImage from "./PollinationImage.jsx"; // Import the PollinationImage component
 
 const AddStory = () => {
   const INITIAL_PAGES = [];
   const INITIAL_ERRORS = {};
+  const imageFileRefs = useRef([]);
+  const audioFileRefs = useRef([]);
   const INITIAL_GENERAL_ERROR_MESSAGE = "";
   const [isStoryAdded, setIsStoryAdded] = useState(false);
+  const [isDoodleOpen, setIsDoodleOpen] = useState(false); // Controls the Doodle modal
   const [showModal, setShowModal] = useState(false);
   const [pageToDelete, setPageToDelete] = useState(null);
+  const frontCoverFileRef = useRef([]);
   const [title, setTitle] = useState("");
   const [imageGenerated, setImageGenerated] = useState(false);
   const [author, setAuthor] = useState("");
@@ -34,6 +39,25 @@ const AddStory = () => {
     );
   };
 
+
+    const uploadDoodleToCloudinary = async (blob) => {
+    const formData = new FormData();
+    formData.append("file", blob); // Append the Blob
+    formData.append("upload_preset", "StoryEchoes"); // Your Cloudinary upload preset
+    
+    try {
+    const response = await axios.post(
+    "https://api.cloudinary.com/v1_1/dhxwg8gcz/upload", // Replace with your Cloudinary URL
+    formData
+    );
+    console.log("Cloudinary Response:", response.data);
+    return response.data.secure_url; // Return the uploaded image URL
+    } catch (error) {
+    console.error("Cloudinary upload failed:", error.response || error.message);
+    throw new Error("Failed to upload Doodle.");
+    }
+    };
+
   const scrollToPage = (pageIndex) => {
     const pageElement = document.querySelector(
       `[data-page-index="${pageIndex}"]`
@@ -41,6 +65,38 @@ const AddStory = () => {
     if (pageElement) {
       pageElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
+  };
+
+  useEffect(() => {
+    return () => {
+      pages.forEach((page) => {
+        if (page.mediaInstance) {
+          page.mediaInstance.pause();
+          page.mediaInstance = null;
+        }
+      });
+    };
+  }, []);
+
+  // Function to handle Doodle Save
+const handleDoodleGenerated = async (blob) => {
+  try {
+  console.log("Uploading Doodle...");
+  const uploadedUrl = await uploadDoodleToCloudinary(blob); // Upload to Cloudinary
+  setFrontCover(uploadedUrl); // Update front cover
+  
+  console.log("Doodle uploaded successfully:", uploadedUrl);
+  
+  // Clear the file input field for the front cover
+  if (frontCoverFileRef.current) {
+  frontCoverFileRef.current.value = ""; // Reset the file input field
+  console.log("Front cover file input cleared.");
+  }
+  } 
+  catch (error) {
+  console.error("Doodle upload failed:", error);
+  alert("Failed to upload the Doodle. Please try again.");
+  }
   };
 
   const movePage = (pageIndex, direction) => {
@@ -198,8 +254,8 @@ const AddStory = () => {
         );
       });
 
-      if (fileInputRefs.current[index]) {
-        fileInputRefs.current[index].value = null; // Reset the file input field
+      if (imageFileRefs.current[index]) {
+        imageFileRefs.current[index].value = null; // Reset the file input field
       }
 
       // Step 3: Upload the generated image to Cloudinary
@@ -271,9 +327,9 @@ const AddStory = () => {
   const saveImageUrlToDatabase = async (imageUrl, index) => {
     const storyId = "your_story_id";
     const pageData = {
-      page: index + 1,
+      page: index,
       image: imageUrl,
-      storyId: storyId,
+      storyId: "",
     };
 
     console.time("Database API Call");
@@ -413,7 +469,7 @@ const AddStory = () => {
           setFrontCover("");
           setErrors((prevErrors) => ({
             ...prevErrors,
-            frontCover: "Cover required!",
+            frontCover: "Once you add a DoodleImage or upload an Image you are good here...",
           }));
         } else {
           setPages((prevPages) =>
@@ -543,38 +599,52 @@ const AddStory = () => {
   const handleMediaUrlInput = (e, index) => {
     const url = e.target.value.trim(); // Get the value from the event object
     if (!url) {
+      // If the URL is empty, clear the media URL and error
       setPages((prevPages) =>
         prevPages.map((page, i) =>
-          i === index ? { ...page, mediaUrl: "", mediaUrlError: null } : page
+          i === index
+            ? { ...page, mediaUrl: "", mediaUrlError: null }
+            : page
         )
       );
       return;
     }
-
-    const validAudioExtensions = /\.(mp3|mp4|wav|ogg)$/i; // Updated to include mp4
+  
+    // Supported audio and video file extensions
+    const validAudioExtensions = /\.(mp3|mp4|wav|ogg)$/i;
+  
     if (!validAudioExtensions.test(url)) {
+      // If the URL format is invalid, clear media URL and set an error message
       setPages((prevPages) =>
-        prevPages.map(
-          (page, i) =>
-            i === index
-              ? {
-                  ...page,
-                  mediaUrl: "", // Clear the media URL
-                  mediaUrlError:
-                    "Error! Supported formats: .mp3, .mp4, .wav, .ogg.",
-                }
-              : page // Return the unchanged page for other indices
+        prevPages.map((page, i) =>
+          i === index
+            ? {
+                ...page,
+                mediaUrl: "", // Clear the media URL
+                mediaUrlError:
+                  "Error! Supported formats: .mp3, .mp4, .wav, .ogg.",
+              }
+            : page // Keep other pages unchanged
         )
       );
       return; // Exit the function to prevent further processing
     }
-
+  
+    // When a valid URL is entered, clear the audio file input and update the Media URL
     setPages((prevPages) =>
       prevPages.map((page, i) =>
-        i === index ? { ...page, mediaUrl: url, mediaUrlError: null } : page
+        i === index
+          ? { ...page, mediaUrl: url, mediaUrlError: null, audio: null } // Clear audio file input
+          : page
       )
     );
+  
+    // Clear the audio file input using its reference
+    if (fileInputRefs.current[index]) {
+      fileInputRefs.current[index].value = ""; // Clear the file input's value
+    }
   };
+  
 
   //Scroll for general page message.
   useEffect(() => {
@@ -604,10 +674,10 @@ const AddStory = () => {
       newErrors.author = "Who is the storyteller? Add your name! 📖";
     }
 
-    // Validate front cover
-    if (!frontCover.trim()) {
-      newErrors.frontCover = "Your story needs a cover! Add an image.";
-    }
+  // Validate front cover
+  if (!frontCover || frontCover.trim() === "") {
+    newErrors.frontCover = "Once you add a Doodle Image or upload an Image, you are good here...";
+  }
 
     // Validate all pages
     const emptyPages = pages
@@ -636,14 +706,14 @@ const AddStory = () => {
         "Some pages are missing content. Please review all pages to ensure they have text.";
     }
 
-    // Validate media or image for each page
-    pages.forEach((page, index) => {
-      if (!page.mediaUrl?.trim() && !page.image) {
-        newErrors[`page${index + 1}`] = `Page ${
-          index + 1
-        } requires either an image or a media URL.`;
-      }
-    });
+    // // Validate media or image for each page
+    // pages.forEach((page, index) => {
+    //   if (!page.mediaUrl?.trim() && !page.image) {
+    //     newErrors[`page${index + 1}`] = `Page ${
+    //       index + 1
+    //     } requires either an image or a media URL.`;
+    //   }
+    // });
 
     // Validate character limit
     const CHARACTER_LIMIT = 300; // Define your character limit
@@ -725,27 +795,60 @@ const AddStory = () => {
       alert("Error submitting story. Please try again.");
     }
   };
-
-  // Function to toggle audio play/pause
   const toggleAudio = (index) => {
     const updatedPages = [...pages];
     const page = updatedPages[index];
-
+  
     if (page.audioInstance) {
       // If audio is already playing, pause it
       page.audioInstance.pause();
       page.audioInstance = null; // Reset audio instance
     } else {
       // Create a new audio instance and play it
-      const audio = new Audio(page.mediaUrl);
+      const audio = new Audio(page.audio); // Use `page.audio` instead of `page.mediaUrl` if needed
       audio.play();
       updatedPages[index].audioInstance = audio; // Store the audio instance
     }
-
+  
     // Update the playing state
     updatedPages[index] = { ...page, isPlaying: !page.isPlaying };
     setPages(updatedPages);
   };
+  
+  const toggleMediaPlay = (index) => {
+    const updatedPages = [...pages];
+    const page = updatedPages[index];
+  
+    if (page.mediaInstance) {
+      // If media is already playing, pause it
+      page.mediaInstance.pause();
+      page.mediaInstance = null; // Reset the media instance
+    } else {
+      try {
+        // Check if media URL is valid and create a new Audio instance
+        const media = new Audio(page.mediaUrl);
+        media.play();
+        page.mediaInstance = media; // Store the media instance
+  
+        // Set mediaPlaying to false when the media ends
+        media.onended = () => {
+          setPages((prevPages) =>
+            prevPages.map((p, i) =>
+              i === index ? { ...p, isPlaying: false, mediaInstance: null } : p
+            )
+          );
+        };
+      } catch (error) {
+        console.error("Error playing media:", error);
+        return;
+      }
+    }
+  
+    // Toggle playing state
+    updatedPages[index] = { ...page, isPlaying: !page.isPlaying };
+    setPages(updatedPages);
+  };
+  
 
   return (
     <div>
@@ -801,88 +904,84 @@ const AddStory = () => {
             </div>
           </div>
 
-          {/* Front Cover Area*/}
-          <div
-            className="row"
-            style={{
-              justifyContent: "space-between",
-            }}
-          >
-            {/* Select Front Cover pic*/}
-            <div
-              style={{
-                width: "40%",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "0px",
-                alignItems: "center",
-              }}
-            >
-              <div
-                className={`form-group front-cover-group ${
-                  errors.frontCover ? "error-highlight" : ""
-                }`}
-                style={{
-                  width: "100%",
-                }}
-              >
-                <label>Front Cover</label>
+{/* Front Cover */}
+<div className="row">
+  <div
+    className={`form-group front-cover-group ${
+      errors.frontCover ? "error-highlight" : ""
+    }`}
+  >
+    <label>Front Cover</label>
 
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileUpload(e, null, "image")}
-                  style={{
-                    width: "100%",
-                    marginBottom: "0px",
-                    fontFamily: "Comic Neuve, cursive",
-                  }}
-                />
+    <input
+      type="file"
+      ref={frontCoverFileRef}
+      accept="image/*"
+      onChange={(e) => handleFileUpload(e, null, "image")}
+      style={{
+        width: "300px",
+        marginBottom: "0px",
+        fontFamily: "Comic Neuve, cursive",
+      }}
+    />
 
-                {errors.frontCover && (
-                  <span className="error">{errors.frontCover}</span>
-                )}
-              </div>
+    {errors.frontCover && (
+      <span className="error">{errors.frontCover}</span>
+    )}
+            {/* Add the "Create a Doodle" Button */}
+            <button
+          onClick={(e) => {
+            e.preventDefault(); // Prevent default action
+            setIsDoodleOpen(true); // Open the Doodle modal
+          }}
+          style={{
+            cursor: "pointer",
+            fontFamily: "Comic Neuve, cursive",
+            fontSize: "1em", // Increased font size
+            textAlign: "center",
+            marginTop: "10px",
+            borderRadius: "10px",
+            width: "100%",
+            backgroundColor: "darkblue",
+            color: "Magenta",
+            border: "2px solid #28c4ac",
+            padding: "5px 5px",
+          }}
+        >
+        You can also Doodle Your Front Cover! 🎨
+        </button>
 
-              {/*Doodle Button Place holder*/}
-              <div
-                style={{
-                  width: "20%",
-                  padding: "30px 0 0 10px",
-                }}
-              >
-                <button
-                  style={{
-                    height: "35px",
-                  }}
-                >
-                  DOODLE
-                </button>
-              </div>
-            </div>
+        {/* Render the Doodle Component */}
+        <Doodle
+          isOpen={isDoodleOpen}
+          onClose={() => setIsDoodleOpen(false)} // Close the modal
+          onSave={handleDoodleGenerated} // Handle Doodle upload and update state
+        />
+  </div>
 
-            {/* Front Cover Display*/}
-            <div
-              className="front-cover-img"
-              style={{
-                paddingLeft: "20px",
-                width: "45%",
-              }}
-            >
-              {frontCover && (
-                <img
-                  src={frontCover}
-                  alt="Front Cover"
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    objectFit: "cover",
-                    borderRadius: "4px",
-                  }}
-                />
-              )}
-            </div>
-          </div>
+  <div
+    className="front-cover-img"
+    style={{
+      paddingLeft: "20px",
+    }}
+  >
+    {frontCover && (
+      <>
+        <img
+          src={frontCover}
+          alt="Front Cover"
+          style={{
+            width: "80px",
+            height: "80px",
+            objectFit: "cover",
+            borderRadius: "4px",
+          }}
+        />
+      </>
+    )}
+  </div>
+</div>
+
 
           <div className="row">
             <div className="form-group">
@@ -1010,9 +1109,9 @@ const AddStory = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
+                    ref={(el) => (imageFileRefs.current[index] = el)} // Assign ref to the input
                     onChange={(e) => handleFileUpload(e, index, "image")}
-                    style={{ width: "50%", maxHeight: "37px" }}
+                    style={{ width: "40%", maxHeight: "37px", marginTop: "25px" }}
                   />
 
                   {page.text.trim() && (
@@ -1047,7 +1146,7 @@ const AddStory = () => {
                 <div className="page-media-buttons">
                   <div
                     style={{
-                      width: "50%",
+                      width: "40%",
                     }}
                   >
                     {/* Media URL */}
@@ -1060,7 +1159,10 @@ const AddStory = () => {
                       style={{
                         fontFamily: "Bubblegum Sans, cursive",
                         width: "100%",
+                        backgroundColor: page.mediaUrl ? "gray" : "white", // Greyed out if media URL is provided
+                        opacity: page.mediaUrl ? 0.5 : 1, // Adjust opacity
                       }}
+                      disabled={!!page.audio} // Disable if audio is provided
                     />
                     {page.mediaUrlError && (
                       <span
@@ -1084,7 +1186,7 @@ const AddStory = () => {
                     {page.mediaUrl && !page.mediaUrlError && (
                       <button
                         type="button"
-                        onClick={() => toggleAudio(index)}
+                        onClick={() => toggleMediaPlay(index)}
                         style={{
                           backgroundColor: "transparent",
                           padding: "5px 0 0 10px",
@@ -1096,6 +1198,58 @@ const AddStory = () => {
                     )}
                   </div>
                 </div>
+{/* Audio File Input */}
+<div className="audio-input-container">
+  <input
+    type="file"
+    accept="audio/*"
+    ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
+    onChange={(e) => handleFileUpload(e, index, "audio")}
+    style={{
+      width: "405px",
+      marginRight: "600px",
+      maxHeight: "35px",
+      backgroundColor: page.audio ? "lightgrey" : "white", // Greyed out if media URL is provided
+      opacity: page.mediaUrl ? 0.5 : 1, // Adjust opacity
+    }}
+    disabled={!!page.mediaUrl} // Disable if media URL is provided
+  />
+  {page.audioError && (
+    <span
+      className="error"
+      style={{
+        fontFamily: "Comic Neuve, cursive",
+        fontSize: "0.75em",
+      }}
+    >
+      {page.audioError}
+    </span>
+  )}
+
+  <div
+    style={{
+      alignSelf: "flex-start"
+    }}
+  >
+    {/* Play/Pause Button for Audio */}
+    {page.audio && !page.audioError && (
+      <button
+        type="button"
+        onClick={() => toggleAudio(index)}
+        style={{
+          backgroundColor: "transparent",
+          padding: "5px 0 0 10px",
+          transform: "translate(-300%, -100%)",
+          border: "none"
+  
+        }}
+      >
+        {page.isPlaying ? "⏸️" : "▶️"}
+      </button>
+    )}
+  </div>
+</div>
+
 
                 <div
                   className="page-buttons"
