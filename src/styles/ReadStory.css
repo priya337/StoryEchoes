@@ -76,10 +76,12 @@
 
 .page-image-cont {
   height: 40%;
+  max-width: 95%;
 }
 
 .page-image {
   height: 100%;
+  width: 100%;
   border-radius: 15px;
   box-shadow: 0 4px 25px rgba(20, 20, 20, 0.912);
 }
