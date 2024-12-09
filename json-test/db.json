@@ -41,7 +41,7 @@
           "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
         }
       ],
-      "readCount": 283,
+      "readCount": 297,
       "liked": false
     },
     {
@@ -87,7 +87,8 @@
           "image": "/Story2images/page7.jpg"
         }
       ],
-      "readCount": 54
+      "readCount": 56,
+      "liked": false
     },
     {
       "id": "fd2e",
@@ -132,7 +133,7 @@
           "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
         }
       ],
-      "readCount": 232,
+      "readCount": 235,
       "liked": false
     },
     {
@@ -174,7 +175,7 @@
       ],
       "id": "aybdi4x",
       "liked": false,
-      "readCount": 2
+      "readCount": 6
     },
     {
       "title": "new test",
@@ -183,8 +184,8 @@
       "content": [
         {
           "page": 1,
-          "text": "we write a story",
-          "image": "/src/assets/fallback.jpg",
+          "text": "Once there was a peppa, dinosaur & spidy. They were fighting.",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768628/ap13zayylufhufiqmhal.jpg",
           "audio": null,
           "imageFileName": "",
           "audioFileName": "",
@@ -195,10 +196,131 @@
           "isPlaying": false,
           "audioInstance": null,
           "isGenerating": false,
-          "imageGenerated": false
+          "imageGenerated": true
+        },
+        {
+          "page": 2,
+          "text": "Looking at spidy, peppa & dinosaur fighting, came madam Gezhel. Told them not to fight. They were all friends again.",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768705/p7t83sat338ooibubnfp.jpg",
+          "isGenerating": false,
+          "imageGenerated": true,
+          "audio": null,
+          "mediaUrl": null
+        },
+        {
+          "page": 3,
+          "text": "There was a spoongebob. He wanted to play with patrik.",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768779/lmxen7ot0px9hw6snlon.jpg",
+          "isGenerating": false,
+          "imageGenerated": true,
+          "audio": null,
+          "mediaUrl": null
         }
       ],
       "id": "8tXTdyv",
+      "liked": false,
+      "readCount": 2
+    },
+    {
+      "page": 0,
+      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768628/ap13zayylufhufiqmhal.jpg",
+      "storyId": "your_story_id",
+      "id": "NOhSE0k"
+    },
+    {
+      "page": 1,
+      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768705/p7t83sat338ooibubnfp.jpg",
+      "storyId": "your_story_id",
+      "id": "mszy2Y2"
+    },
+    {
+      "page": 2,
+      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768779/lmxen7ot0px9hw6snlon.jpg",
+      "storyId": "your_story_id",
+      "id": "rL3N1Ze"
+    },
+    {
+      "page": 0,
+      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768997/nzwctkiqwinu1pt2lnra.jpg",
+      "storyId": "",
+      "id": "bU7QisT"
+    },
+    {
+      "page": 0,
+      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769395/lvbaybzrfkdv66lffxnw.jpg",
+      "storyId": "",
+      "id": "cyGdIwA"
+    },
+    {
+      "title": "Spongebob with friends",
+      "author": "Arav",
+      "front_cover": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769262/t5tmdwlinumqwnhkck2v.png",
+      "content": [
+        {
+          "page": 1,
+          "text": "Spongebob  was playing with his friends. Suddenly they turned into Dinosaurs.",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769395/lvbaybzrfkdv66lffxnw.jpg",
+          "audio": null,
+          "imageFileName": "",
+          "audioFileName": "",
+          "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+          "imageError": null,
+          "audioError": null,
+          "mediaUrlError": null,
+          "isPlaying": false,
+          "audioInstance": null,
+          "isGenerating": false,
+          "imageGenerated": true
+        },
+        {
+          "page": 2,
+          "text": "Spongebob was scared, Dinosaurs wanted to eat him. & then he wanted to run to Patrik but was turning to dinosaurs. ",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769512/iovukoixdo9lx1den2zo.jpg",
+          "isGenerating": false,
+          "imageGenerated": true,
+          "audio": null,
+          "mediaUrl": null
+        }
+      ],
+      "id": "sToYXtK",
+      "liked": false,
+      "readCount": 2
+    },
+    {
+      "page": 1,
+      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769512/iovukoixdo9lx1den2zo.jpg",
+      "storyId": "your_story_id",
+      "id": "Ms9ZwD8"
+    },
+    {
+      "page": 0,
+      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769756/bnagi4gbxoogpm3w2ovv.jpg",
+      "storyId": "",
+      "id": "Zj0BR_n"
+    },
+    {
+      "title": "Kian & Auto",
+      "author": "Kian",
+      "front_cover": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769792/cyx3oonmj7m0dltnsngy.png",
+      "content": [
+        {
+          "page": 1,
+          "text": "Kian played with little auto every day. One day he lost the auto. He was sad.",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769756/bnagi4gbxoogpm3w2ovv.jpg",
+          "audio": null,
+          "imageFileName": "",
+          "audioFileName": "",
+          "mediaUrl": null,
+          "imageError": null,
+          "audioError": null,
+          "mediaUrlError": null,
+          "isPlaying": false,
+          "audioInstance": null,
+          "isGenerating": false,
+          "imageGenerated": true
+        }
+      ],
+      "id": "22oQYL8",
       "liked": false,
       "readCount": 1
     }

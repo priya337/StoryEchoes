@@ -45,6 +45,14 @@ const ReadStory = () => {
     }
 
     setBookDimensions({ bookW, bookH });
+
+    return () => {
+      if (audioRef && audioRef.current) {
+        console.log("ReadStory: cleaned up");
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
   }, []);
 
   useEffect(() => {
