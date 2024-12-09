@@ -1,0 +1,249 @@
+{
+  "stories": [
+    {
+      "id": "fd2a",
+      "title": "Nibbles and the Perfect Hat",
+      "author": "David Todd",
+      "front_cover": "/Story1images/front_cover.jpg",
+      "staticBook": true,
+      "content": [
+        {
+          "page": 1,
+          "text": "Nibbles the garden gnome loved his hat. It was large and floppy, but it always tilted to one side. His brown, fluffy hair peeked out from under it. Nibbles wished his hat fit better. He decided to trim his hair to see if it would help.",
+          "image": "/Story1images/page1.jpg",
+          "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        },
+        {
+          "page": 2,
+          "text": "Nibbles found his tiny scissors. Snip, snip, snip! He carefully trimmed his brown hair. Now, his hat fit perfectly! Nibbles was so happy. He ran around the garden, feeling the hat stay in place. He was ready for new adventures.",
+          "image": "/Story1images/page2.jpg",
+          "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        },
+        {
+          "page": 3,
+          "text": "With his hat fitting just right, Nibbles grabbed his tiny spade. He wanted to find hidden tunnels in the garden. Nibbles dug and dug. He found a small tunnel under a big rock. It was dark and mysterious.",
+          "image": "/Story1images/page3.jpg"
+        },
+        {
+          "page": 4,
+          "text": "Nibbles was curious. He crawled into the tunnel. It was a bit scary, but he was brave. Inside, he found sparkling stones and shiny pebbles. Nibbles was excited. He collected some stones to show his friends.",
+          "image": "/Story1images/page4.jpg"
+        },
+        {
+          "page": 5,
+          "text": "Nibbles crawled out of the tunnel. He held the sparkling stones tightly. His hat still fit perfectly. Nibbles felt proud. He couldn't wait to show his friends what he had found. They would be amazed!",
+          "image": "/Story1images/page5.jpg"
+        },
+        {
+          "page": 6,
+          "text": "Nibbles showed his friends the stones. They were amazed! They loved the sparkling stones. Nibbles told them about the tunnel. His friends wanted to explore too. Nibbles smiled. He was happy to share his adventure.",
+          "image": "/Story1images/page6.jpg",
+          "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        }
+      ],
+      "readCount": 283,
+      "liked": false
+    },
+    {
+      "id": "fd2b",
+      "title": "Danny and the Blue Adventure",
+      "author": "David Todd",
+      "front_cover": "/Story2images/front_cover.jpg",
+      "staticBook": true,
+      "content": [
+        {
+          "page": 1,
+          "text": "In a vibrant jungle lived a green dinosaur named Danny. One sunny day, he decided to explore his home and make new friends.",
+          "image": "/Story2images/page1.jpg"
+        },
+        {
+          "page": 2,
+          "text": "Walking along, Danny stumbled upon a little blue toy car caught on a vine. The car seemed sad, so Danny helped free it.",
+          "image": "/Story2images/page2.jpg"
+        },
+        {
+          "page": 3,
+          "text": "Danny and the blue toy car became fast friends. They began their journey through the jungle, discovering new places together.",
+          "image": "/Story2images/page3.jpg"
+        },
+        {
+          "page": 4,
+          "text": "As they played in a clearing, a sudden rainstorm began. Danny and the blue car found shelter beneath a large leaf.",
+          "image": "/Story2images/page4.jpg"
+        },
+        {
+          "page": 5,
+          "text": "Once the rain stopped, they came across a river too wide for the blue car to cross. Danny helped the car by carrying it.",
+          "image": "/Story2images/page5.jpg"
+        },
+        {
+          "page": 6,
+          "text": "By evening, the duo reached the edge of the jungle. They climbed a hill to watch the sky change colors as the sun set.",
+          "image": "/Story2images/page6.jpg"
+        },
+        {
+          "page": 7,
+          "text": "Danny and the blue toy car returned to the jungle, their hearts filled with the warmth of friendship and adventure.",
+          "image": "/Story2images/page7.jpg"
+        }
+      ],
+      "readCount": 54
+    },
+    {
+      "id": "fd2e",
+      "title": "The Rooster and the Fox",
+      "Author": "David Todd",
+      "front_cover": "/Storyfd2eimages/front_cover.jpg",
+      "content": [
+        {
+          "page": 1,
+          "text": "In a lush green forest, a red rooster with bright feathers lived happily on a farm. Nearby, a sly red fox with a bushy tail watched the rooster every day, hoping to catch him for a meal. The rooster loved to crow from the top of the barn, feeling proud and safe.",
+          "image": "/Storyfd2eimages/page1.jpg"
+        },
+        {
+          "page": 2,
+          "text": "One sunny morning, the fox decided to trick the rooster. He approached the barn and called out, 'Dear Rooster, I have heard about your beautiful voice. Will you come down and sing for me?' The rooster, being clever, sensed the fox's plan and thought of a way to outsmart him.",
+          "image": "/Storyfd2eimages/page2.jpg"
+        },
+        {
+          "page": 3,
+          "text": "The rooster replied, 'Oh, Mr. Fox, I would love to sing for you, but I am too high up. If you wait a moment, I will come down.' The fox's eyes gleamed with excitement as he waited eagerly. The rooster then said, 'But first, could you close your eyes and count to ten? It will make my song even more magical.'",
+          "image": "/Storyfd2eimages/page3.jpg"
+        },
+        {
+          "page": 4,
+          "text": "The fox, thinking he was about to catch the rooster, closed his eyes and began to count. Meanwhile, the rooster quietly flew down from the barn and quickly ran to the farmer's house. When the fox finished counting and opened his eyes, the rooster was nowhere to be seen.",
+          "image": "/Storyfd2eimages/page4.jpg"
+        },
+        {
+          "page": 5,
+          "text": "The fox was furious and realized he had been tricked. He searched everywhere but couldn't find the rooster. The rooster, safe inside the farmer's house, chuckled to himself. He knew he had outsmarted the fox and saved himself from becoming the fox's meal.",
+          "image": "/Storyfd2eimages/page5.jpg"
+        },
+        {
+          "page": 6,
+          "text": "The rooster learned a valuable lesson that day: always stay alert and use your wits to stay safe. The fox, on the other hand, learned that being cunning doesn't always get you what you want. From then on, the rooster continued to crow proudly from the barn, and the fox kept his distance.",
+          "image": "/Storyfd2eimages/page6.jpg"
+        },
+        {
+          "page": 7,
+          "text": "And so the rooster and the fox lived their lives with new wisdom. The rooster stayed clever and cautious, while the fox learned to respect the intelligence of others. They both found a way to live peacefully, each with their own lessons learned.",
+          "image": "/Storyfd2eimages/page7.jpg",
+          "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        }
+      ],
+      "readCount": 232,
+      "liked": false
+    },
+    {
+      "title": "Dino in the school",
+      "author": "Tolli",
+      "front_cover": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733685244/zdc5titoz5bvxhk2yrvf.png",
+      "content": [
+        {
+          "page": 1,
+          "text": "There was once a little dinosaur. He was happy to start his school",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733618271/edjg8mehuxabrvmvavio.jpg",
+          "audio": null,
+          "imageFileName": "",
+          "audioFileName": "",
+          "mediaUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+          "imageError": null,
+          "audioError": null,
+          "mediaUrlError": null,
+          "isPlaying": false,
+          "audioInstance": null,
+          "isGenerating": false,
+          "imageGenerated": true
+        },
+        {
+          "page": 2,
+          "text": "The dinosaur was happy to meet new friends",
+          "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733618350/zevkgzq8mwv7v0j7uyd1.jpg",
+          "audio": null,
+          "mediaUrl": null,
+          "imageError": null,
+          "audioError": null,
+          "mediaUrlError": null,
+          "isPlaying": false,
+          "audioInstance": null,
+          "isGenerating": false,
+          "newlyAdded": true,
+          "imageGenerated": true
+        }
+      ],
+      "id": "aybdi4x",
+      "liked": false,
+      "readCount": 2
+    },
+    {
+      "title": "new test",
+      "author": "dummy",
+      "front_cover": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733731809/kuajqz5l518pjqm8vhst.png",
+      "content": [
+        {
+          "page": 1,
+          "text": "we write a story",
+          "image": "/src/assets/fallback.jpg",
+          "audio": null,
+          "imageFileName": "",
+          "audioFileName": "",
+          "mediaUrl": null,
+          "imageError": null,
+          "audioError": null,
+          "mediaUrlError": null,
+          "isPlaying": false,
+          "audioInstance": null,
+          "isGenerating": false,
+          "imageGenerated": false
+        }
+      ],
+      "id": "8tXTdyv",
+      "liked": false,
+      "readCount": 1
+    }
+  ],
+  "interactions": [],
+  "users": [
+    {
+      "id": 1,
+      "user": "priya",
+      "bookIds": [
+        "fd2e",
+        "qbJwp0E"
+      ]
+    },
+    {
+      "id": 2,
+      "user": "neha",
+      "bookIds": [
+        "fd2a",
+        "d807",
+        "fd2e",
+        "fd2b"
+      ]
+    },
+    {
+      "user": "arav",
+      "bookIds": [
+        "fd2e"
+      ],
+      "id": 3
+    },
+    {
+      "user": "polli",
+      "bookIds": [],
+      "id": 4
+    },
+    {
+      "user": "zack",
+      "bookIds": [],
+      "id": 5
+    },
+    {
+      "user": "tony",
+      "bookIds": [],
+      "id": 6
+    }
+  ]
+}
