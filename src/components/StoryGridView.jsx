@@ -63,7 +63,7 @@ const StoryGridView = ({ filteredBooks, mode }) => {
 
         {/* + Symbol for Adding a New Story */}
         {mode === "Edit" && (
-          <div>
+          <div className="add-button-card">
             <Link to="/addStory">
               <OverlayTrigger
                 placement="top"

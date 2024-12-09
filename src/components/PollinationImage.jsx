@@ -10,8 +10,6 @@ const PollinationImage = ({ prompt, onComplete, onError }) => {
     nologo: true, // Disable logo
   });
 
-  const imageUrl1 = "";
-
   // Notify parent when the image URL is available or when there's an error
   useEffect(() => {
     if (imageUrl) {

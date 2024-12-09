@@ -68,6 +68,14 @@
   text-align: center;
 }
 
+.add-button-card {
+  width: 200px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Container for the list of stories */
 .story-list {
   width: 100vw;
@@ -77,8 +85,21 @@
   display: flex; /* Use flexbox to align stories horizontally */
   flex-wrap: wrap; /* Allow wrapping if there are too many stories */
   gap: 30px;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+/* Scrollbar Styling */
+.story-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.story-list::-webkit-scrollbar-thumb {
+  background-color: #26d6b3;
+  border-radius: 10px;
 }
 
 .add-button {
@@ -159,6 +180,19 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+/* Scrollbar Styling */
+.story-list-view::-webkit-scrollbar {
+  width: 10px;
+}
+
+.story-list-view::-webkit-scrollbar-thumb {
+  background-color: #26d6b3;
+  border-radius: 10px;
 }
 
 .fav-title {
@@ -204,4 +238,18 @@
   .empty-fav-msg {
     font-size: 1.5em;
   }
+}
+
+.image-field {
+  background-image: url("../assets/image.png");
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.media-field {
+  background-image: url("../assets/media.png");
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: right;
 }
