@@ -222,36 +222,6 @@
       "readCount": 2
     },
     {
-      "page": 0,
-      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768628/ap13zayylufhufiqmhal.jpg",
-      "storyId": "your_story_id",
-      "id": "NOhSE0k"
-    },
-    {
-      "page": 1,
-      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768705/p7t83sat338ooibubnfp.jpg",
-      "storyId": "your_story_id",
-      "id": "mszy2Y2"
-    },
-    {
-      "page": 2,
-      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768779/lmxen7ot0px9hw6snlon.jpg",
-      "storyId": "your_story_id",
-      "id": "rL3N1Ze"
-    },
-    {
-      "page": 0,
-      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733768997/nzwctkiqwinu1pt2lnra.jpg",
-      "storyId": "",
-      "id": "bU7QisT"
-    },
-    {
-      "page": 0,
-      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769395/lvbaybzrfkdv66lffxnw.jpg",
-      "storyId": "",
-      "id": "cyGdIwA"
-    },
-    {
       "title": "Spongebob with friends",
       "author": "Arav",
       "front_cover": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769262/t5tmdwlinumqwnhkck2v.png",
@@ -285,18 +255,6 @@
       "id": "sToYXtK",
       "liked": false,
       "readCount": 2
-    },
-    {
-      "page": 1,
-      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769512/iovukoixdo9lx1den2zo.jpg",
-      "storyId": "your_story_id",
-      "id": "Ms9ZwD8"
-    },
-    {
-      "page": 0,
-      "image": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733769756/bnagi4gbxoogpm3w2ovv.jpg",
-      "storyId": "",
-      "id": "Zj0BR_n"
     },
     {
       "title": "Kian & Auto",
@@ -349,6 +307,32 @@
       "id": "mWal5vS",
       "liked": false,
       "readCount": 2
+    },
+    {
+      "title": "check",
+      "author": "check auth",
+      "front_cover": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733842001/tp8b3imozcodk9osqikz.jpg",
+      "content": [
+        {
+          "page": 1,
+          "text": "new kian story",
+          "image": "/src/assets/fallback.jpg",
+          "audio": null,
+          "imageFileName": "",
+          "audioFileName": "",
+          "mediaUrl": null,
+          "imageError": null,
+          "audioError": null,
+          "mediaUrlError": null,
+          "isPlaying": false,
+          "audioInstance": null,
+          "isGenerating": false,
+          "imageGenerated": false
+        }
+      ],
+      "id": "dloQPXN",
+      "liked": false,
+      "readCount": 1
     }
   ],
   "interactions": [],
