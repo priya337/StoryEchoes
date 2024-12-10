@@ -1086,8 +1086,9 @@ ${pageNumbers}.`;
                 )*/}
 
                 {/* Text Area */}
-                <div style={{ display: "flex", marginBottom: "10px" }}>
+                <div style={{ display: "flex" }}>
                   <div
+                    className="story-text-field"
                     style={{
                       width: "100%",
                       display: "flex",
@@ -1106,11 +1107,6 @@ ${pageNumbers}.`;
                         height: "80px",
                       }}
                     />
-                    {errors.pages &&
-                      index + 1 ===
-                        parseInt(errors.pages.match(/\d+/)?.[0]) && (
-                        <span className="error">{errors.pages}</span>
-                      )}
                   </div>
 
                   {/* Display image next to the Text*/}
@@ -1146,8 +1142,16 @@ ${pageNumbers}.`;
                   </div>
                 </div>
 
+                {errors.pages &&
+                  index + 1 === parseInt(errors.pages.match(/\d+/)?.[0]) && (
+                    <span className="error">{errors.pages}</span>
+                  )}
+
                 {/* Image Button Area */}
-                <div className="page-image-buttons">
+                <div
+                  className="page-image-buttons"
+                  style={{ marginTop: "10px" }}
+                >
                   {/* File Upload for Image */}
                   <input
                     type="file"

@@ -10,6 +10,8 @@ import PollinationImage from "./PollinationImage.jsx"; // Import the Pollination
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
+import micIcon from "../assets/mic.png";
+
 const AddStory = () => {
   const INITIAL_PAGES = [];
   const INITIAL_ERRORS = {};
@@ -1077,8 +1079,9 @@ const AddStory = () => {
                 </div>
 
                 {/* Text Area */}
-                <div style={{ display: "flex", marginBottom: "10px" }}>
+                <div style={{ display: "flex" }}>
                   <div
+                    className="story-text-field"
                     style={{
                       width: "100%",
                       display: "flex",
@@ -1098,11 +1101,20 @@ const AddStory = () => {
                         fontSize: "1em",
                       }}
                     />
-                    {errors.pages &&
-                      index + 1 ===
-                        parseInt(errors.pages.match(/\d+/)?.[0]) && (
-                        <span className="error">{errors.pages}</span>
-                      )}
+
+                    {/*Speak Story Button*/}
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id="speak-tooltip">
+                          Narrate your story to text here.
+                        </Tooltip>
+                      }
+                    >
+                      <button className="speak-button">
+                        <img src={micIcon} alt="Mic Icon" />
+                      </button>
+                    </OverlayTrigger>
                   </div>
 
                   <div>
@@ -1136,8 +1148,16 @@ const AddStory = () => {
                   </div>
                 </div>
 
+                {errors.pages &&
+                  index + 1 === parseInt(errors.pages.match(/\d+/)?.[0]) && (
+                    <span className="error">{errors.pages}</span>
+                  )}
+
                 {/* Image Button Area */}
-                <div className="page-image-buttons">
+                <div
+                  className="page-image-buttons"
+                  style={{ marginTop: "10px" }}
+                >
                   {/* File Upload for Image */}
                   <input
                     type="file"

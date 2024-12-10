@@ -373,3 +373,30 @@ body,
   color: magenta;
   font-weight: bold;
 }
+
+.story-text-field {
+  position: relative;
+}
+
+.story-text-field textarea::-webkit-scrollbar {
+  width: 10px;
+}
+
+.story-text-field textarea::-webkit-scrollbar-thumb {
+  background-color: #26d6b3;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.speak-button {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  width: 35px;
+  border: none;
+  background-color: transparent;
+
+  img {
+    width: 25px;
+  }
+}
