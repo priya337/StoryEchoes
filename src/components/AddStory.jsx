@@ -39,24 +39,26 @@ const AddStory = () => {
     );
   };
 
-
-    const uploadDoodleToCloudinary = async (blob) => {
+  const uploadDoodleToCloudinary = async (blob) => {
     const formData = new FormData();
     formData.append("file", blob); // Append the Blob
     formData.append("upload_preset", "StoryEchoes"); // Your Cloudinary upload preset
-    
+
     try {
-    const response = await axios.post(
-    "https://api.cloudinary.com/v1_1/dhxwg8gcz/upload", // Replace with your Cloudinary URL
-    formData
-    );
-    console.log("Cloudinary Response:", response.data);
-    return response.data.secure_url; // Return the uploaded image URL
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dhxwg8gcz/upload", // Replace with your Cloudinary URL
+        formData
+      );
+      console.log("Cloudinary Response:", response.data);
+      return response.data.secure_url; // Return the uploaded image URL
     } catch (error) {
-    console.error("Cloudinary upload failed:", error.response || error.message);
-    throw new Error("Failed to upload Doodle.");
+      console.error(
+        "Cloudinary upload failed:",
+        error.response || error.message
+      );
+      throw new Error("Failed to upload Doodle.");
     }
-    };
+  };
 
   const scrollToPage = (pageIndex) => {
     const pageElement = document.querySelector(
@@ -79,24 +81,23 @@ const AddStory = () => {
   }, []);
 
   // Function to handle Doodle Save
-const handleDoodleGenerated = async (blob) => {
-  try {
-  console.log("Uploading Doodle...");
-  const uploadedUrl = await uploadDoodleToCloudinary(blob); // Upload to Cloudinary
-  setFrontCover(uploadedUrl); // Update front cover
-  
-  console.log("Doodle uploaded successfully:", uploadedUrl);
-  
-  // Clear the file input field for the front cover
-  if (frontCoverFileRef.current) {
-  frontCoverFileRef.current.value = ""; // Reset the file input field
-  console.log("Front cover file input cleared.");
-  }
-  } 
-  catch (error) {
-  console.error("Doodle upload failed:", error);
-  alert("Failed to upload the Doodle. Please try again.");
-  }
+  const handleDoodleGenerated = async (blob) => {
+    try {
+      console.log("Uploading Doodle...");
+      const uploadedUrl = await uploadDoodleToCloudinary(blob); // Upload to Cloudinary
+      setFrontCover(uploadedUrl); // Update front cover
+
+      console.log("Doodle uploaded successfully:", uploadedUrl);
+
+      // Clear the file input field for the front cover
+      if (frontCoverFileRef.current) {
+        frontCoverFileRef.current.value = ""; // Reset the file input field
+        console.log("Front cover file input cleared.");
+      }
+    } catch (error) {
+      console.error("Doodle upload failed:", error);
+      alert("Failed to upload the Doodle. Please try again.");
+    }
   };
 
   const movePage = (pageIndex, direction) => {
@@ -469,7 +470,8 @@ const handleDoodleGenerated = async (blob) => {
           setFrontCover("");
           setErrors((prevErrors) => ({
             ...prevErrors,
-            frontCover: "Once you add a DoodleImage or upload an Image you are good here...",
+            frontCover:
+              "Once you add a DoodleImage or upload an Image you are good here...",
           }));
         } else {
           setPages((prevPages) =>
@@ -602,34 +604,33 @@ const handleDoodleGenerated = async (blob) => {
       // If the URL is empty, clear the media URL and error
       setPages((prevPages) =>
         prevPages.map((page, i) =>
-          i === index
-            ? { ...page, mediaUrl: "", mediaUrlError: null }
-            : page
+          i === index ? { ...page, mediaUrl: "", mediaUrlError: null } : page
         )
       );
       return;
     }
-  
+
     // Supported audio and video file extensions
     const validAudioExtensions = /\.(mp3|mp4|wav|ogg)$/i;
-  
+
     if (!validAudioExtensions.test(url)) {
       // If the URL format is invalid, clear media URL and set an error message
       setPages((prevPages) =>
-        prevPages.map((page, i) =>
-          i === index
-            ? {
-                ...page,
-                mediaUrl: "", // Clear the media URL
-                mediaUrlError:
-                  "Error! Supported formats: .mp3, .mp4, .wav, .ogg.",
-              }
-            : page // Keep other pages unchanged
+        prevPages.map(
+          (page, i) =>
+            i === index
+              ? {
+                  ...page,
+                  mediaUrl: "", // Clear the media URL
+                  mediaUrlError:
+                    "Error! Supported formats: .mp3, .mp4, .wav, .ogg.",
+                }
+              : page // Keep other pages unchanged
         )
       );
       return; // Exit the function to prevent further processing
     }
-  
+
     // When a valid URL is entered, clear the audio file input and update the Media URL
     setPages((prevPages) =>
       prevPages.map((page, i) =>
@@ -638,13 +639,12 @@ const handleDoodleGenerated = async (blob) => {
           : page
       )
     );
-  
+
     // Clear the audio file input using its reference
     if (fileInputRefs.current[index]) {
       fileInputRefs.current[index].value = ""; // Clear the file input's value
     }
   };
-  
 
   //Scroll for general page message.
   useEffect(() => {
@@ -674,10 +674,11 @@ const handleDoodleGenerated = async (blob) => {
       newErrors.author = "Who is the storyteller? Add your name! 📖";
     }
 
-  // Validate front cover
-  if (!frontCover || frontCover.trim() === "") {
-    newErrors.frontCover = "Once you add a Doodle Image or upload an Image, you are good here...";
-  }
+    // Validate front cover
+    if (!frontCover || frontCover.trim() === "") {
+      newErrors.frontCover =
+        "Once you add a Doodle Image or upload an Image, you are good here...";
+    }
 
     // Validate all pages
     const emptyPages = pages
@@ -798,7 +799,7 @@ const handleDoodleGenerated = async (blob) => {
   const toggleAudio = (index) => {
     const updatedPages = [...pages];
     const page = updatedPages[index];
-  
+
     if (page.audioInstance) {
       // If audio is already playing, pause it
       page.audioInstance.pause();
@@ -809,16 +810,16 @@ const handleDoodleGenerated = async (blob) => {
       audio.play();
       updatedPages[index].audioInstance = audio; // Store the audio instance
     }
-  
+
     // Update the playing state
     updatedPages[index] = { ...page, isPlaying: !page.isPlaying };
     setPages(updatedPages);
   };
-  
+
   const toggleMediaPlay = (index) => {
     const updatedPages = [...pages];
     const page = updatedPages[index];
-  
+
     if (page.mediaInstance) {
       // If media is already playing, pause it
       page.mediaInstance.pause();
@@ -829,7 +830,7 @@ const handleDoodleGenerated = async (blob) => {
         const media = new Audio(page.mediaUrl);
         media.play();
         page.mediaInstance = media; // Store the media instance
-  
+
         // Set mediaPlaying to false when the media ends
         media.onended = () => {
           setPages((prevPages) =>
@@ -843,12 +844,11 @@ const handleDoodleGenerated = async (blob) => {
         return;
       }
     }
-  
+
     // Toggle playing state
     updatedPages[index] = { ...page, isPlaying: !page.isPlaying };
     setPages(updatedPages);
   };
-  
 
   return (
     <div>
@@ -904,84 +904,105 @@ const handleDoodleGenerated = async (blob) => {
             </div>
           </div>
 
-{/* Front Cover */}
-<div className="row">
-  <div
-    className={`form-group front-cover-group ${
-      errors.frontCover ? "error-highlight" : ""
-    }`}
-  >
-    <label>Front Cover</label>
+          {/* Front Cover Area*/}
+          <div
+            className="row"
+            style={{
+              justifyContent: "space-between",
+            }}
+          >
+            {/* Select Front Cover pic*/}
+            <div
+              style={{
+                width: "47%",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "0px",
+                alignItems: "center",
+              }}
+            >
+              <div
+                className={`form-group front-cover-group ${
+                  errors.frontCover ? "error-highlight" : ""
+                }`}
+                style={{
+                  width: "100%",
+                }}
+              >
+                <label>Front Cover</label>
 
-    <input
-      type="file"
-      ref={frontCoverFileRef}
-      accept="image/*"
-      onChange={(e) => handleFileUpload(e, null, "image")}
-      style={{
-        width: "300px",
-        marginBottom: "0px",
-        fontFamily: "Comic Neuve, cursive",
-      }}
-    />
+                <input
+                  type="file"
+                  ref={frontCoverFileRef}
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, null, "image")}
+                  className="image-field"
+                  style={{
+                    width: "100%",
+                    marginBottom: "0px",
+                    fontFamily: "Comic Neuve, cursive",
+                  }}
+                />
+              </div>
 
-    {errors.frontCover && (
-      <span className="error">{errors.frontCover}</span>
-    )}
-            {/* Add the "Create a Doodle" Button */}
-            <button
-          onClick={(e) => {
-            e.preventDefault(); // Prevent default action
-            setIsDoodleOpen(true); // Open the Doodle modal
-          }}
-          style={{
-            cursor: "pointer",
-            fontFamily: "Comic Neuve, cursive",
-            fontSize: "1em", // Increased font size
-            textAlign: "center",
-            marginTop: "10px",
-            borderRadius: "10px",
-            width: "100%",
-            backgroundColor: "darkblue",
-            color: "Magenta",
-            border: "2px solid #28c4ac",
-            padding: "5px 5px",
-          }}
-        >
-        You can also Doodle Your Front Cover! 🎨
-        </button>
+              {/* "Create a Doodle" Button */}
+              <div className="doodle-button">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent default action
+                    setIsDoodleOpen(true); // Open the Doodle modal
+                  }}
+                  style={{
+                    height: "37px",
+                    fontFamily: "Comic Neuve, cursive",
+                    fontSize: "1em", // Increased font size
+                    marginTop: "10px",
+                    borderRadius: "10px",
+                    backgroundColor: "darkblue",
+                    color: "Magenta",
+                    border: "2px solid #28c4ac",
+                    padding: "5px 5px",
+                  }}
+                  className="add-edit-story-buttons"
+                >
+                  Doodle 🎨
+                </button>
+              </div>
 
-        {/* Render the Doodle Component */}
-        <Doodle
-          isOpen={isDoodleOpen}
-          onClose={() => setIsDoodleOpen(false)} // Close the modal
-          onSave={handleDoodleGenerated} // Handle Doodle upload and update state
-        />
-  </div>
+              {/* Render the Doodle Component */}
+              <Doodle
+                isOpen={isDoodleOpen}
+                onClose={() => setIsDoodleOpen(false)} // Close the modal
+                onSave={handleDoodleGenerated} // Handle Doodle upload and update state
+              />
+            </div>
+            {errors.frontCover && (
+              <span className="error">{errors.frontCover}</span>
+            )}
 
-  <div
-    className="front-cover-img"
-    style={{
-      paddingLeft: "20px",
-    }}
-  >
-    {frontCover && (
-      <>
-        <img
-          src={frontCover}
-          alt="Front Cover"
-          style={{
-            width: "80px",
-            height: "80px",
-            objectFit: "cover",
-            borderRadius: "4px",
-          }}
-        />
-      </>
-    )}
-  </div>
-</div>
-
+            {/* Front Cover Display*/}
+            <div
+              className="front-cover-img"
+              style={{
+                paddingLeft: "20px",
+              }}
+            >
+              {frontCover && (
+                <>
+                  <img
+                    src={frontCover}
+                    alt="Front Cover"
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "cover",
+                      borderRadius: "4px",
+                    }}
+                  />
+                </>
+              )}
+            </div>
+          </div>
 
           <div className="row">
             <div className="form-group">
@@ -1111,7 +1132,11 @@ const handleDoodleGenerated = async (blob) => {
                     accept="image/*"
                     ref={(el) => (imageFileRefs.current[index] = el)} // Assign ref to the input
                     onChange={(e) => handleFileUpload(e, index, "image")}
-                    style={{ width: "40%", maxHeight: "37px", marginTop: "25px" }}
+                    className="image-field"
+                    style={{
+                      width: "40%",
+                      maxHeight: "37px",
+                    }}
                   />
 
                   {page.text.trim() && (
@@ -1122,6 +1147,7 @@ const handleDoodleGenerated = async (blob) => {
                         type="button"
                         onClick={() => handleImageGenerated(index, page.text)}
                         disabled={page.isGenerating} // Disable the button while generating
+                        className="add-edit-story-buttons"
                         style={{
                           backgroundColor: page.isGenerating
                             ? "white"
@@ -1142,20 +1168,21 @@ const handleDoodleGenerated = async (blob) => {
                   )}
                 </div>
 
-                {/* Media Area */}
+                {/* UN-USED MEDIA URL */}
+                {/*
                 <div className="page-media-buttons">
                   <div
                     style={{
                       width: "40%",
                     }}
                   >
-                    {/* Media URL */}
                     <input
                       type="text"
                       placeholder="Paste media URL"
                       value={page.mediaUrl || ""}
                       onChange={(e) => handleMediaUrlInput(e, index)}
                       onBlur={(e) => handleMediaUrlInput(e, index)}
+                      className="media-field"
                       style={{
                         fontFamily: "Bubblegum Sans, cursive",
                         width: "100%",
@@ -1182,7 +1209,7 @@ const handleDoodleGenerated = async (blob) => {
                       alignSelf: "flex-start",
                     }}
                   >
-                    {/* Play/Pause Button for Media URL */}
+                    
                     {page.mediaUrl && !page.mediaUrlError && (
                       <button
                         type="button"
@@ -1197,59 +1224,65 @@ const handleDoodleGenerated = async (blob) => {
                       </button>
                     )}
                   </div>
+                </div>*/}
+
+                {/* Media Area */}
+                <div className="page-media-buttons">
+                  <div
+                    style={{
+                      width: "40%",
+                    }}
+                  >
+                    {/* Audio File Input */}
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
+                      onChange={(e) => handleFileUpload(e, index, "audio")}
+                      className="media-field"
+                      style={{
+                        width: "100%",
+                        maxHeight: "35px",
+                        backgroundColor: page.audio ? "lightgrey" : "white", // Greyed out if media URL is provided
+                        opacity: page.mediaUrl ? 0.5 : 1, // Adjust opacity
+                      }}
+                      disabled={!!page.mediaUrl} // Disable if media URL is provided
+                    />
+                    {page.audioError && (
+                      <span
+                        className="error"
+                        style={{
+                          fontFamily: "Comic Neuve, cursive",
+                          fontSize: "0.75em",
+                        }}
+                      >
+                        {page.audioError}
+                      </span>
+                    )}{" "}
+                  </div>
+
+                  <div
+                    style={{
+                      alignSelf: "flex-start",
+                    }}
+                  >
+                    {/* Play/Pause Button for Audio */}
+                    {page.audio && !page.audioError && (
+                      <button
+                        type="button"
+                        onClick={() => toggleAudio(index)}
+                        className="add-edit-story-buttons"
+                        style={{
+                          backgroundColor: "transparent",
+                          padding: "5px 0 0 10px",
+                          border: "none",
+                        }}
+                      >
+                        {page.isPlaying ? "⏸️" : "▶️"}
+                      </button>
+                    )}
+                  </div>
                 </div>
-{/* Audio File Input */}
-<div className="audio-input-container">
-  <input
-    type="file"
-    accept="audio/*"
-    ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
-    onChange={(e) => handleFileUpload(e, index, "audio")}
-    style={{
-      width: "405px",
-      marginRight: "600px",
-      maxHeight: "35px",
-      backgroundColor: page.audio ? "lightgrey" : "white", // Greyed out if media URL is provided
-      opacity: page.mediaUrl ? 0.5 : 1, // Adjust opacity
-    }}
-    disabled={!!page.mediaUrl} // Disable if media URL is provided
-  />
-  {page.audioError && (
-    <span
-      className="error"
-      style={{
-        fontFamily: "Comic Neuve, cursive",
-        fontSize: "0.75em",
-      }}
-    >
-      {page.audioError}
-    </span>
-  )}
-
-  <div
-    style={{
-      alignSelf: "flex-start"
-    }}
-  >
-    {/* Play/Pause Button for Audio */}
-    {page.audio && !page.audioError && (
-      <button
-        type="button"
-        onClick={() => toggleAudio(index)}
-        style={{
-          backgroundColor: "transparent",
-          padding: "5px 0 0 10px",
-          transform: "translate(-300%, -100%)",
-          border: "none"
-  
-        }}
-      >
-        {page.isPlaying ? "⏸️" : "▶️"}
-      </button>
-    )}
-  </div>
-</div>
-
 
                 <div
                   className="page-buttons"
@@ -1278,6 +1311,7 @@ const handleDoodleGenerated = async (blob) => {
                       <button
                         type="button"
                         onClick={addPage}
+                        className="add-edit-story-buttons"
                         style={{
                           fontFamily: "Bubblegum San",
                           color: "Magenta",
@@ -1299,6 +1333,7 @@ const handleDoodleGenerated = async (blob) => {
                       <button
                         type="button"
                         onClick={() => movePage(index, "up")}
+                        className="add-edit-story-buttons"
                         style={{
                           backgroundColor: "transparent",
                           padding: "0px",
@@ -1314,6 +1349,7 @@ const handleDoodleGenerated = async (blob) => {
                       <button
                         type="button"
                         onClick={() => movePage(index, "down")}
+                        className="add-edit-story-buttons"
                         style={{
                           backgroundColor: "transparent",
                           padding: "0px",
@@ -1336,6 +1372,7 @@ const handleDoodleGenerated = async (blob) => {
                       <button
                         type="button"
                         onClick={() => deletePage(index)}
+                        className="add-edit-story-buttons"
                         style={{
                           fontFamily: "Bubblegum San",
                           color: "Magenta",

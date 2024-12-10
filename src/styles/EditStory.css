@@ -178,7 +178,7 @@ body,
 
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Prevent horizontal scroll bar */
-  max-height: 45vh;
+  max-height: 43vh;
 }
 
 /* Scrollbar Styling */

@@ -353,3 +353,26 @@ CSS repeated in Edit
 .transcription-button:hover {
   background-color: #0056b3;
 }
+
+.add-edit-story-buttons:hover {
+  transform: scale(1.1);
+}
+
+.doodle-button {
+  width: 35%;
+  padding: 25px 0 0 10px;
+}
+
+.image-field {
+  background-image: url("../assets/image.png");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 99%;
+}
+
+.media-field {
+  background-image: url("../assets/media.png");
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 98%;
+}
