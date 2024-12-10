@@ -175,7 +175,7 @@
       ],
       "id": "aybdi4x",
       "liked": false,
-      "readCount": 6
+      "readCount": 7
     },
     {
       "title": "new test",
@@ -219,7 +219,7 @@
       ],
       "id": "8tXTdyv",
       "liked": false,
-      "readCount": 2
+      "readCount": 3
     },
     {
       "title": "Spongebob with friends",
@@ -254,7 +254,7 @@
       ],
       "id": "sToYXtK",
       "liked": false,
-      "readCount": 2
+      "readCount": 4
     },
     {
       "title": "Kian & Auto",
@@ -279,32 +279,6 @@
         }
       ],
       "id": "22oQYL8",
-      "liked": false,
-      "readCount": 1
-    },
-    {
-      "title": "Lion & the clever mouse",
-      "author": "Arav",
-      "front_cover": "https://res.cloudinary.com/dhxwg8gcz/image/upload/v1733772374/hz1aqb9efgf4jyk8icqn.png",
-      "content": [
-        {
-          "page": 1,
-          "text": "check",
-          "image": "/src/assets/fallback.jpg",
-          "audio": null,
-          "imageFileName": "",
-          "audioFileName": "",
-          "mediaUrl": null,
-          "imageError": null,
-          "audioError": null,
-          "mediaUrlError": null,
-          "isPlaying": false,
-          "audioInstance": null,
-          "isGenerating": false,
-          "imageGenerated": false
-        }
-      ],
-      "id": "mWal5vS",
       "liked": false,
       "readCount": 2
     },
