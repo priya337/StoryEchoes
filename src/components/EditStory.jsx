@@ -7,6 +7,9 @@ import axios from "axios";
 import Doodle from "./Doodle";
 import { API_URL } from "../config/apiConfig.js";
 
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 const EditStory = () => {
   const { id } = useParams();
   const frontCoverFileRef = useRef([]);
@@ -973,25 +976,34 @@ ${pageNumbers}.`;
               {/* "Create a Doodle" Button */}
               <div className="doodle-button">
                 {/* Add the "Create a Doodle" Button */}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevent default action
-                    setIsDoodleOpen(true); // Open the Doodle modal
-                  }}
-                  className="add-edit-story-buttons"
-                  style={{
-                    height: "37px",
-                    fontFamily: "Comic Neuve, cursive",
-                    fontSize: "1em", // Increased font size
-                    borderRadius: "10px",
-                    backgroundColor: "darkblue",
-                    color: "Magenta",
-                    border: "2px solid #28c4ac",
-                    padding: "5px 5px",
-                  }}
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id="doodle-tooltip">
+                      Draw a Doodle for Cover Page
+                    </Tooltip>
+                  }
                 >
-                  Doodle 🎨
-                </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent default action
+                      setIsDoodleOpen(true); // Open the Doodle modal
+                    }}
+                    className="add-edit-story-buttons"
+                    style={{
+                      height: "37px",
+                      fontFamily: "Comic Neuve, cursive",
+                      fontSize: "1em", // Increased font size
+                      borderRadius: "10px",
+                      backgroundColor: "darkblue",
+                      color: "Magenta",
+                      border: "2px solid #28c4ac",
+                      padding: "5px 5px",
+                    }}
+                  >
+                    Doodle 🎨
+                  </button>
+                </OverlayTrigger>
 
                 {/* Render the Doodle Component */}
                 <Doodle
@@ -1151,27 +1163,40 @@ ${pageNumbers}.`;
                       {" "}
                       {/* Parent wrapper */}
                       {/* Generate Image Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleImageGenerated(index, page.text)}
-                        disabled={page.isGenerating} // Disable the button while generating
-                        className="add-edit-story-buttons"
-                        style={{
-                          backgroundColor: page.isGenerating
-                            ? "white"
-                            : "darkblue",
-                          color: "Magenta",
-                          fontfamily: "Bubblegum San",
-                          fontWeight: "bold",
-                          cursor: page.isGenerating ? "not-allowed" : "pointer",
-                          border: "none",
-                          borderRadius: "5px",
-                          height: "35px",
-                          fontSize: "0.8em",
-                        }}
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="generate-image-tooltip">
+                            Generate an AI Image on story content
+                          </Tooltip>
+                        }
                       >
-                        {page.isGenerating ? "Generating..." : "Generate Image"}
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => handleImageGenerated(index, page.text)}
+                          disabled={page.isGenerating} // Disable the button while generating
+                          className="add-edit-story-buttons"
+                          style={{
+                            backgroundColor: page.isGenerating
+                              ? "white"
+                              : "darkblue",
+                            color: "Magenta",
+                            fontfamily: "Bubblegum San",
+                            fontWeight: "bold",
+                            cursor: page.isGenerating
+                              ? "not-allowed"
+                              : "pointer",
+                            border: "none",
+                            borderRadius: "5px",
+                            height: "35px",
+                            fontSize: "0.8em",
+                          }}
+                        >
+                          {page.isGenerating
+                            ? "Generating..."
+                            : "Generate Image"}
+                        </button>
+                      </OverlayTrigger>
                     </div>
                   )}
                 </div>
@@ -1269,19 +1294,28 @@ ${pageNumbers}.`;
                   >
                     {/* Play/Pause Button for Audio */}
                     {page.audio && !page.audioError && (
-                      <button
-                        type="button"
-                        onClick={() => toggleAudio(index)}
-                        className="add-edit-story-buttons"
-                        style={{
-                          backgroundColor: "transparent",
-                          padding: "5px 0 0 10px",
-                          transform: "translate(-300%, -100%)",
-                          border: "none",
-                        }}
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="play-audio-tooltip">
+                            Play the audio
+                          </Tooltip>
+                        }
                       >
-                        {page.isPlaying ? "⏸️" : "▶️"}
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => toggleAudio(index)}
+                          className="add-edit-story-buttons"
+                          style={{
+                            backgroundColor: "transparent",
+                            padding: "5px 0 0 10px",
+                            transform: "translate(-300%, -100%)",
+                            border: "none",
+                          }}
+                        >
+                          {page.isPlaying ? "⏸️" : "▶️"}
+                        </button>
+                      </OverlayTrigger>
                     )}
                   </div>
                 </div>
@@ -1310,57 +1344,84 @@ ${pageNumbers}.`;
                     }}
                   >
                     {index === pages.length - 1 && !limitReached && (
-                      <button
-                        type="button"
-                        onClick={addPage}
-                        className="add-edit-story-buttons"
-                        style={{
-                          fontFamily: "Bubblegum San",
-                          color: "Magenta",
-                          backgroundColor: "darkblue",
-                          fontWeight: "bold",
-                          border: "none",
-                          borderRadius: "5px",
-                          height: "35px",
-                          fontSize: "0.8em",
-                        }}
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="add-page-tooltip">
+                            Add a new story page
+                          </Tooltip>
+                        }
                       >
-                        + Add
-                      </button>
+                        <button
+                          type="button"
+                          onClick={addPage}
+                          className="add-edit-story-buttons"
+                          style={{
+                            fontFamily: "Bubblegum San",
+                            color: "Magenta",
+                            backgroundColor: "darkblue",
+                            fontWeight: "bold",
+                            border: "none",
+                            borderRadius: "5px",
+                            height: "35px",
+                            fontSize: "0.8em",
+                          }}
+                        >
+                          + Add
+                        </button>
+                      </OverlayTrigger>
                     )}
                   </div>
 
                   {/* Move Up Button */}
                   <div className="move-buttons">
                     {index > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => movePage(index, "up")}
-                        className="add-edit-story-buttons"
-                        style={{
-                          backgroundColor: "transparent",
-                          padding: "0px",
-                          border: "none",
-                        }}
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="move-page-up-tooltip">
+                            Re-order the page up
+                          </Tooltip>
+                        }
                       >
-                        ⬆️
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => movePage(index, "up")}
+                          className="add-edit-story-buttons"
+                          style={{
+                            backgroundColor: "transparent",
+                            padding: "0px",
+                            border: "none",
+                          }}
+                        >
+                          ⬆️
+                        </button>
+                      </OverlayTrigger>
                     )}
 
                     {/* Move Down Button */}
                     {index < pages.length - 1 && (
-                      <button
-                        type="button"
-                        onClick={() => movePage(index, "down")}
-                        className="add-edit-story-buttons"
-                        style={{
-                          backgroundColor: "transparent",
-                          padding: "0px",
-                          border: "none",
-                        }}
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="move-page-down-tooltip">
+                            Re-order the page down
+                          </Tooltip>
+                        }
                       >
-                        ⬇️
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => movePage(index, "down")}
+                          className="add-edit-story-buttons"
+                          style={{
+                            backgroundColor: "transparent",
+                            padding: "0px",
+                            border: "none",
+                          }}
+                        >
+                          ⬇️
+                        </button>
+                      </OverlayTrigger>
                     )}
                   </div>
 
@@ -1373,23 +1434,32 @@ ${pageNumbers}.`;
                     }}
                   >
                     {pages.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => deletePage(index)}
-                        className="add-edit-story-buttons"
-                        style={{
-                          fontFamily: "Bubblegum San",
-                          color: "Magenta",
-                          backgroundColor: "darkblue",
-                          fontWeight: "bold",
-                          border: "none",
-                          borderRadius: "5px",
-                          height: "35px",
-                          fontSize: "0.8em",
-                        }}
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="delete-page-tooltip">
+                            Delete the story page
+                          </Tooltip>
+                        }
                       >
-                        - Delete
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => deletePage(index)}
+                          className="add-edit-story-buttons"
+                          style={{
+                            fontFamily: "Bubblegum San",
+                            color: "Magenta",
+                            backgroundColor: "darkblue",
+                            fontWeight: "bold",
+                            border: "none",
+                            borderRadius: "5px",
+                            height: "35px",
+                            fontSize: "0.8em",
+                          }}
+                        >
+                          - Delete
+                        </button>
+                      </OverlayTrigger>
                     )}
                   </div>
                 </div>
