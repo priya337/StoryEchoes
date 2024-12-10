@@ -6,6 +6,7 @@ import PollinationImage from "./PollinationImage"; // Import the PollinationImag
 import axios from "axios";
 import Doodle from "./Doodle";
 import { API_URL } from "../config/apiConfig.js";
+import { useStories } from "../contexts/stories.context.jsx";
 
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -16,6 +17,7 @@ const EditStory = () => {
   const imageFileRefs = useRef([]);
   const navigate = useNavigate();
   const pagesContainerRef = useRef(null);
+  const { setRefresh } = useStories(); //Fetched stories in Context API
   const [temporaryComponent, setTemporaryComponent] = useState(null);
   const [isDoodleOpen, setIsDoodleOpen] = useState(false); // Controls the Doodle modal
   const [generalErrorMessage, setGeneralErrorMessage] = useState(); // State for error message
@@ -791,6 +793,8 @@ ${pageNumbers}.`;
 
       if (response.ok) {
         setBeeMessage("Awesome! Your story has been saved! 🚀");
+        //Indicate Context API for refresh
+        setRefresh((prev) => prev + 1);
         setTimeout(() => {
           navigate(`/read-story/${id}`);
         }, 2000);

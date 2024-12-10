@@ -3,6 +3,8 @@ import Logo from "../assets/logo.png";
 
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
+
 import HTMLFlipBook from "react-pageflip";
 import Spinner from "react-bootstrap/Spinner";
 import { useStories } from "../contexts/stories.context.jsx";
@@ -25,6 +27,8 @@ const ReadStory = () => {
   const [storyToSpeak, setStoryToSpeak] = useState(""); // Content to speak
   const [bookDimensions, setBookDimensions] = useState(null); // Portrait mode for Tablet Screen
   const [isMediaPlaying, setIsMediaPlaying] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams(); //Check if newly created book
+  const state = searchParams.get("state");
   const audioRef = useRef(null);
   const flipBook = useRef({});
   const screenW = window.innerWidth;
@@ -93,6 +97,8 @@ const ReadStory = () => {
   }, [userDetails]);
 
   function updateStoryReadCount(story) {
+    if (state === "new") return;
+
     //Call Update function & update the story read count
     story.readCount = story.readCount ? story.readCount + 1 : 1;
 
