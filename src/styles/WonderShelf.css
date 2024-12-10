@@ -80,7 +80,7 @@
 .story-list {
   width: 100vw;
   margin-top: 20px;
-  padding: 0 10px;
+  padding: 10px 10px 0 20px;
 
   display: flex; /* Use flexbox to align stories horizontally */
   flex-wrap: wrap; /* Allow wrapping if there are too many stories */
