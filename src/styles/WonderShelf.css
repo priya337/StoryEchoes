@@ -19,7 +19,7 @@
 }
 
 .search-bar {
-  background-image: url("../assets/search.jpg");
+  background-image: url("../assets/search.png");
   background-repeat: no-repeat;
   background-size: 25px;
   background-position: 1px;
@@ -74,6 +74,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.add-button-card:hover,
+.add-button:hover {
+  transform: scale(1.1);
 }
 
 /* Container for the list of stories */
