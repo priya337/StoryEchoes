@@ -5,6 +5,7 @@ import FallbackImage from "../assets/fallback.jpg";
 import axios from "axios";
 import Doodle from "./Doodle";
 import { API_URL } from "../config/apiConfig.js";
+import { useStories } from "../contexts/stories.context.jsx";
 import PollinationImage from "./PollinationImage.jsx"; // Import the PollinationImage component
 
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -18,6 +19,7 @@ const AddStory = () => {
   const imageFileRefs = useRef([]);
   const audioFileRefs = useRef([]);
   const INITIAL_GENERAL_ERROR_MESSAGE = "";
+  const { setRefresh } = useStories(); //Fetched stories in Context API
   const [isStoryAdded, setIsStoryAdded] = useState(false);
   const [isDoodleOpen, setIsDoodleOpen] = useState(false); // Controls the Doodle modal
   const [showModal, setShowModal] = useState(false);
@@ -786,9 +788,11 @@ const AddStory = () => {
           "🐝 Hooray! Your story has been submitted successfully!"
         );
         setIsStoryAdded(true);
+        //Indicate Context API for refresh
+        setRefresh((prev) => prev + 1);
 
         setTimeout(() => {
-          navigate(`/read-story/${responseData.id}`);
+          navigate(`/read-story/${responseData.id}?state=new`);
         }, 2000);
       } else {
         // Handle server errors
