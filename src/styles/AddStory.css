@@ -354,6 +354,10 @@ CSS repeated in Edit
   background-color: #0056b3;
 }
 
+.honey-bee-message:hover {
+  transform: scale(1.05);
+}
+
 .add-edit-story-buttons:hover {
   transform: scale(1.1);
 }
