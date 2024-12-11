@@ -279,28 +279,89 @@ throw new Error("Audio upload failed");
 };
 const validImageExtensions = /\.(jpg|jpeg|png|gif|webp)$/i; // Only image formats
 const validAudioExtensions = /\.(mp3|mp4|wav|ogg)$/i; // Audio formats including mp4
+
 // Check for image file type
 if (type === "image") {
-if (!validImageExtensions.test(file.name)) {
-setErrors((prevErrors) => ({
-...prevErrors,
-frontCover:
-"Error! Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
-}));
-prevPages.map(
-(page, i) =>
-i === index
-? {
-...page,
-image: null, // Clear the image
-imageError:
-"Error! Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
+  // Check if the file type is invalid
+  if (!validImageExtensions.test(file.name)) {
+    // Handle invalid file type
+    setPages((prevPages) =>
+      prevPages.map((page, i) =>
+        i === index
+          ? {
+              ...page,
+              image: null, // Clear the image field
+              imageError: "Error! Supported formats: .jpg, .jpeg, .png, .gif, .webp.",
+              isLoading: false, // Ensure no loading state
+            }
+          : page
+      )
+    );
+    return; // Stop further processing
+  }
+
+  // Set loading state and clear previous errors
+  setPages((prevPages) =>
+    prevPages.map((page, i) =>
+      i === index
+        ? {
+            ...page,
+            image: null, // Clear the image field while uploading
+            imageError: null, // Clear any previous error
+            isLoading: true, // Indicate upload in progress
+          }
+        : page
+    )
+  );
+
+  // Upload the image to Cloudinary
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "StoryEchoes");
+
+  try {
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dhxwg8gcz/upload",
+      formData
+    );
+
+    if (response.data.secure_url) {
+      const uploadedUrl = response.data.secure_url;
+
+      // Update the state with the uploaded image
+      setPages((prevPages) =>
+        prevPages.map((page, i) =>
+          i === index
+            ? {
+                ...page,
+                image: uploadedUrl, // Set the uploaded image URL
+                imageError: null,   // Clear any previous error
+                isLoading: false,   // Clear loading state
+              }
+            : page
+        )
+      );
+    }
+  } catch (error) {
+    console.error("File upload failed:", error);
+
+    // Set error state on failure
+    setPages((prevPages) =>
+      prevPages.map((page, i) =>
+        i === index
+          ? {
+              ...page,
+              image: null, // Clear the image field on failure
+              imageError: "Failed to upload image. Please try again.", // Set error message
+              isLoading: false, // Clear loading state
+            }
+          : page
+      )
+    );
+  }
 }
-: page // Correctly return 'page' for other indices
-);
-return; // Exit the function to prevent further processing
-}
-}
+
+
 
 // Check for audio file type
 if (type === "audio") {
