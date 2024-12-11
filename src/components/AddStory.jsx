@@ -20,6 +20,9 @@ const imageFileRefs = useRef([]);
 const FileRefs = useRef([]);
 const INITIAL_ERRORS = [];
 const audioFileRefs = useRef([]);
+const imageCache = new Map(); // Cache to store prompt-image mappings
+const cachedUrl = imageCache.get("debugText"); // Replace "debugText" with a test string
+console.log("Retrieved cached URL:", cachedUrl);
 const INITIAL_GENERAL_ERROR_MESSAGE = "";
 const { setRefresh } = useStories(); //Fetched stories in Context API
 const [isStoryAdded, setIsStoryAdded] = useState(false);
@@ -186,13 +189,21 @@ if (targetIndex < 0 || targetIndex>= prevPages.length) {
   page: targetIndex + 1, // Update page number
   };
 
-  // Reset any file inputs if necessary (optional, if using file input fields)
-  if (fileInputRefs.current[pageIndex]) {
-    fileInputRefs.current[pageIndex].value = null; // Reset file input for the current page
+  // Reset any file inputs if necessary 
+  if (imageFileRefs.current[pageIndex]) {
+    imageFileRefs.current[pageIndex].value = null; // Reset file input for the current page
   }
-  if (fileInputRefs.current[targetIndex]) {
-    fileInputRefs.current[targetIndex].value = null; // Reset file input for the target page
+  if (imageFileRefs.current[targetIndex]) {
+    imageFileRefs.current[targetIndex].value = null; // Reset file input for the target page
   }
+
+    // Reset any file inputs if necessary 
+    if (audioFileRefs.current[pageIndex]) {
+      audioFileRefs.current[pageIndex].value = null; // Reset file input for the current page
+    }
+    if (audioFileRefs.current[targetIndex]) {
+      audioFileRefs.current[targetIndex].value = null; // Reset file input for the target page
+    }
 
   // Return the updated pages
   return updatedPages;
@@ -267,100 +278,121 @@ if (targetIndex < 0 || targetIndex>= prevPages.length) {
   // Call this during validation
   scrollToErrors();
 
-  const handleImageGenerated = async (index, text) => {
+ // Main Function to Handle Image Generation
+const handleImageGenerated = async (index, text) => {
   try {
-  console.log("Starting image generation process...");
+    console.log("Starting image generation process...");
+    console.log("Page Index:", index);
+    console.log("Prompt Text:", text);
 
-  // Step 1: Update state to indicate generation in progress
-  setPages((prevPages) =>
-  prevPages.map((p, i) =>
-  i === index ? { ...p, isGenerating: true, imageGenerated: false } : p
-  )
-  );
-
-  // Step 2: Dynamically render PollinationImage and generate the image
-  const generatedImageUrl = await new Promise((resolve, reject) => {
-  if (
-  !setTemporaryComponent ||
-  typeof setTemporaryComponent !== "function"
-  ) {
-  const error = new Error("setTemporaryComponent is not available.");
-  console.error(error.message);
-  reject(error);
-  return;
-  }
-
-  setTemporaryComponent(
-  <PollinationImage prompt={text} onComplete={(url)=> {
-    if (!url) {
-    const error = new Error(
-    "Image generation failed: No URL returned."
-    );
-    console.error(error.message);
-    reject(error);
-    setTemporaryComponent(null); // Clean up
-    return;
+    // Step 1: Validate Text Input
+    if (!text || typeof text !== "string" || text.trim() === "") {
+      console.error("Valid text is required for image generation.");
+      return;
     }
-    console.log("Image generated successfully:", url);
-    resolve(url); // Resolve the Promise with the image URL
-    setTemporaryComponent(null); // Clean up after success
-    }}
-    onError={(error) => {
-    console.error("Image generation failed:", error);
-    reject(error); // Reject with the error
-    setTemporaryComponent(null); // Clean up after failure
-    }}
-    />
-    );
+
+    // Step 2: Reset Local Image and State
+    console.log("Resetting local image...");
+    updatePageState(index, {
+      image: null, // Clear the existing image
+      isGenerating: true,
+      imageGenerated: false,
+    });
+    resetFileInput(index);
+
+    // Step 3: Check Cache
+    if (imageCache.has(text)) {
+      console.log("Using cached image for text:", text);
+      const cachedImageUrl = imageCache.get(text);
+
+      // Update state with the cached image URL
+      updatePageState(index, {
+        image: cachedImageUrl,
+        imageGenerated: true,
+        isGenerating: false,
+      });
+      return;
+    }
+
+    // Step 4: Generate Image
+    const generatedImageUrl = await generateImageWithTimeout(text);
+
+    // Step 5: Cache Generated Image
+    imageCache.set(text, generatedImageUrl);
+    console.log("Generated image cached successfully:", generatedImageUrl);
+
+    // Step 6: Upload and Save Image URL in Parallel
+    const [uploadedImageUrl] = await Promise.all([
+      uploadImageToCloudinary(generatedImageUrl),
+      saveImageUrlToDatabase(generatedImageUrl),
+    ]);
+    console.log("Image uploaded successfully to Cloudinary:", uploadedImageUrl);
+
+    // Step 7: Update State with Final Image URL
+    updatePageState(index, {
+      image: uploadedImageUrl,
+      isGenerating: false,
+      imageGenerated: true,
     });
 
-    if (fileInputRefs.current[index]) {
-      fileInputRefs.current[index].value = ""; // Clear the file input's value
-      }
+    console.log("Image generation process completed successfully.");
+  } catch (error) {
+    console.error("Error during image generation process:", error);
 
-    // Step 3: Upload the generated image to Cloudinary
-    console.log("Uploading generated image to Cloudinary...");
-    const uploadedUrl = await uploadImageToCloudinary(generatedImageUrl);
-    console.log("Image uploaded to Cloudinary successfully:", uploadedUrl);
+    // Reset state on error
+    updatePageState(index, { isGenerating: false });
+    alert("An error occurred during image generation. Please try again.");
+  }
+};
 
-    // Step 4: Save the uploaded image URL to the database
-    console.log("Saving the uploaded image URL to the database...");
-    await saveImageUrlToDatabase(uploadedUrl, index);
-    console.log("Image URL saved successfully in the database.");
+// Utility Function to Reset File Input
+const resetFileInput = (index) => {
+  if (imageFileRefs.current[index]) {
+    imageFileRefs.current[index].value = ""; // Clear the file input field
+  }
+};
 
-    // Step 5: Update state with the uploaded image
-    setPages((prevPages) =>
-    prevPages.map((p, i) =>
-    i === index
-    ? {
-    ...p,
-    image: uploadedUrl,
-    imageGenerated: true,
-    isGenerating: false,
+// Utility Function to Update Page State
+const updatePageState = (index, updates) => {
+  setPages((prevPages) => {
+    if (!prevPages[index]) {
+      console.warn(`Page at index ${index} does not exist.`);
+      return prevPages;
     }
-    : p
-    )
-    );
+    const updatedPages = [...prevPages];
+    updatedPages[index] = { ...updatedPages[index], ...updates };
+    return updatedPages;
+  });
+};
 
-    console.log(
-    "Image generation and upload process completed successfully."
-    );
-    } catch (error) {
-    console.error("Error during the image generation process:", error);
+// Utility Function to Generate Image with Timeout
+const generateImageWithTimeout = (text) => {
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error("Image generation timed out")), 15000);
 
-    // Alert the user about the error
-    alert(
-    "An error occurred during the image generation process. Please try again."
+    setTemporaryComponent(
+      <PollinationImage
+        prompt={text}
+        onComplete={(url) => {
+          clearTimeout(timeout);
+          if (!url) {
+            const error = new Error("Image generation failed: No URL returned.");
+            reject(error);
+            setTemporaryComponent(null); // Clean up component
+            return;
+          }
+          resolve(url); // Resolve the promise with the image URL
+          setTemporaryComponent(null); // Clean up component
+        }}
+        onError={(error) => {
+          clearTimeout(timeout);
+          reject(error);
+          setTemporaryComponent(null); // Clean up component
+        }}
+      />
     );
-
-    // Reset state in case of an error
-    setPages((prevPages) =>
-    prevPages.map((p, i) =>
-    i === index ? { ...p, isGenerating: false } : p
-    )
-    );
-    }
-    };
+  });
+};
 
     const uploadImageToCloudinary = async (imageFile) => {
     const formData = new FormData();
@@ -701,8 +733,8 @@ if (targetIndex < 0 || targetIndex>= prevPages.length) {
       );
 
       // Clear the audio file input using its reference
-      if (fileInputRefs.current[index]) {
-      fileInputRefs.current[index].value = ""; // Clear the file input's value
+      if (audioFileRefs.current[index]) {
+        audioFileRefs.current[index].value = ""; // Clear the file input's value
       }
       };
 
@@ -1160,7 +1192,7 @@ if (targetIndex < 0 || targetIndex>= prevPages.length) {
                   <input
                     type="file"
                     accept="image/*"
-                    ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
+                    ref={(el) => (imageFileRefs.current[index] = el)} // Assign ref to the input
                     onChange={(e) => handleFileUpload(e, index, "image")}
                     className="image-field"
                     style={{
@@ -1280,13 +1312,13 @@ if (targetIndex < 0 || targetIndex>= prevPages.length) {
                     <input
                       type="file"
                       accept="audio/*"
-                      ref={(el) => (fileInputRefs.current[index] = el)} // Assign ref to the input
+                      ref={(el) => (audioFileRefs.current[index] = el)} // Assign ref to the input
                       onChange={(e) => handleFileUpload(e, index, "audio")}
                       className="media-field"
                       style={{
                         width: "100%",
                         maxHeight: "35px",
-                        backgroundColor: page.audio ? "lightgrey" : "white", // Greyed out if media URL is provided
+                        backgroundColor: page.audio ? "lightgreen" : "white", // Greyed out if media URL is provided
                         opacity: page.mediaUrl ? 0.5 : 1, // Adjust opacity
                       }}
                       disabled={!!page.mediaUrl} // Disable if media URL is provided
@@ -1359,7 +1391,7 @@ if (targetIndex < 0 || targetIndex>= prevPages.length) {
                       justifyContent: "flex-start",
                     }}
                   >
-                    { !limitReached && pages.length <= MAX_PAGES && (
+                    {index < MAX_PAGES - 1 && (
                       <OverlayTrigger
                         placement="top"
                         overlay={
