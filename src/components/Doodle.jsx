@@ -96,20 +96,20 @@ const Doodle = ({ isOpen, onClose, onSave }) => {
           onMouseLeave={stopDrawing}
         />
         <div style={{ marginTop: "10px", textAlign: "center" }}>
-          <button
-            onClick={() => canvasRef.current.getContext("2d").clearRect(0, 0, 500, 300)}
-            style={{
-              marginRight: "10px",
-              padding: "10px 20px",
-              backgroundColor: "#f44336",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Clear
-          </button>
+        <button
+    onClick={onClose} // This now calls the `onClose` method to close the modal
+    style={{
+      marginRight: "10px",
+      padding: "10px 20px",
+      backgroundColor: "#f44336",
+      color: "white",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+    }}
+  >
+    Cancel
+  </button>
           <button
             onClick={saveDoodle}
             style={{
