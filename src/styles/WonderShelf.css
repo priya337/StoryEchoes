@@ -232,6 +232,12 @@
 
   .story-list {
     flex-direction: column;
+    max-height: max-content;
+  }
+
+  .add-button-card {
+    width: 10px;
+    height: 50px;
   }
 
   .add-button,

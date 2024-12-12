@@ -17,13 +17,25 @@
   color: white; /* Text color set to white for better readability */
 }
 
-/* Ensure h1 is centered and visible */
-.about-container h1 {
-  font-size: 4em;
+.about-site-title{
+  color: #26d6b3;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.about-site-desc {
+  width: 50%;
+  margin: auto;
+  font-weight: bold;
+}
+
+/* Ensure h3 is centered and visible */
+.about-container h3 {
+  font-size: 3em;
   color: #26d6b3;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
   margin-top: 0;
-  padding-bottom: 20px;
+  padding: 40px 0 20px 0;
 }
 
 /* Styling for the list items */
@@ -91,18 +103,22 @@
     justify-content: flex-start;
   }
 
-  .about-container h1 {
-    font-size: 2em;
+  .about-site-title{
+    font-size: 1.2em;
+  }
+
+  .about-site-desc {
+    width: 100%;
+    font-size: 0.8em;
+  }
+
+  .about-container h3 {
+    font-size: 1.2em;
     padding-bottom: 0;
   }
 
   .profile-image {
     width: 25%;
-  }
-
-  .about-list-items {
-    margin: 0;
-    gap: 0;
   }
 
   /* Styling for the profile name */
@@ -112,6 +128,27 @@
 
   /* Styling for the additional info (role, country) */
   .about-list-items .additional-info {
-    font-size: 1em;
+    font-size: 0.8em;
+  }
+
+  .additional-info li{
+    margin: 0;
+  }
+
+  .about-list-items {
+    margin: 0;
+    gap: 0;
+    flex-wrap: nowrap;
+
+    li{
+      margin: 0;
+    }
+  }
+}
+
+/*Tablet Screen -820*/
+@media only screen and (max-device-width: 768px) and (min-width: 426px) {
+  .about-site-desc {
+    width: 100%;
   }
 }

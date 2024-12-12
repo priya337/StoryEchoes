@@ -400,3 +400,10 @@ body,
     width: 25px;
   }
 }
+
+/*Tablet Screen -820*/
+@media only screen and (max-device-width: 768px) and (min-width: 426px) {
+  .pages-container{
+    max-height: 53vh;
+  }
+}

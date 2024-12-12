@@ -83,7 +83,7 @@
 /*Mobile Screen*/
 @media screen and (max-device-width: 425px) {
   .action-bar {
-    width: 100vw;
+    width: 95vw;
   }
 
   .bar-story-details {
