@@ -24,10 +24,12 @@ const WonderShelf = () => {
     let tempBooks = [...stories];
     if (searchStr) {
       tempBooks = stories.filter((oneStory) => {
-        return (
-          oneStory.title.toUpperCase().search(searchStr.toUpperCase()) >= 0
-        );
-      });
+        if (oneStory.title) {
+          return (oneStory.title.toUpperCase().search(searchStr.toUpperCase()) >= 0);
+        }else  {
+          return false
+        };
+      })
     }
     tempBooks = sortByTitle(tempBooks);
     setFilteredBooks([...tempBooks]);
@@ -51,9 +53,13 @@ const WonderShelf = () => {
     let tempBooks = stories.filter((story) => story.title); // Exclude invalid entries
 
     if (searchStr) {
-      tempBooks = tempBooks.filter((oneStory) =>
-        oneStory.title.toUpperCase().includes(searchStr.toUpperCase())
-      );
+      tempBooks = tempBooks.filter((oneStory) =>{
+        if (oneStory.title) {
+          return oneStory.title.toUpperCase().includes(searchStr.toUpperCase())
+        } else  {
+          return false
+        };      
+      });
     }
 
     tempBooks = sortByTitle(tempBooks);
