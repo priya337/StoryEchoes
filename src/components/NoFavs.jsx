@@ -2,7 +2,7 @@ import EmptyBookShelfPic from "../assets/empty-bookshelf.png";
 
 const NoFavs = () => {
   return (
-    <div>
+    <div className="empty-bookshelf">
       {/*No Favourites*/}
       <h4 className="empty-fav-msg">
         Your bookshelf is looking a little lonely! <br />

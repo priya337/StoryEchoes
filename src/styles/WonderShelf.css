@@ -46,6 +46,21 @@
   color: #535bf2;
 }
 
+.grid-view-button {
+  width: 50px;
+  height: 35px;
+  border-radius: 10px;
+
+  background-color: #1d1a51 !important;
+  color: #dce6e4;
+  font-size: 0.8em;
+
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
 .view-button {
   width: 50px;
   height: 35px;
@@ -204,6 +219,10 @@
   margin: 10px 0 5px 0;
   color: white;
   font-family: "Comic Neue", cursive;
+}
+
+.empty-bookshelf{
+  width: 100%;
 }
 
 .empty-fav-msg {
