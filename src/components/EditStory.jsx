@@ -1301,7 +1301,7 @@ const generateImageWithTimeout = (text) => {
                           style={{
                             backgroundColor: "transparent",
                             padding: "5px 0 0 10px",
-                            transform: "translate(-300%, -100%)",
+                            transform: "translate(-220%, -115%)",
                             border: "none",
                           }}
                         >
